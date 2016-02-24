@@ -75,12 +75,12 @@ class Login(Page):
         # Set layout del hrz_password
         self.hrz_buttons.setLayout(self.lyt_buttons)
 
-        # Aggiungiamo il contenitore e il scrlMappa nel vrt_page
+        # Aggiunta del contenitore e il scrlMappa nel vrt_page
         self.lyt_page.addWidget(self.gdr_data)
         self.lyt_page.addWidget(self.hrz_buttons)
 
-        # Set dl layout della pagina
+        # Set del layout della pagina
         self.vrt_page.setLayout(self.lyt_page)
 
-        # Sett del widget della pagina
+        # Set del widget della pagina
         self.setCentralWidget(self.vrt_page)

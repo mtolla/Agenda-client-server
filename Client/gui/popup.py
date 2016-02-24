@@ -23,8 +23,8 @@ class Popup(QtGui.QDialog):
         # Definizione dell'oggetto lbl_about
         self.lbl_about = QtGui.QLabel(message, self)
 
-        # Aggiungiamo il contenitore e il scrlMappa nel vrt_page
+        # Aggiunta del contenitore e il scrlMappa nel vrt_page
         self.lyt_page.addWidget(self.lbl_about)
 
-        # Settiamo il widget della pagina
+        # Set del widget della pagina
         self.setLayout(self.lyt_page)
