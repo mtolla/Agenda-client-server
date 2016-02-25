@@ -1,4 +1,3 @@
-from PyQt4 import QtCore
 from popup import *
 
 
@@ -7,11 +6,11 @@ class Page(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self)
 
         self.setWindowTitle('ManageIT')
-        self.setWindowIcon(QtGui.QIcon("./icon/ManageIT.png"))
+        self.setWindowIcon(QtGui.QIcon(MANAGE_IT))
 
         # ------------------------------------- Menu bar -------------------------------------
 
-        close = QtGui.QAction(QtGui.QIcon("./icon/quit.png"), "Quit", self)
+        close = QtGui.QAction(QtGui.QIcon(QUIT), "Quit", self)
         close.setShortcut("Ctrl+Q")
         close.setStatusTip("Close application")
         self.connect(close, QtCore.SIGNAL('triggered()'), QtCore.SLOT('close()'))
@@ -19,7 +18,7 @@ class Page(QtGui.QMainWindow):
         sep = QtGui.QAction(self)
         sep.setSeparator(True)
 
-        info = QtGui.QAction(QtGui.QIcon("./icon/info.png"), "About", self)
+        info = QtGui.QAction(QtGui.QIcon(INFO), "About", self)
         info.setShortcut("Ctrl+I")
         info.setStatusTip("Show information")
 

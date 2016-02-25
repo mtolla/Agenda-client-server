@@ -67,6 +67,7 @@ class Login(Page):
         self.cmd_pwd_forget = QtGui.QPushButton("Password lost?", self.hrz_buttons)
         self.cmd_pwd_forget.setFlat(True)
         self.cmd_pwd_forget.setStatusTip("Password lost?")
+        self.connect(self.cmd_pwd_forget, QtCore.SIGNAL("clicked()"), self.pwd_forget)
 
         # Aggiunta degli oggeti nel lyt_password
         self.lyt_buttons.addWidget(self.cmd_login)
@@ -84,3 +85,7 @@ class Login(Page):
 
         # Set del widget della pagina
         self.setCentralWidget(self.vrt_page)
+
+    @staticmethod
+    def pwd_forget():
+        Popup("Per recuperare la password, contattare un amministratore", ALERT).exec_()
