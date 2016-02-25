@@ -1,98 +1,50 @@
+# coding=utf-8
 # Importo librerie
-import datetime
-from time import time
-#Librerie server
-from flask import Flask
-from flask import request
-#Librerie underground Task
-
 
 # Importo dbManager
 from dbManager import ClassDbManager
 # Importo loginManager
 from loginManager import ClassLoginManager
+# Importo backgroundThread
+from PyQt4 import QtCore
+import time
 
+class Api():
+    def __init__(self):
+        # Creazione oggetti db,login Manager
+        self.dbManager = ClassDbManager()
+        self.loginManager = ClassLoginManager()
+        # Variabili cotrollo login
+        self.usrMaxLen = 10
+        self.pswMaxLen = 10
+        # Creazione thread controllo token
+        token_thread = TokenThread(self)
+        QtCore.QThreadPool.globalInstance().start(token_thread)
 
-api = Flask(__name__)
-api.debug = True
-link = '<img src="https://goo.gl/dmr6pW">'
-dbManager = ClassDbManager()
-loginManager = ClassLoginManager()
+    # Login con user, password
+    def do_login(self, user, password):
+        if self.valid_credentials(user, password):
+            return self.loginManager.do_login(user, password)
 
+    # Login con token
+    def do_login_token(self, token):
+        return self.loginManager.do_login_token(token)
 
-#############################
-# Variabili cotrollo login   #
-#############################
-usrMaxLen = 10
-pswMaxLen = 10
+    # Controllo credenziali
+    def valid_credentials(self, user, psw):
+        if len(user) <= self.usrMaxLen and len(psw) <= self.pswMaxLen:
+            return True
+        else:
+            return False
 
+# Classe Thread controllo token
+class TokenThread(QtCore.QRunnable):
+    def __init__(self, sleep_time):
+        QtCore.QRunnable.__init__(self)
+        self.loginManager = ClassLoginManager()
+        self.sleep_time = 36000  # 10 Minuti
 
-#############################
-
-@api.route("/")
-def hello():
-    return 'Welcome to TollaServer 0.1'
-
-@api.route("/Tolla")
-def tolla():
-    return link
-
-
-@api.route("/ping")
-def ping():
-    return True
-
-
-@api.route('/login', methods=['POST'])
-def do_login():
-    user = request.form['username']
-    password = request.form['password']
-    if valid_credentials(user, password):
-        return loginManager.do_login(user, password)
-
-@app.route('/login/<token>', methods=['POST'])
-def do_login_token():
-    return loginManager.do_login_token(request.form['token'])
-
-def valid_credentials(user, psw):
-    if len(user) <= usrMaxLen and len(psw) <= pswMaxLen:
-        return True
-    else:
-        return False
-
-
-
-#################################
-# Background work
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    api.run()
+    def run(self):
+        while True:
+            self.loginManager.check_life_token()
+            time.sleep(self.sleep_time)
