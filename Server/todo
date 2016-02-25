@@ -1,0 +1,6 @@
+Gestione token
+Dato id attività, restituire attributi
+id gruppo, Partecipanti
+id partecipante, id progetti
+id progetto, attività
+
