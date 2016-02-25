@@ -1,12 +1,12 @@
-{
+[{
   "ID" : 0,
   "username": "carluca",
   "password": "HASH",
   "name": "Carluca",
   "surname": "Bianchi",
   "groups:": {
-    "agenda": "partecipant",
-    "ricerca": "teamLeader"
+    "0": "partecipant",
+    "1": "teamLeader"
   },
   "holidays:": {
     "vacanza":{
@@ -14,8 +14,8 @@
         "end": "timestamp1"
         }
     }
-  }
-
+  },
+  
   {
   "ID" : 1,
   "username": "gianfranco",
@@ -37,3 +37,4 @@
         }
     }
   }
+]
