@@ -1,0 +1,39 @@
+{
+  "ID" : 0,
+  "username": "carluca",
+  "password": "HASH",
+  "name": "Carluca",
+  "surname": "Bianchi",
+  "groups:": {
+    "agenda": "partecipant",
+    "ricerca": "teamLeader"
+  },
+  "holidays:": {
+    "vacanza":{
+        "begin": "timestamp0",
+        "end": "timestamp1"
+        }
+    }
+  }
+
+  {
+  "ID" : 1,
+  "username": "gianfranco",
+  "password": "HASH",
+  "name": "Gianfranco",
+  "surname": "Rossi",
+  "groups:": {
+    "0": "partecipant",
+    "1": "partecipant"
+  },
+  "holidays:": {
+    "vacanza":{
+        "begin": "timestamp0",
+        "end": "timestamp1"
+        },
+    "malattia":{
+        "begin": "timestamp0",
+        "end": "timestamp1"
+        }
+    }
+  }

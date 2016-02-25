@@ -1,0 +1,10 @@
+{
+  "ID": 0,
+  "name": "U14 Aula Seminari",
+  "address:": {
+    "city": "Milano",
+    "street": "Via chiese",
+    "number": "5"
+  },
+  "room": "Aula Seminari"
+}

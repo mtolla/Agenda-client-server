@@ -1,0 +1,11 @@
+{
+  "ID": 0,
+  "name": "AgendaActivity1",
+  "project": "Agenda",
+  "creator": "Carluca",
+  "location": 0,
+  "partecipants:": {
+    "group": "AgendaGroup",
+    "partecipants": [0, 1]
+  }
+}
