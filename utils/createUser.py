@@ -6,8 +6,11 @@ class CreateUser(QtGui.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.connect(self.ui.pushButton, QtCore.SIGNAL("clicked()"), self.create)
+        self.connect(self.ui.actionQuit, QtCore.SIGNAL("triggered()"), QtCore.SLOT("close()"))
     def create(self):
-        #complete
+        self.username = self.ui.usernameEdit.text()
+
+
 
 if __name__ == "__main__":
     import sys

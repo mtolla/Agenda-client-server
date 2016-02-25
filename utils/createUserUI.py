@@ -84,7 +84,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("Create New User", "Create New User", None))
         self.passwordLabel.setText(_translate("MainWindow", "Password", None))
         self.nameLabel.setText(_translate("MainWindow", "Name", None))
         self.surnameLabel.setText(_translate("MainWindow", "Surname", None))
@@ -92,4 +92,5 @@ class Ui_MainWindow(object):
         self.pushButton.setText(_translate("MainWindow", "Create", None))
         self.menuFile.setTitle(_translate("MainWindow", "Fi&le", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+
 
