@@ -9,6 +9,7 @@ from loginManager import ClassLoginManager
 from PyQt4 import QtCore
 import time
 
+
 class Api():
     def __init__(self):
         # Creazione oggetti db,login Manager
@@ -37,9 +38,10 @@ class Api():
         else:
             return False
 
+
 # Classe Thread controllo token
 class TokenThread(QtCore.QRunnable):
-    def __init__(self, sleep_time):
+    def __init__(self):
         QtCore.QRunnable.__init__(self)
         self.loginManager = ClassLoginManager()
         self.sleep_time = 36000  # 10 Minuti

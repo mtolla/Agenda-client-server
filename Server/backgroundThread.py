@@ -15,7 +15,8 @@ class BackgroundThread():
         thread.daemon = True  # Daemonize thread
         thread.start()  # Start the execution
 
-    def run(self, login_manager):
+    @staticmethod
+    def run(login_manager):
         while True:
             login_manager.check_life_token()
             time.sleep(36000)

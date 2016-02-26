@@ -1,7 +1,8 @@
-# coding=utf-8
-import json
+# -*- coding: utf-8 -*-
 from time import time
 from hashlib import sha512
+# Importo dbManager
+from dbManager import ClassDbManager
 
 """
 Funzioni e cosa devono ricevere:
@@ -14,24 +15,23 @@ Funzioni e cosa devono ricevere:
 - check_life_token(token): controlla se il token è scaduto
 """
 
+
 class ClassLoginManager:
     def __init__(self):
-        # Legge il file utenti.json
-        login_file = open("../Database/user.json", "r")
-        # Lo trasforma in un dizionario
-        self.login_dict = json.loads(login_file)
+
         # Dizionario di token
         self.user_token = dict()
         # Durata max token: 24 ore = 60 sec * 60 min * 24 h
-        self.dur_token = 60*60*24
+        self.dur_token = 60 * 60 * 24
+        # Oggetto db_manager
+        self.db_manager = ClassDbManager()
 
     def do_login(self, usr, psw):
-        if not self.user_token.has_key(usr):
-            for user in self.login_dict.iteritems():
-                if user['id'] == usr and user['password'] == psw:
-                    return self.generate_token(usr)
-                else:
-                    return False
+        if usr in self.user_token:
+            self.delete_token(usr, False)
+        if self.db_manager.dologin(usr, psw):
+            return self.generate_token(usr, psw)
+        return False
 
     def do_login_token(self, token):
         return self.check_token(token)
@@ -39,26 +39,29 @@ class ClassLoginManager:
     def generate_token(self, usr):
         self.user_token[usr] = dict()
         self.user_token[usr]['time'] = time()
-        self.user_token[usr]['token'] = sha512(usr + str(self.user_token[usr]['time'])).hexdigest() # Verificare che serva hexdigest
+        # Verificare che serva hexdigest
+        self.user_token[usr]['token'] = sha512(usr + str(self.user_token[usr]['time'])).hexdigest()
         return self.user_token[usr]['token']
 
     def logout(self, token):
-        return self.delete_token(token)
+        return self.delete_token(False, token)
 
-    def delete_token(self, token):
-        for users in self.user_token:
-            if users['token'] == token:
-                return self.user_token.pop(users)
+    def delete_token(self, usr, token):
+        if token:
+            for user in self.user_token:
+                if user['token'] == token:
+                    return self.user_token.pop(user)
+        else:
+            return self.user_token.pop(usr)
 
     def check_token(self, token):
         for users in self.user_token:
             if token == users['token']:
                 return True
-            else: return False
+            else:
+                return False
 
     def check_life_token(self):
         for users in self.user_token:
             if time() - users['time'] >= self.dur_token:
                 self.user_token.pop(users)
-
-
