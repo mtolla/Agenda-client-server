@@ -24,16 +24,39 @@ class ClassDbManager:
             else:
                 return False
 
-    def select(self, diz_cond):
-        # Select * from table where cond
+    def select_att_attr(self, diz_cond):
+        # Da una id di una attività restituire gli attributi
+        # Select * from activity where activity.id = diz_cond['where']
         # diz_cond : field, table, where
-
         f = open(self.db_file[diz_cond['table']], "r")
         diz_app = json.loads(f)
-        #for row in diz_app:
-            #if eval(diz_cond['where']):
+        for row in diz_app:
+            if row['ID'] == diz_cond['where']:
+                return row
+        return False
 
+    def select_att_attr(self, diz_cond):
+        # Da una id di una attività restituire gli attributi
+        # Select * from activity where activity.id = diz_cond['where']
+        # diz_cond : field, table, where
+        f = open(self.db_file[diz_cond['table']], "r")
+        diz_app = json.loads(f)
+        for row in diz_app:
+            if row['ID'] == diz_cond['where']:
+                return row
+        return False
 
+    def select_gro_par(self, diz_cond):
+        # Da una id di un gruppo restituire id partecipanti
+        # Select * from group where group.id = diz_cond['where']
+        # diz_cond : field, table, where
+        f = open(self.db_file[diz_cond['table']], "r")
+        diz_app = json.loads(f)
+        appid = ""
+        for row in diz_app:
+            if row['ID'] == diz_cond['where']:
+
+        return False
 
 
 

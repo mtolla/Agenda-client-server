@@ -1,0 +1,16 @@
+Gestione token
+Dato id attività, restituire attributi      BOOOM BABY
+id gruppo, Partecipanti
+id partecipante, id progetti
+id progetto, attività
+Verificare che serva hexdigest
+
+
+login: usr,psw -> token/false
+login: token -> t/f
+progetto:
+lista progetti persona -> id, nome prog
+Deve essere un dizionario:
+token, id progetto -> tutto l'oggetto, mail project manager, t/f se è almeno teamleader in un gruppo, tutti id e nome attività progetto
+id attività -> oggetto attività
+
