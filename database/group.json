@@ -1,7 +1,24 @@
+
+[{
+    "ID": 0,
+    "name": "AgendaGroup", 
+    "father": false,
+    "subgroup": [3, 1, 2] 
+}, 
+
+
 {
-  "ID": 0,
-  "name": "AgendaGroup",
-  "teamLedaer": "Ste",
-  "partecipants": [0, 1],
-  "subgroup":[3, 1, 2]
+    "ID": 1,
+    "name": "TestAgenda", 
+    "father": 0,
+    "subgroup": [] 
+}, 
+
+{
+    "ID": 1,
+    "name": "CodingAgenda", 
+    "father": 0,
+    "subgroup": [] 
 }
+]
+

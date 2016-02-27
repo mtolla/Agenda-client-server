@@ -1,6 +1,9 @@
-{
+[{
   "ID" : 0,
   "name" : "Agenda",
+  "begin" : 000000000, 
+  "end" : 000000000, 
+  "status" : true,
   "projectManager" : 0,
-  "groups" : [0, 1, 2]
-}
+  "groups" : 0
+}, {}, {}]
