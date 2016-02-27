@@ -44,6 +44,7 @@ class Login(Page):
         self.lbl_password = QtGui.QLabel("Password :", self.gdr_data)
 
         self.txt_password = QtGui.QLineEdit(self.gdr_data)
+        self.txt_password.setEchoMode(QtGui.QLineEdit.Password)
 
         # Aggiunta degli oggeti nel lyt_data
         self.lyt_data.addWidget(self.lbl_user, 0, 0)
