@@ -1,5 +1,5 @@
 from PyQt4 import QtGui, QtCore
-from client.file_location import *
+from client.local.file_location import *
 
 
 class Popup(QtGui.QDialog):

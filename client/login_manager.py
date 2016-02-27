@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from gui.login_view import *
-from login_interface import *
+from interface.login_interface import *
 from server_manager import *
 from agenda_manager import *
 import hashlib
