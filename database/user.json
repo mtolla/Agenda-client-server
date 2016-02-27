@@ -11,8 +11,8 @@
 	"holidays": [{
         "ID" : 0,
 	"name" : "vacanza", 
-	"begin": 0000000,
-        "end": 0000000
+	"begin": 0,
+        "end": 0
     }] 
 },
 {	"ID" : 1,
