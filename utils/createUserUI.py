@@ -9,9 +9,9 @@
 from PyQt4 import QtCore, QtGui
 
 try:
-    _fromUtf8 = QtCore.QString.fromUtf8
+    _fromutf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    def _fromUtf8(s):
+    def _fromutf8(s):
         return s
 
 try:
@@ -22,75 +22,94 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(385, 335)
-        self.centralwidget = QtGui.QWidget(MainWindow)
-        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
-        self.gridLayoutWidget = QtGui.QWidget(self.centralwidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(0, 0, 381, 211))
-        self.gridLayoutWidget.setObjectName(_fromUtf8("gridLayoutWidget"))
-        self.gridLayout = QtGui.QGridLayout(self.gridLayoutWidget)
-        self.gridLayout.setHorizontalSpacing(99)
-        self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.surnameEdit = QtGui.QLineEdit(self.gridLayoutWidget)
-        self.surnameEdit.setObjectName(_fromUtf8("surnameEdit"))
-        self.gridLayout.addWidget(self.surnameEdit, 3, 1, 1, 1)
-        self.usernameEdit = QtGui.QLineEdit(self.gridLayoutWidget)
-        self.usernameEdit.setText(_fromUtf8(""))
-        self.usernameEdit.setEchoMode(QtGui.QLineEdit.Normal)
-        self.usernameEdit.setObjectName(_fromUtf8("usernameEdit"))
-        self.gridLayout.addWidget(self.usernameEdit, 0, 1, 1, 1)
-        self.passwordLabel = QtGui.QLabel(self.gridLayoutWidget)
-        self.passwordLabel.setObjectName(_fromUtf8("passwordLabel"))
-        self.gridLayout.addWidget(self.passwordLabel, 1, 0, 1, 1)
-        self.nameLabel = QtGui.QLabel(self.gridLayoutWidget)
-        self.nameLabel.setObjectName(_fromUtf8("nameLabel"))
-        self.gridLayout.addWidget(self.nameLabel, 2, 0, 1, 1)
-        self.surnameLabel = QtGui.QLabel(self.gridLayoutWidget)
-        self.surnameLabel.setObjectName(_fromUtf8("surnameLabel"))
-        self.gridLayout.addWidget(self.surnameLabel, 3, 0, 1, 1)
-        self.nameEdit = QtGui.QLineEdit(self.gridLayoutWidget)
-        self.nameEdit.setObjectName(_fromUtf8("nameEdit"))
-        self.gridLayout.addWidget(self.nameEdit, 2, 1, 1, 1)
-        self.usernameLabel = QtGui.QLabel(self.gridLayoutWidget)
-        self.usernameLabel.setObjectName(_fromUtf8("usernameLabel"))
-        self.gridLayout.addWidget(self.usernameLabel, 0, 0, 1, 1)
-        self.passwordEdit = QtGui.QLineEdit(self.gridLayoutWidget)
-        self.passwordEdit.setText(_fromUtf8(""))
-        self.passwordEdit.setEchoMode(QtGui.QLineEdit.Password)
-        self.passwordEdit.setObjectName(_fromUtf8("passwordEdit"))
-        self.gridLayout.addWidget(self.passwordEdit, 1, 1, 1, 1)
-        self.pushButton = QtGui.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(140, 230, 88, 34))
-        self.pushButton.setObjectName(_fromUtf8("pushButton"))
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtGui.QStatusBar(MainWindow)
-        self.statusbar.setObjectName(_fromUtf8("statusbar"))
-        MainWindow.setStatusBar(self.statusbar)
-        self.menubar = QtGui.QMenuBar(MainWindow)
+class UiMainWindow(object):
+    def setupui(self, main_window):
+        main_window.setObjectName(_fromutf8("MainWindow"))
+        main_window.resize(385, 335)
+        self.centralwidget = QtGui.QWidget(main_window)
+        self.centralwidget.setObjectName(_fromutf8("centralwidget"))
+        self.grid_layout_widget = QtGui.QWidget(self.centralwidget)
+        self.grid_layout_widget.setGeometry(QtCore.QRect(0, 0, 381, 211))
+        self.grid_layout_widget.setObjectName(_fromutf8("gridLayoutWidget"))
+        self.grid_layout = QtGui.QGridLayout(self.grid_layout_widget)
+        self.grid_layout.setHorizontalSpacing(99)
+        self.grid_layout.setObjectName(_fromutf8("gridLayout"))
+
+        self.username_edit = QtGui.QLineEdit(self.grid_layout_widget)
+        self.username_edit.setText(_fromutf8(""))
+        self.username_edit.setEchoMode(QtGui.QLineEdit.Normal)
+        self.username_edit.setObjectName(_fromutf8("usernameEdit"))
+        self.grid_layout.addWidget(self.username_edit, 0, 1, 1, 1)
+
+        self.password_label = QtGui.QLabel(self.grid_layout_widget)
+        self.password_label.setObjectName(_fromutf8("password_label"))
+        self.grid_layout.addWidget(self.password_label, 1, 0, 1, 1)
+
+        self.name_label = QtGui.QLabel(self.grid_layout_widget)
+        self.name_label.setObjectName(_fromutf8("name_label"))
+        self.grid_layout.addWidget(self.name_label, 3, 0, 1, 1)
+
+        self.surname_label = QtGui.QLabel(self.grid_layout_widget)
+        self.surname_label.setObjectName(_fromutf8("surname_label"))
+        self.grid_layout.addWidget(self.surname_label, 4, 0, 1, 1)
+
+        self.username_label = QtGui.QLabel(self.grid_layout_widget)
+        self.username_label.setObjectName(_fromutf8("username_label"))
+        self.grid_layout.addWidget(self.username_label, 0, 0, 1, 1)
+
+        self.password_edit = QtGui.QLineEdit(self.grid_layout_widget)
+        self.password_edit.setText(_fromutf8(""))
+        self.password_edit.setEchoMode(QtGui.QLineEdit.Password)
+        self.password_edit.setObjectName(_fromutf8("password_edit"))
+
+        self.email_edit = QtGui.QLineEdit(self.grid_layout_widget)
+        self.email_edit.setText(_fromutf8(""))
+        self.email_edit.setObjectName(_fromutf8("email_edit"))
+        self.grid_layout.addWidget(self.email_edit, 2, 1, 1, 1)
+
+        self.name_edit = QtGui.QLineEdit(self.grid_layout_widget)
+        self.name_edit.setObjectName(_fromutf8("name_edit"))
+        self.grid_layout.addWidget(self.name_edit, 3, 1, 1, 1)
+
+        self.surname_edit = QtGui.QLineEdit(self.grid_layout_widget)
+        self.surname_edit.setObjectName(_fromutf8("surname_edit"))
+        self.grid_layout.addWidget(self.surname_edit, 4, 1, 1, 1)
+
+        self.grid_layout.addWidget(self.password_edit, 1, 1, 1, 1)
+        self.email_label = QtGui.QLabel(self.grid_layout_widget)
+        self.email_label.setObjectName(_fromutf8("email_label"))
+        self.grid_layout.addWidget(self.email_label, 2, 0, 1, 1)
+
+        self.push_button = QtGui.QPushButton(self.centralwidget)
+        self.push_button.setGeometry(QtCore.QRect(140, 230, 88, 34))
+        self.push_button.setObjectName(_fromutf8("push_button"))
+        main_window.setCentralWidget(self.centralwidget)
+        self.statusbar = QtGui.QStatusBar(main_window)
+        self.statusbar.setObjectName(_fromutf8("statusbar"))
+        main_window.setStatusBar(self.statusbar)
+        self.menubar = QtGui.QMenuBar(main_window)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 385, 30))
-        self.menubar.setObjectName(_fromUtf8("menubar"))
-        self.menuFile = QtGui.QMenu(self.menubar)
-        self.menuFile.setObjectName(_fromUtf8("menuFile"))
-        MainWindow.setMenuBar(self.menubar)
-        self.actionQuit = QtGui.QAction(MainWindow)
-        self.actionQuit.setObjectName(_fromUtf8("actionQuit"))
-        self.menuFile.addAction(self.actionQuit)
-        self.menubar.addAction(self.menuFile.menuAction())
+        self.menubar.setObjectName(_fromutf8("menubar"))
+        self.menu_file = QtGui.QMenu(self.menubar)
+        self.menu_file.setObjectName(_fromutf8("menu_file"))
+        main_window.setMenuBar(self.menubar)
+        self.action_quit = QtGui.QAction(main_window)
+        self.action_quit.setObjectName(_fromutf8("action_quit"))
+        self.menu_file.addAction(self.action_quit)
+        self.menubar.addAction(self.menu_file.menuAction())
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslate_ui(main_window)
+        QtCore.QMetaObject.connectSlotsByName(main_window)
 
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("Create New User", "Create New User", None))
-        self.passwordLabel.setText(_translate("MainWindow", "Password", None))
-        self.nameLabel.setText(_translate("MainWindow", "Name", None))
-        self.surnameLabel.setText(_translate("MainWindow", "Surname", None))
-        self.usernameLabel.setText(_translate("MainWindow", "Username", None))
-        self.pushButton.setText(_translate("MainWindow", "Create", None))
-        self.menuFile.setTitle(_translate("MainWindow", "Fi&le", None))
-        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+    def retranslate_ui(self, main_window):
+        main_window.setWindowTitle(_translate("Create New User", "Create New User", None))
+        self.username_label.setText(_translate("MainWindow", "Username", None))
+        self.password_label.setText(_translate("MainWindow", "Password", None))
+        self.email_label.setText(_translate("MainWindow", "Email", None))
+        self.name_label.setText(_translate("MainWindow", "Name", None))
+        self.surname_label.setText(_translate("MainWindow", "Surname", None))
+        self.push_button.setText(_translate("MainWindow", "Create", None))
+        self.menu_file.setTitle(_translate("MainWindow", "Fi&le", None))
+        self.action_quit.setText(_translate("MainWindow", "Quit", None))
 
 

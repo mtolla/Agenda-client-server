@@ -1,45 +1,30 @@
+#!/usr/bin/env python2
+
 from createUserUI import *
-import json
-import hashlib
+from populate import *
+import pickle
+import ast
+
 
 class CreateUser(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-        self.connect(self.ui.pushButton, QtCore.SIGNAL("clicked()"), self.create)
-        self.connect(self.ui.actionQuit, QtCore.SIGNAL("triggered()"), QtCore.SLOT("close()"))
+        self.ui = UiMainWindow()
+        self.ui.setupui(self)
+        self.connect(self.ui.push_button, QtCore.SIGNAL("clicked()"), self.create)
+        self.connect(self.ui.action_quit, QtCore.SIGNAL("triggered()"), QtCore.SLOT("close()"))
 
     def create(self):
-        self.output = dict()
-        self.username = self.ui.usernameEdit.text()
-        # Encoding password with a secure one-way encryption algorithm
-        self.password = hashlib.sha512(self.ui.passwordEdit.text()).hexdigest()
-        self.name = self.ui.nameEdit.text()
-        self.surname = self.ui.surnameEdit.text()
-
-        # Load json user data
-        with open("../database/user.json   ") as datafile:
-            userdata = json.load(datafile)
-        datafile.close()
-
-        # Load Last +1 index
-        last = str(userdata.keys().__len__())
-
-        # Insert data
-        userdata[last] = dict()
-        userdata[last]["username"] = str(self.username)
-        userdata[last]["name"] = str(self.name)
-        userdata[last]["surname"] = str(self.surname)
-        userdata[last]["password"] = self.password
-        userdata[last]["group"] = dict()
-        userdata[last]["holiday"] = dict()
-        pprint(userdata)
-
-        with open("../database/user.json", "w") as datafile:
-            json.dump(userdata, datafile)
-        datafile.close()
-
+        # Recive data from UI
+        self.username = str(self.ui.username_edit.text())
+        self.password = str(self.ui.password_edit.text())
+        self.email = str(self.ui.email_edit.text())
+        self.name = str(self.ui.name_edit.text())
+        self.surname = str(self.ui.surname_edit.text())
+        # Put data into a dict
+        data = populate_user(self.username, self.password,self.email, self.name, self.surname)
+        # Write data into database
+        add_dict(data, user_file)
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
