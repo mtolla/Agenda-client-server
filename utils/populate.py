@@ -1,7 +1,7 @@
 import sys
 import hashlib
 import json
-import pprint
+
 activity_file = sys.path[1] + "/database/.json"
 group_file = sys.path[1] + "/database/group.json"
 location_file = sys.path[1] + "/database/location.json"
@@ -45,8 +45,7 @@ def setholidays(user, holidays):
             holidays["ID"] = i
             # Add new holiday
             holidays_list.append(holidays)
-            print holidays_list
-            #print(data)
+
         x += 1
         data[x]["holiday"] = holidays_list
         datafile = open(user_file, "w")
