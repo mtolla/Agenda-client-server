@@ -31,8 +31,8 @@ class ClassLoginManager:
     def do_login(self, usr, psw):
         if usr in self.user_token:
             self.delete_token(usr, False)
-        if self.db_manager.dologin(usr, psw):
-            return self.generate_token(usr, psw)
+        if self.db_manager.do_login(usr, psw):
+            return self.generate_token(usr)
         return False
 
     def do_login_token(self, token):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import sys
+import ast
 
 
 class ClassDbManager:
@@ -14,15 +15,14 @@ class ClassDbManager:
         # Inizializzo loginManager
 
 
-    def dologin(self, usr, psw):
+    def do_login(self, usr, psw):
         f = open(self.db_file['user'], "r")
         # Dizionario di appoggio
-        dict_app = json.loads(f)
-        for user in dict_app.iteritems():
-            if user['id'] == usr and user['password'] == psw:
+        dict_app = json.load(f)
+        for user in dict_app:
+            if user['username'] == usr and user['password'] == psw:
                 return True
-            else:
-                return False
+        return False
 
     def get_attributes_from_activity(self, id_att):
         # Da una id di una attività restituire gli attributi
@@ -30,7 +30,7 @@ class ClassDbManager:
         # diz_cond : field, table, where
         f = open(self.db_file['activity'], "r")
         # Dizionario di appoggio
-        dict_app = json.loads(f)
+        dict_app = json.load(f)
         for row in dict_app:
             if row['ID'] == id_att:
                 return dict_app[row]
@@ -41,7 +41,7 @@ class ClassDbManager:
         # Seleziono da utenti tutti quelli che tra i gruppi hanno quello passato
         f = open(self.db_file['group'], "r")
         # Dizionario di appoggio
-        dict_app = json.loads(f)
+        dict_app = json.load(f)
         # Dizionario di ritorno
         dict_return = dict()
         for row in dict_app:
@@ -56,7 +56,7 @@ class ClassDbManager:
         # Seleziono da progetti quelli che mi servono e li passo
         f = open(self.db_file['project'], "r")
         # Dizionario di appoggio
-        dict_app = json.loads(f)
+        dict_app = json.load(f)
         # Dizionario di ritorno
         dict_return = dict()
         for proj in id_proj:
@@ -71,7 +71,7 @@ class ClassDbManager:
         # Seleziono il progetto che mi serve e lo restituisco
         f = open(self.db_file['project'], "r")
         # Dizionario di appoggio
-        dict_app = json.loads(f)
+        dict_app = json.load(f)
         for row in dict_app:
             if row['ID'] == id_proj:
                 return dict_app[row]
@@ -82,15 +82,15 @@ class ClassDbManager:
         # Seleziono il progetto, ricavo id del PM, lo cerco tra gli utenti e restituisco la mail
         fproj = open(self.db_file['project'], "r")
         fuser = open(self.db_file['user'], "r")
-        dict_app_proj = json.loads(fproj)
-        dict_app_user = json.loads(fuser)
+        dict_app_proj = json.load(fproj)
+        dict_app_user = json.load(fuser)
         app = 0
         for row in dict_app_proj:
             if row['ID'] == id_proj:
                 app = row['projectManager']
                 break
         for row in dict_app_user:
-            if row['ID'] == app:
+            if row['username'] == app:
                 return row['email']
         return False
 
@@ -99,9 +99,9 @@ class ClassDbManager:
         # Ricevo l'ID dal loginManager e lo ricerco nel database utenti
         # Apro il file che mi serve
         f = open(self.db_file['user'], "r")
-        dict_app = json.loads(f)
+        dict_app = json.load(f)
         for row in dict_app:
-            if row['ID'] == id_user:
+            if row['username'] == id_user:
                 for group in row['groups']:
                     if group['level'] == 'teamleader':
                         return True
@@ -111,7 +111,7 @@ class ClassDbManager:
         # Da un id progetto trovo tutte le attività
         # Cerco in activity tutte quelle con id progetto uguale a quello richiesto
         f = open(self.db_file['activity'], "r")
-        dict_app = json.loads(f)
+        dict_app = json.load(f)
         dict_return = dict()
         for row in dict_app:
             if row['project'] == id_proj:
@@ -122,7 +122,7 @@ class ClassDbManager:
         # Da un id di una attività restituisco l'attività
         # Cerco in activity quella richiesta
         f = open(self.db_file['activity'], "r")
-        dict_app = json.loads(f)
+        dict_app = json.load(f)
         for row in dict_app:
             if row['ID'] == id_act:
                 return row
