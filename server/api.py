@@ -19,7 +19,7 @@ class Api():
         self.usrMaxLen = 10
         self.pswMaxLen = 10
         # Creazione thread controllo token
-        token_thread = TokenThread(self)
+        token_thread = TokenThread()
         QtCore.QThreadPool.globalInstance().start(token_thread)
 
     # Login con user, password
@@ -48,7 +48,8 @@ class Api():
         dict_return = dict()
         dict_return['project'] = self.dbManager.get_proj_from_id_proj(id_proj)
         dict_return['email'] = self.dbManager.get_pjmanager_email(id_proj)
-        dict_return['isteamleader'] = self.dbManager.is_teamleader(token)
+        id_user = self.loginManager.from_token_get_id(token)
+        dict_return['isteamleader'] = self.dbManager.is_teamleader(id_user)
         dict_return['activities'] = self.dbManager.get_activities_from_proj(id_proj)
         return dict_return
 

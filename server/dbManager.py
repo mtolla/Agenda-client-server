@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import sys
-from loginManager import ClassLoginManager
 
 
 class ClassDbManager:
@@ -12,16 +11,14 @@ class ClassDbManager:
                    'location': sys.path[1] + '/database/location.json',
                    'group': sys.path[1] + '/database/group.json',
                    'activity': sys.path[1] + '/database/activity.json'}
-        # Legge il file utenti.json
-        login_file = open("../Database/user.json", "r")
-        # Lo trasforma in un dizionario
-        self.login_dict = json.loads(login_file)
         # Inizializzo loginManager
-        self.loginManager = ClassLoginManager ()
 
 
     def dologin(self, usr, psw):
-        for user in self.login_dict.iteritems():
+        f = open(self.db_file['user'], "r")
+        # Dizionario di appoggio
+        dict_app = json.loads(f)
+        for user in dict_app.iteritems():
             if user['id'] == usr and user['password'] == psw:
                 return True
             else:
@@ -97,10 +94,9 @@ class ClassDbManager:
                 return row['email']
         return False
 
-    def is_teamleader(self, token):
-        # Da un token trovo l'ID
+    def is_teamleader(self, id_user):
+        # Dall'user id trovo se è un teamleader
         # Ricevo l'ID dal loginManager e lo ricerco nel database utenti
-        id_user = self.loginManager.from_token_get_id(token)
         # Apro il file che mi serve
         f = open(self.db_file['user'], "r")
         dict_app = json.loads(f)
