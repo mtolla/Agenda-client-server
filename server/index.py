@@ -3,6 +3,8 @@ from flask import Flask
 from flask import request
 # Importo classe Api
 from api import Api
+# Conversione Stringhe -> Dizionari
+import ast
 
 index = Flask(__name__)
 index.debug = True
@@ -17,7 +19,6 @@ def hello():
 def tolla():
     return link
 
-
 @index.route("/ping")
 def ping():
     return True
@@ -28,11 +29,14 @@ def testbg():
 
 @index.route('/get_token', methods=['POST'])
 def do_login():
-    dict_login = request.form['dict_login']
-    usr = dict_login['user']
+    dict_login = ast.literal_eval(request.form['dict_login'])
+    usr = dict_login['username']
     psw = dict_login['password']
     if usr and psw:
-        api.do_login(usr, psw)
+        response = api.do_login(usr, psw)
+        if response:
+            return response
+        return 0
 
 @index.route('/login', methods=['POST'])
 def do_login_token():

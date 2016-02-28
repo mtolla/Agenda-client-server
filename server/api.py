@@ -24,8 +24,8 @@ class Api():
 
     # Login con user, password
     def do_login(self, user, password):
-        if self.valid_credentials(user, password):
-            return self.loginManager.do_login(user, password)
+        #if self.valid_credentials(user, password):
+        return self.loginManager.do_login(user, password)
 
     # Login con token
     def do_login_token(self, token):
