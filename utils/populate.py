@@ -8,6 +8,18 @@ location_file = sys.path[1] + "/database/location.json"
 project_file = sys.path[1] + "/database/project.json"
 user_file = sys.path[1] + "/database/user.json"
 
+# Load json utility
+def load(path):
+    datafile = open(path)
+    data = json.load(datafile)
+    datafile.close()
+    return data
+
+# Write json utility
+def write(path, data):
+        datafile = open(path, "w")
+        json.dump(data,datafile)
+        datafile.close()
 
 def populate_user(username, password, email, name, surname):
     user = dict()
@@ -26,10 +38,8 @@ def setholidays(user, holidays):
     :type holidays = dictionary
     example: setholidays(1, {"begin":timestamp,"end":timestamp})
     """
-    # Open user file and load data
-    datafile = open(user_file)
-    data = json.load(datafile)
-    datafile.close()
+    # Load user data
+    data = load(user_file)
     # Find user ID
     x = i = 0
     found = False
@@ -48,17 +58,13 @@ def setholidays(user, holidays):
 
         x += 1
         data[x]["holiday"] = holidays_list
-        datafile = open(user_file, "w")
-        json.dump(data,datafile)
-        datafile.close()
+        # Write user data
+        write(user_file, data)
 
 def add_dict(dictionary, path):
     id = []
     count = 0
-    datafile = open(path)
-    data = json.load(datafile)
-    datafile.close()
-
+    data = load(path)
     for x in data:
         id.append(x["ID"])
     id.sort()
@@ -70,7 +76,6 @@ def add_dict(dictionary, path):
     # Set id index
     dictionary["ID"] = count
     data.append(dictionary)
+    write(path, data)
 
-    with open(path, "w") as datafile:
-        json.dump(data, datafile)
-    datafile.close()
+# def create_group()
