@@ -38,6 +38,23 @@ class Api():
         else:
             return False
 
+    def badass_function(self, token, id_proj):
+        # Dato token e id progetto restituire:
+        #   - L'oggetto del progetto
+        #   - eMail project manager
+        #   - T/F se è almeno teamleader in un gruppo
+        #   - Tutti id e nomi attività del progetto
+        # Dizionario di ritorno
+        dict_return = dict()
+        dict_return['project'] = self.dbManager.get_proj_from_id_proj(id_proj)
+        dict_return['email'] = self.dbManager.get_pjmanager_email(id_proj)
+        dict_return['isteamleader'] = self.dbManager.is_teamleader(token)
+        dict_return['activities'] = self.dbManager.get_activities_from_proj(id_proj)
+        return dict_return
+
+    def test(self):
+        return self.loginManager.user_token
+
 
 # Classe Thread controllo token
 class TokenThread(QtCore.QRunnable):

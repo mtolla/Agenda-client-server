@@ -6,11 +6,14 @@ id progetto, attività
 Verificare che serva hexdigest
 
 
-login: usr,psw -> token/false
-login: token -> t/f
+login: usr,psw -> token/false               BOOOM BABY
+login: token -> t/f                         BOOOM BABY
 progetto:
-lista progetti persona -> id, nome prog
+lista progetti persona -> id, nome prog     BOOM BABY
 Deve essere un dizionario:
-token, id progetto -> tutto l'oggetto, mail project manager, t/f se è almeno teamleader in un gruppo, tutti id e nome attività progetto
+token, id progetto -> tutto l'oggetto,
+                      mail project manager,
+                      t/f se è almeno teamleader in un gruppo,
+                      tutti id e nome attività progetto
 id attività -> oggetto attività
 

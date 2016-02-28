@@ -13,6 +13,8 @@ Funzioni e cosa devono ricevere:
 - delete_token(token): elimina il token che riceve
 - check_token(token): riceve un token e risponde True o False
 - check_life_token(token): controlla se il token è scaduto
+
+user_token = {user:{time,token}}
 """
 
 
@@ -65,3 +67,8 @@ class ClassLoginManager:
         for users in self.user_token:
             if time() - users['time'] >= self.dur_token:
                 self.user_token.pop(users)
+
+    def from_token_get_id(self, token):
+        for users in self.user_token:
+            if token == users['token']:
+                return users

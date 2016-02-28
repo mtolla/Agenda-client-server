@@ -24,15 +24,20 @@ def ping():
 
 @index.route("/testbg")
 def testbg():
-    return api.test_bg()
+    return api.test()
 
 @index.route('/login', methods=['POST'])
 def do_login():
-    api.do_login(request.form['username'], request.form['password'])
+    usr = request.form['username']
+    psw = request.form['password']
+    if usr and psw:
+        api.do_login(usr, psw)
 
-@index.route('/login/<token>', methods=['POST'])
-def do_login_token(self):
-    return api.do_login_token(request.form['token'])
+@index.route('/login', methods=['POST'])
+def do_login_token():
+    token = request.form['token']
+    if token:
+        return api.do_login_token(token)
 
 
 if __name__ == "__main__":
