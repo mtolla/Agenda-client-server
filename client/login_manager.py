@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from gui.login_view import *
-from interface.login_interface import *
-from server_manager import *
-from agenda_manager import *
+from interface.login_interface import LoginInterface
+from server_manager.server_manager import ServerManager
+from agenda_manager.agenda_manager import AgendaManager
 import hashlib
 import json
 
@@ -73,14 +73,14 @@ class LoginManager(LoginInterface):
         :return: True or False
         """
 
-        self.user['user'] = self.login.txt_user.text()
-        self.user['password'] = self.login.txt_password.text()
+        self.user['username'] = str(self.login.txt_user.text())
+        self.user['password'] = str(self.login.txt_password.text())
 
-        if self.user['user'] != "" and self.user['password'] != "":
+        if self.user['username'] != "" and self.user['password'] != "":
             self.user['password'] = hashlib.sha512(self.user['password']).hexdigest()
             return True
         else:
-            self.user['user'] = ""
+            self.user['username'] = ""
             self.user['password'] = ""
             Popup("Inserire user e password", ALERT).exec_()
             return False
