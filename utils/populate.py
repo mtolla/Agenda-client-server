@@ -2,7 +2,7 @@ import sys
 import hashlib
 import json
 
-activity_file = sys.path[1] + "/database/.json"
+activity_file = sys.path[1] + "/database/activity.json"
 group_file = sys.path[1] + "/database/group.json"
 location_file = sys.path[1] + "/database/location.json"
 project_file = sys.path[1] + "/database/project.json"
@@ -20,6 +20,13 @@ def write(path, data):
         datafile = open(path, "w")
         json.dump(data,datafile)
         datafile.close()
+
+# Find next index
+def next_index(dict):
+    i = 0
+    while i < len(dict) and i == dict[i]["ID"]:
+        i += 1
+    return i
 
 def populate_user(username, password, email, name, surname):
     user = dict()
@@ -41,18 +48,15 @@ def setholidays(user, holidays):
     # Load user data
     data = load(user_file)
     # Find user ID
-    x = i = 0
+    x = 0
     found = False
     holidays_list = []
     while (found == False) and (x < len(data)):
         if user == data[x]["ID"]:
             holidays_list = data[x]["holiday"]
             found = True
-            # Load last holiday ID
-            while i < len(holidays_list) and i == holidays_list[i]["ID"]:
-                i += 1
             # Set holiday id
-            holidays["ID"] = i
+            holidays["ID"] = next_index(holidays_list)
             # Add new holiday
             holidays_list.append(holidays)
 
@@ -65,17 +69,29 @@ def add_dict(dictionary, path):
     id = []
     count = 0
     data = load(path)
-    for x in data:
+    '''for x in data:
         id.append(x["ID"])
     id.sort()
 
     # Calculate last id index
     while count < len(id) and count == id[count]:
         count += 1
-
+    '''
+    count = next_index(data)
     # Set id index
     dictionary["ID"] = count
     data.append(dictionary)
     write(path, data)
 
-# def create_group()
+def add_group_to_user(group, user, role):
+    """
+        :type group: int
+        :type user: int
+        :type role: basestring
+        usange: add_user_to_group(1, 5, "partecipant")
+    """
+    users = load(user_file)
+    new_group = dict()
+    new_group["ID"] = group
+    new_group["level"] = role
+    users[user]["groups"].append(new_group)
