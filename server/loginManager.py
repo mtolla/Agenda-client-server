@@ -31,8 +31,6 @@ class ClassLoginManager:
     def do_login(self, usr, psw):
         if usr in self.user_token:
             self.delete_token(usr, False)
-                                                                    # Verificare che serva hexdigest
-        psw = sha512(psw).hexdigest()
         if self.db_manager.dologin(usr, psw):
             return self.generate_token(usr, psw)
         return False
