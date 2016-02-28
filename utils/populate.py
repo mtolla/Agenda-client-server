@@ -108,4 +108,4 @@ def remove_group_from_user(group, user):
     for x in users[user]["groups"]:
         if x["ID"] == group:
             users[user]["groups"].remove(x)
-    print users[user]["groups"]
+    write(user_file, users)
