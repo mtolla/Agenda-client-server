@@ -31,6 +31,8 @@ class ClassLoginManager:
     def do_login(self, usr, psw):
         if usr in self.user_token:
             self.delete_token(usr, False)
+                                                                    # Verificare che serva hexdigest
+        psw = sha512(psw).hexdigest()
         if self.db_manager.dologin(usr, psw):
             return self.generate_token(usr, psw)
         return False
@@ -41,7 +43,7 @@ class ClassLoginManager:
     def generate_token(self, usr):
         self.user_token[usr] = dict()
         self.user_token[usr]['time'] = time()
-        # Verificare che serva hexdigest
+                                                                    # Verificare che serva hexdigest
         self.user_token[usr]['token'] = sha512(usr + str(self.user_token[usr]['time'])).hexdigest()
         return self.user_token[usr]['token']
 

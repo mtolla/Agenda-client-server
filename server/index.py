@@ -26,10 +26,11 @@ def ping():
 def testbg():
     return api.test()
 
-@index.route('/login', methods=['POST'])
+@index.route('/get_token', methods=['POST'])
 def do_login():
-    usr = request.form['username']
-    psw = request.form['password']
+    dict_login = request.form['dict_login']
+    usr = dict_login['user']
+    psw = dict_login['password']
     if usr and psw:
         api.do_login(usr, psw)
 
