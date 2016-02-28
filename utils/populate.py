@@ -88,10 +88,24 @@ def add_group_to_user(group, user, role):
         :type group: int
         :type user: int
         :type role: basestring
-        usange: add_user_to_group(1, 5, "partecipant")
+        usange: add_group_to_user(1, 5, "partecipant")
     """
     users = load(user_file)
     new_group = dict()
     new_group["ID"] = group
     new_group["level"] = role
     users[user]["groups"].append(new_group)
+    write(user_file, user)
+
+def remove_group_from_user(group, user):
+    """
+    :type group: int
+    :type user: int
+    :type role: basestring
+    usange: remove_group_from_user(1, 5)
+    """
+    users = load(user_file)
+    for x in users[user]["groups"]:
+        if x["ID"] == group:
+            users[user]["groups"].remove(x)
+    print users[user]["groups"]
