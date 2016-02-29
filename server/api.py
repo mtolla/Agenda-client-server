@@ -47,7 +47,7 @@ class Api():
         #   - L'oggetto del progetto
         #   - eMail project manager
         #   - T/F se è almeno teamleader in un gruppo
-        #   - Tutti attività del progetto dell'utente (attività da singolo(group = NULL))
+        #   - Tutte attività del progetto dell'utente (attività da singolo(group = NULL))
         #   - Vacanze del progetto
         # Dizionario di ritorno
         dict_return = dict()
@@ -56,7 +56,7 @@ class Api():
         id_user = self.loginManager.from_token_get_user(token)
         dict_return['isteamleader'] = self.dbManager.is_teamleader(id_user)
         dict_return['activities'] = self.dbManager.get_activities_from_proj(id_proj)
-        dict_return['holydays'] = self.dbManager.get_holydays_from_proj(id_proj)
+        dict_return['holidays'] = self.dbManager.get_holidays_from_proj(id_proj)
         return dict_return
 
     def get_activity(self, id_att):
@@ -64,9 +64,49 @@ class Api():
         #   - Attività
         #   - Gruppo se è un attività di gruppo
         dict_return = dict ()
-        dict_return['activity'] = self.dbManager.get_attributes_from_activity(id_att)
+        dict_return['activity'] = self.dbManager.get_activity_from_id_act(id_att)
         dict_return['group'] = self.dbManager.get_group_name_from_group(dict_return['activity']['group'])
         return dict_return
+
+    def get_partecipants_group(self, id_group):
+        return self.dbManager.get_participants_from_group(id_group)
+
+    def get_name_projects(self, list_id_proj):
+        return self.dbManager.get_name_from_id_projects(list_id_proj)
+
+    def get_project(self, id_proj):
+        return self.dbManager.get_proj_from_id_proj(id_proj)
+
+    def get_pjmanager_mail(self, id_proj):
+        return self.dbManager.get_pjmanager_email(id_proj)
+
+    def get_is_teamleader(self, token):
+        id_user = self.loginManager.from_token_get_user(token)
+        return self.dbManager.is_teamleader(id_user)
+
+    def get_activities_project(self, id_proj):
+        return self.dbManager.get_activities_from_proj(id_proj)
+
+    def get_holidays_proj(self, id_proj):
+        return self.dbManager.get_holidays_from_proj(id_proj)
+
+    def get_group_name(self, id_group):
+        return self.dbManager.get_group_name_from_group(id_group)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def error(self, app):
+        return self.dbManager.error(app)
 
     def test(self):
         return json.dumps(self.loginManager.user_token)

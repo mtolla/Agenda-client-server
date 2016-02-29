@@ -12,6 +12,7 @@ class ClassDbManager:
                    'location': sys.path[1] + '/database/location.json',
                    'group': sys.path[1] + '/database/group.json',
                    'activity': sys.path[1] + '/database/activity.json'}
+        self.er = '<img src="https://goo.gl/'
         # Inizializzo loginManager
 
 
@@ -24,7 +25,7 @@ class ClassDbManager:
                 return True
         return False
 
-    def get_attributes_from_activity(self, id_att):
+    def get_activity_from_id_act(self, id_att):
         # Da una id di una attività restituire gli attributi
         # Seleziono da activity l'attività con id passato
         # diz_cond : field, table, where
@@ -51,7 +52,7 @@ class ClassDbManager:
                         break
         return list_return
 
-    def get_name_from_id_projects(self, id_proj):
+    def get_name_from_id_projects(self, list_id_proj):
         # Da una lista di id progetti restituire id e nome
         # Seleziono da progetti quelli che mi servono e li passo
         f = open(self.db_file['project'], "r")
@@ -59,7 +60,7 @@ class ClassDbManager:
         list_app = json.load(f)
         # Dizionario di ritorno
         dict_return = dict()
-        for proj in id_proj:
+        for proj in list_id_proj:
             for row in list_app:
                 if row['ID'] == proj:
                     dict_return = {'ID': row['ID'], 'name': row['name']}
@@ -119,17 +120,7 @@ class ClassDbManager:
                 list_return.append(row)
         return list_return
 
-    def get_activities_from_id_act(self, id_act):
-        # Da un id di una attività restituisco l'attività
-        # Cerco in activity quella richiesta
-        f = open(self.db_file['activity'], "r")
-        list_app = json.load(f)
-        for row in list_app:
-            if row['ID'] == id_act:
-                return row
-        return False
-
-    def get_holydays_from_proj(self, id_proj):
+    def get_holidays_from_proj(self, id_proj):
         # Da un id di un progetto restituisco tutte le vacanze degli utenti
         # Cerco l'id del gruppo dal progetto, lo confronto nella tabella user
         fproj = open(self.db_file['project'], "r")
@@ -141,11 +132,12 @@ class ClassDbManager:
         for row in list_app_proj:
             if row['ID'] == id_proj:
                 app = row['groups']
+                print app
                 break
         for row in list_app_user:
-            for group in row ['groups']:
-                if group == app:
-                    dict_return[row['ID']] = row['holydays']
+            for group in row['groups']:
+                if group['ID'] == app:
+                    dict_return[row['ID']] = row['holiday']
         return dict_return
 
     def get_group_name_from_group(self, id_group):
@@ -155,5 +147,11 @@ class ClassDbManager:
             if row['ID'] == id_group:
                 return row['name']
         return False
+
+    def error(self, app):
+        if app:
+            return self.er + '5UL9yj">'
+        else:
+            return self.er + 'dmr6pW">'
 
 

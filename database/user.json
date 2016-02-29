@@ -23,7 +23,10 @@
     ],
     "surname": "Bianchi",
     "name": "Carluca",
-    "groups": [],
+    "groups": [{
+        "ID": 0,
+        "level": "teamleader"
+      }],
     "password": "68c58ddae9e0cde89cf6a0589644b7fb85bc7cec4c9a00e1a52512f9a06c20c4d376a9d1e124fab52da153c13ada4b95282c7756bc747a72fa734676a4eca746",
     "ID": 0,
     "email": "carluca@testprovider.nl"

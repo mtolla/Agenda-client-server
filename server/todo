@@ -1,19 +1,23 @@
-Gestione token
-Dato id attività, restituire attributi      BOOOM BABY
-id gruppo, Partecipanti
-id partecipante, id progetti
-id progetto, attività
-Verificare che serva hexdigest
+test funzioni:
 
+login Manager
+- do_login
+- do_login_token
+- generate_token
+- logout
+- delete_token
+- check_token
+- check_life_token
+- from_token_get_user
 
-login: usr,psw -> token/false               BOOOM BABY
-login: token -> t/f                         BOOOM BABY
-progetto:
-lista progetti persona -> id, nome prog     BOOM BABY
-Deve essere un dizionario:
-token, id progetto -> tutto l'oggetto,
-                      mail project manager,
-                      t/f se è almeno teamleader in un gruppo,
-                      tutti id e nome attività progetto
-id attività -> oggetto attività
-
+dbManager
+- do_login
+- get_activity_from_id_act
+- get_participants_from_group
+- get_name_from_id_projects
+- get_proj_from_id_proj
+- get_pjmanager_email
+- is_teamleader
+- get_activities_from_proj
+- get_holidays_from_proj
+- get_group_name_from_group

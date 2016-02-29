@@ -24,7 +24,7 @@ class ClassLoginManager:
         # Dizionario di token
         self.user_token = dict()
         # Durata max token: 24 ore = 60 sec * 60 min * 24 h * 1000 msec
-        #self.dur_token = 60 * 60 * 24
+        # self.dur_token = 60 * 60 * 24
         self.dur_token = 5  # Durata test
         # Oggetto db_manager
         self.db_manager = ClassDbManager()
@@ -70,7 +70,6 @@ class ClassLoginManager:
         for key, users in self.user_token.items():
             if time() - users['time'] >= self.dur_token:
                 self.user_token.pop(key)
-
 
     def from_token_get_user(self, token):
         for key, users in self.user_token.items():
