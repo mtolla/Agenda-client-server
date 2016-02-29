@@ -96,18 +96,35 @@ e la loro semplice e diretta interazione con classi e anche dati Json.
 
 \section{Librerie per la creazione dell'interfaccia utente}
 \subsection{Introduzione}
-Sono state scelte le librerie Qt\footnote{http://www.qt.io/}
+Sono state scelte le librerie Qt\footnote{http://www.qt.io/} che fanno parte di uno storico
+framework open source. 
 \subsection{Potenzialit\`a}
-\subsection{ambienti di sviluppo}
+Le librerie Qt sono in grado di gestire interfacce grafiche, basi di dati, 
+attivit\`a multimediali, flussi di rete, gestione di file e notifiche di sistema.
+Una caratteristica piuttosto interessante di queste librerie \`e che possono essere usate
+attraverso molti\footnote{\`E possibile visionare tutti i linguaggi supportati a questa pagina: 
+http://wiki.qt.io/Category:LanguageBindings}
+linguaggi di programmazione e non sono legate a nessuna piattaforma specifica.
+Permettono anche possibile lo sviluppo di applicazioni mobile\footnote{
+il progetto SailfishOs pu\`o dare un'idea delle potenzialit\`a delle librerie Qt:
+http://sailfishos.org/develop/sdk-overview/}
+\subsection{Ambienti di sviluppo}
+Per lo sviluppo dell'interfaccia grafica \`e stato comodo usare lo strumento
+QtDesigner\footnote{http://doc.qt.io/qt-4.8/designer-manual.html} (che segue il paradigma WYSIWYG) 
+che permette di disegnare GUI, modificare le propriet\`a dei vari
+oggetti e generare codice XML dell'interfaccia realizzata.
 \subsection{interazione con Python}
+Per far interagire il file XML generato da QtDesigner con Python
+\`e stato usato lo strumento Pyuic4\footnote{http://pyqt.sourceforge.net/Docs/PyQt4/designer.html}
+che svolge il lavoro meccanico di conversione da file che descrive un'interfaccia
+ad uno script Python che mette a disposizione classi che rappresentano
+gli oggetti usati ed i metodi  per accedervi.
+
 
 \section{Struttura dei sistemi di sicurezza adottati}
 \subsection{Codifica delle password}
+
 \subsection{Token, autenticazione e gestione delle sessioni}
 \subsection{Password dimenticate}
 
-\begin{thebibliography}{10}	
-
-
-\end{thebibliography}
-\end{document}             % End of documen
+\end{document}
