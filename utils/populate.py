@@ -67,17 +67,6 @@ def setholidays(user, holidays):
 
 def add_dict(dictionary, path):
     data = load(path)
-    '''
-    id = []
-    count = 0
-    for x in data:
-        id.append(x["ID"])
-    id.sort()
-
-    # Calculate last id index
-    while count < len(id) and count == id[count]:
-        count += 1
-    '''
     count = next_index(data)
     # Set id index
     dictionary["ID"] = count
