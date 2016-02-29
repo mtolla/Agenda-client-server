@@ -23,8 +23,9 @@ class ClassLoginManager:
 
         # Dizionario di token
         self.user_token = dict()
-        # Durata max token: 24 ore = 60 sec * 60 min * 24 h
-        self.dur_token = 60 * 60 * 24
+        # Durata max token: 24 ore = 60 sec * 60 min * 24 h * 1000 msec
+        #self.dur_token = 60 * 60 * 24
+        self.dur_token = 5  # Durata test
         # Oggetto db_manager
         self.db_manager = ClassDbManager()
 
@@ -41,7 +42,6 @@ class ClassLoginManager:
     def generate_token(self, usr):
         self.user_token[usr] = dict()
         self.user_token[usr]['time'] = time()
-                                                                    # Verificare che serva hexdigest
         self.user_token[usr]['token'] = sha512(usr + str(self.user_token[usr]['time'])).hexdigest()
         return self.user_token[usr]['token']
 
@@ -49,26 +49,30 @@ class ClassLoginManager:
         return self.delete_token(False, token)
 
     def delete_token(self, usr, token):
+        # Con logout elimino passando il token
+        # Con login elimino passando user
         if token:
-            for user in self.user_token:
+            for key, user in self.user_token.items():
                 if user['token'] == token:
-                    return self.user_token.pop(user)
+                    self.user_token.pop(key)
+                    break
         else:
-            return self.user_token.pop(usr)
+            self.user_token.pop(usr)
+        return True
 
     def check_token(self, token):
-        for users in self.user_token:
+        for key, users in self.user_token.items():
             if token == users['token']:
                 return True
-            else:
-                return False
+        return False
 
     def check_life_token(self):
-        for users in self.user_token:
+        for key, users in self.user_token.items():
             if time() - users['time'] >= self.dur_token:
-                self.user_token.pop(users)
+                self.user_token.pop(key)
 
-    def from_token_get_id(self, token):
-        for users in self.user_token:
+
+    def from_token_get_user(self, token):
+        for key, users in self.user_token.items():
             if token == users['token']:
-                return users
+                return key

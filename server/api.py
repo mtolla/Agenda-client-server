@@ -8,7 +8,7 @@ from loginManager import ClassLoginManager
 # Importo backgroundThread
 from PyQt4 import QtCore
 import time
-
+import json # DA ELIMINARE FINITI I TEST
 
 class Api():
     def __init__(self):
@@ -29,7 +29,11 @@ class Api():
 
     # Login con token
     def do_login_token(self, token):
-        return self.loginManager.do_login_token(token)
+        if self.loginManager.do_login_token(token):
+            return "OK", 200
+        else:
+            return "Unauthorized", 401
+
 
     # Controllo credenziali
     def valid_credentials(self, user, psw):
@@ -43,18 +47,29 @@ class Api():
         #   - L'oggetto del progetto
         #   - eMail project manager
         #   - T/F se è almeno teamleader in un gruppo
-        #   - Tutti id e nomi attività del progetto
+        #   - Tutti attività del progetto dell'utente (attività da singolo(group = NULL))
+        #   - Vacanze del progetto
         # Dizionario di ritorno
         dict_return = dict()
         dict_return['project'] = self.dbManager.get_proj_from_id_proj(id_proj)
         dict_return['email'] = self.dbManager.get_pjmanager_email(id_proj)
-        id_user = self.loginManager.from_token_get_id(token)
+        id_user = self.loginManager.from_token_get_user(token)
         dict_return['isteamleader'] = self.dbManager.is_teamleader(id_user)
         dict_return['activities'] = self.dbManager.get_activities_from_proj(id_proj)
+        dict_return['holydays'] = self.dbManager.get_holydays_from_proj(id_proj)
+        return dict_return
+
+    def get_activity(self, id_att):
+        # Dato id attività restituire:
+        #   - Attività
+        #   - Gruppo se è un attività di gruppo
+        dict_return = dict ()
+        dict_return['activity'] = self.dbManager.get_attributes_from_activity(id_att)
+        dict_return['group'] = self.dbManager.get_group_name_from_group(dict_return['activity']['group'])
         return dict_return
 
     def test(self):
-        return self.loginManager.user_token
+        return json.dumps(self.loginManager.user_token)
 
 
 # Classe Thread controllo token
