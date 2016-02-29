@@ -41,8 +41,8 @@ def populate_user(username, password, email, name, surname):
 
 def setholidays(user, holidays):
     """
-    :type user: int
-    :type holidays = dictionary
+    :param user: int
+    :param holidays = dictionary
     example: setholidays(1, {"begin":timestamp,"end":timestamp})
     """
     # Load user data
@@ -84,11 +84,23 @@ def add_dict(dictionary, path):
     data.append(dictionary)
     write(path, data)
 
+def remove_dict(id, path):
+    """
+    :param id: int
+    :param path: string
+    :return:
+    """
+    file_to_remove = load(path)
+    for x in file_to_remove:
+        if x["ID"] == id:
+           file_to_remove.remove(x)
+    write(path, file_to_remove)
+
 def add_group_to_user(group, user, role):
     """
-        :type group: int
-        :type user: int
-        :type role: basestring
+        :param group: int
+        :param user: int
+        :param role: basestring
         usange: add_group_to_user(1, 5, "partecipant")
     """
     users = load(user_file)
@@ -100,9 +112,9 @@ def add_group_to_user(group, user, role):
 
 def remove_group_from_user(group, user):
     """
-    :type group: int
-    :type user: int
-    :type role: basestring
+    :param group: int
+    :param user: int
+    :param role: basestring
     usange: remove_group_from_user(1, 5)
     """
     users = load(user_file)
