@@ -2,8 +2,6 @@
 
 from createUserUI import *
 from populate import *
-import pickle
-import ast
 
 
 class CreateUser(QtGui.QMainWindow):

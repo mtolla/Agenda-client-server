@@ -66,10 +66,11 @@ def setholidays(user, holidays):
         write(user_file, data)
 
 def add_dict(dictionary, path):
+    data = load(path)
+    '''
     id = []
     count = 0
-    data = load(path)
-    '''for x in data:
+    for x in data:
         id.append(x["ID"])
     id.sort()
 
