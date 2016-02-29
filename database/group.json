@@ -1,24 +1,32 @@
-
-[{
+[
+  {
     "ID": 0,
-    "name": "AgendaGroup", 
+    "name": "AgendaGroup",
     "father": false,
-    "subgroup": [3, 1, 2] 
-}, 
-
-
-{
+    "subgroup": [
+      1,
+      2
+    ]
+  },
+  {
     "ID": 1,
-    "name": "TestAgenda", 
+    "name": "TestAgenda",
     "father": 0,
-    "subgroup": [] 
-}, 
-
-{
-    "ID": 1,
-    "name": "CodingAgenda", 
+    "subgroup": []
+  },
+  {
+    "ID": 2,
+    "name": "CodingAgenda",
     "father": 0,
-    "subgroup": [] 
-}
+    "subgroup": [
+      3
+    ]
+  },
+  {
+    "ID": 3,
+    "name": "Testing",
+    "father": 2,
+    "subgroup": []
+  }
 ]
 
