@@ -92,7 +92,6 @@ class ClassDbManager:
                 break
         for row in list_app_user:
             if row['ID'] == app:
-                print ("ciao")
                 return row['email']
         return False
 
@@ -132,7 +131,6 @@ class ClassDbManager:
         for row in list_app_proj:
             if row['ID'] == id_proj:
                 app = row['groups']
-                print app
                 break
         for row in list_app_user:
             for group in row['groups']:
@@ -141,6 +139,7 @@ class ClassDbManager:
         return dict_return
 
     def get_group_name_from_group(self, id_group):
+        # Da un id di un gruppo restituice il nome
         f = open(self.db_file['group'], "r")
         list_app = json.load(f)
         for row in list_app:

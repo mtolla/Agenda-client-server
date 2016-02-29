@@ -8,7 +8,8 @@ from loginManager import ClassLoginManager
 # Importo backgroundThread
 from PyQt4 import QtCore
 import time
-import json # DA ELIMINARE FINITI I TEST
+import json  # DA ELIMINARE FINITI I TEST
+
 
 class Api():
     def __init__(self):
@@ -24,7 +25,7 @@ class Api():
 
     # Login con user, password
     def do_login(self, user, password):
-        #if self.valid_credentials(user, password):
+        # if self.valid_credentials(user, password):
         return self.loginManager.do_login(user, password)
 
     # Login con token
@@ -33,7 +34,6 @@ class Api():
             return "OK", 200
         else:
             return "Unauthorized", 401
-
 
     # Controllo credenziali
     def valid_credentials(self, user, psw):
@@ -51,19 +51,18 @@ class Api():
         #   - Vacanze del progetto
         # Dizionario di ritorno
         dict_return = dict()
-        dict_return['project'] = self.dbManager.get_proj_from_id_proj(id_proj)
-        dict_return['email'] = self.dbManager.get_pjmanager_email(id_proj)
-        id_user = self.loginManager.from_token_get_user(token)
-        dict_return['isteamleader'] = self.dbManager.is_teamleader(id_user)
-        dict_return['activities'] = self.dbManager.get_activities_from_proj(id_proj)
-        dict_return['holidays'] = self.dbManager.get_holidays_from_proj(id_proj)
+        dict_return['project'] = self.get_project(id_proj)
+        dict_return['email'] = self.get_pjmanager_mail(id_proj)
+        dict_return['isteamleader'] = self.get_is_teamleader(token)
+        dict_return['activities'] = self.get_activities_project(id_proj)
+        dict_return['holidays'] = self.get_holidays_proj(id_proj)
         return dict_return
 
     def get_activity(self, id_att):
         # Dato id attività restituire:
         #   - Attività
         #   - Gruppo se è un attività di gruppo
-        dict_return = dict ()
+        dict_return = dict()
         dict_return['activity'] = self.dbManager.get_activity_from_id_act(id_att)
         dict_return['group'] = self.dbManager.get_group_name_from_group(dict_return['activity']['group'])
         return dict_return
@@ -93,18 +92,6 @@ class Api():
     def get_group_name(self, id_group):
         return self.dbManager.get_group_name_from_group(id_group)
 
-
-
-
-
-
-
-
-
-
-
-
-
     def error(self, app):
         return self.dbManager.error(app)
 
@@ -117,7 +104,7 @@ class TokenThread(QtCore.QRunnable):
     def __init__(self):
         QtCore.QRunnable.__init__(self)
         self.loginManager = ClassLoginManager()
-        self.sleep_time = 36000  # 10 Minuti
+        self.sleep_time = 360  # 10 Minuti
 
     def run(self):
         while True:

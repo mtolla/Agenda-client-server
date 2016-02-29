@@ -11,13 +11,13 @@ login Manager
 - from_token_get_user
 
 dbManager
-- do_login
-- get_activity_from_id_act
-- get_participants_from_group
-- get_name_from_id_projects
-- get_proj_from_id_proj
-- get_pjmanager_email
-- is_teamleader
-- get_activities_from_proj
-- get_holidays_from_proj
-- get_group_name_from_group
+- do_login : Fa il login
+- get_activity_from_id_act          : da un id attività -> attività
+- get_participants_from_group       : da un id gruppo -> partecipanti
+- get_name_from_id_projects         : da una lista di id proj -> nome e id progetti
+- get_proj_from_id_proj             : da un id proj -> progetto
+- get_pjmanager_email               : da un id proj -> mail teamleader
+- is_teamleader                     : da un token -> teamleader di almeno un gruppo
+- get_activities_from_proj          : da un id proj -> tutte le attività
+- get_holidays_from_proj            : da un id proj -> tutte le holidays
+- get_group_name_from_group         : da un id gruppo -> nome gruppo

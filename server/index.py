@@ -51,39 +51,50 @@ def do_login_token():
         return api.do_login_token(token)
 
 
-"""
-Legenda:
-/
-/agenda : bad_ass_function
-"""
+###########################################################################
+# DA ELIMINARE SERVE PER TEST
+@index.route('/login/<user>/<passw>', methods=['GET'])
+def asd(user, passw):
+    if user and passw:
+        response = api.do_login(user, passw)
+        if response:
+            return response
+        return 0
 
 
-@index.route('/agenda/<token>/<id_proj>', methods=['GET'])
+@index.route('/testbaf/<int:id_proj>', methods=['GET'])
+def piero(id_proj):
+    return api.badass_function(id_proj)
+
+
+@index.route('/agenda/<token>/<int:id_proj>', methods=['GET'])
 def agenda(token, id_proj):
     return api.badass_function(token, id_proj)
 
 
-@index.route('/activity/<id_att>', methods=['GET'])
+@index.route('/activity/<int:id_att>', methods=['GET'])
 def get_activity(id_att):
     return api.get_activity(id_att)
 
 
-@index.route('/partecipants_group/<id_group>', methods=['GET'])
+@index.route('/partecipants_group/<int:id_group>', methods=['GET'])
 def get_partecipants_group(id_group):
     return api.get_partecipants_group(id_group)
 
 
+###########################################################################
+# ASSOLUTAMENTE DA TESTARE
 @index.route('/name_projects/<list_id_proj>', methods=['GET'])
 def get_name_projects(list_id_proj):
     return api.get_name_projects(list_id_proj)
 
 
-@index.route('/project/<id_proj>', methods=['GET'])
+@index.route('/project/<int:id_proj>', methods=['GET'])
 def get_project(id_proj):
     return api.get_project(id_proj)
 
 
-@index.route('/pjmanager_mail/<id_proj>', methods=['GET'])
+@index.route('/pjmanager_mail/<int:id_proj>', methods=['GET'])
 def get_pjmanager_mail(id_proj):
     return api.get_pjmanager_mail(id_proj)
 
@@ -96,17 +107,17 @@ def get_is_teamleader(token):
         return "False", 404
 
 
-@index.route('/activities_project/<id_proj>', methods=['GET'])
+@index.route('/activities_project/<int:id_proj>', methods=['GET'])
 def get_activities_project(id_proj):
     return api.get_activities_project(id_proj)
 
 
-@index.route('/holidays_proj/<id_proj>', methods=['GET'])
+@index.route('/holidays_proj/<int:id_proj>', methods=['GET'])
 def get_holidays_proj(id_proj):
     return api.get_holidays_proj(id_proj)
 
 
-@index.route('/group_name/<id_group>', methods=['GET'])
+@index.route('/group_name/<int:id_group>', methods=['GET'])
 def get_group_name(id_group):
     return api.get_group_name(id_group)
 

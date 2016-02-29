@@ -80,7 +80,7 @@ class MyTestCase(unittest.TestCase):
         app = dbManager.get_activity_from_id_act(0)
         if app:
             print ("get_activity_from_id_act OK: ")
-            print (app)
+            #print (app)
         else:
             print ("get_activity_from_id_act ERROR")
 
@@ -88,7 +88,7 @@ class MyTestCase(unittest.TestCase):
         app = dbManager.get_participants_from_group(0)
         if app:
             print ("get_participants_from_group OK: ")
-            print (app)
+            #print (app)
         else:
             print ("get_participants_from_group ERROR")
 
@@ -116,10 +116,10 @@ class MyTestCase(unittest.TestCase):
             print ("get_pjmanager_email ERROR")
 
             # is_teamleader
-        app = dbManager.is_teamleader(0)
+        app = dbManager.is_teamleader(1)
         if app:
             print ("is_teamleader OK: ")
-            print (app)
+            #print (app)
         else:
             print ("is_teamleader ERROR")
 
@@ -127,17 +127,17 @@ class MyTestCase(unittest.TestCase):
         app = dbManager.get_activities_from_proj(0)
         if app:
             print ("get_activities_from_proj OK: ")
-            print (app)
+            #print (app)
         else:
             print ("get_activities_from_proj ERROR")
 
             # get_activities_from_id_act
-        app = dbManager.get_activities_from_id_act(0)
+        app = dbManager.get_activity_from_id_act(0)
         if app:
-            print ("get_activities_from_id_act OK: ")
-            print (app)
+            print ("get_activity_from_id_act OK: ")
+            #print (app)
         else:
-            print ("get_activities_from_id_act ERROR")
+            print ("get_activity_from_id_act ERROR")
 
         # get_holidays_from_proj
         app = dbManager.get_holidays_from_proj(0)
