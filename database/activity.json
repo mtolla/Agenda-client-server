@@ -1,1 +1,44 @@
-[{"group": 0, "name": "AgendaActivity1", "creator": 0, "project": 0, "location": 0, "partecipants": [0, 1], "ID": 0, "description": "scrum"}, {"group": 1, "description": "testing agenda project", "creator": 1, "project": 0, "location": 0, "partecipants": [1, 2, 3], "ID": 1, "name": "testAgenda"}, {"group": 1, "description": "develop agenda project", "creator": 0, "project": 0, "location": 0, "partecipants": [1, 4, 3, 5], "ID": 2, "name": "developAgenda"}]
+[
+  {
+    "group": 0,
+    "name": "AgendaActivity1",
+    "creator": 0,
+    "project": 0,
+    "location": 0,
+    "partecipants": [
+      0,
+      1
+    ],
+    "ID": 0,
+    "description": "scrum"
+  },
+  {
+    "group": 1,
+    "description": "testing agenda project",
+    "creator": 1,
+    "project": 0,
+    "location": 0,
+    "partecipants": [
+      1,
+      2,
+      3
+    ],
+    "ID": 1,
+    "name": "testAgenda"
+  },
+  {
+    "group": 1,
+    "description": "develop agenda project",
+    "creator": 0,
+    "project": 0,
+    "location": 0,
+    "partecipants": [
+      1,
+      4,
+      3,
+      5
+    ],
+    "ID": 2,
+    "name": "developAgenda"
+  }
+]
