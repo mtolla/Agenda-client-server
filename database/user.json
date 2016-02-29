@@ -26,7 +26,7 @@
     "groups": [],
     "password": "68c58ddae9e0cde89cf6a0589644b7fb85bc7cec4c9a00e1a52512f9a06c20c4d376a9d1e124fab52da153c13ada4b95282c7756bc747a72fa734676a4eca746",
     "ID": 0,
-    "email": "carluca@myprovider.net"
+    "email": "carluca@testprovider.nl"
   },
   {
     "username": "Angelica",
@@ -52,7 +52,6 @@
     ],
     "surname": "Bianchi",
     "name": "Angelica",
-    "email": "angelica@myprovider.net",
     "groups": [
       {
         "ID": 0,
@@ -68,7 +67,8 @@
       }
     ],
     "password": "1414051bdd75c40106c94a7823e769382155fea0fa5375a82ff19a1e6e4f2969f3776e103080fbbdd909f481a285afa0d38fc38adf3b4099a9fd100448c08343",
-    "ID": 1
+    "ID": 1,
+    "email": "angelica@testprovider.nl"
   },
   {
     "username": "stefano",
