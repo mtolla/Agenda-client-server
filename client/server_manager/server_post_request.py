@@ -13,14 +13,6 @@ class ServerPostRequest(ServerRequestInterface):
         self.request = requests
 
     def get_token(self, user):
-<<<<<<< HEAD
-        # 127.0.0.1:5000/get_token
-        return self.request.post(self.server_url + "/get_token", data={'action': "get_token", 'dict_login': json.dumps(user)})
-        # return self.request.post(self.server_url, data={'action': "get_token", 'dict_login': user})
-
-    def do_login(self):
-        pass
-=======
         """
         Dato l'utente:
             Se esiste nel database restituisce il token
@@ -49,4 +41,3 @@ class ServerPostRequest(ServerRequestInterface):
             return True
 
         return False
->>>>>>> a4911dfa355a3129e61defed63cabedddf5e137c

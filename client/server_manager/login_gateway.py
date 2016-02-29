@@ -8,14 +8,6 @@ class LoginGateway(LoginServerInterface):
         LoginServerInterface.__init__(self)
 
         self.server_url = server_url
-<<<<<<< HEAD
-
-        self.server_post_request = ServerPostRequest(server_url)
-
-    def get_token(self, user):
-        return self.server_post_request.get_token(user)
-=======
->>>>>>> a4911dfa355a3129e61defed63cabedddf5e137c
 
         self.server_post_request = ServerPostRequest(server_url)
 

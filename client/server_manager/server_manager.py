@@ -12,14 +12,11 @@ class ServerManager:
         self.server_request_handler = ServerRequestHandler(self.server_url)
 
     def get_token(self, user):
-<<<<<<< HEAD
-=======
         """
         Dato l'utente richiama il login_gateway per ricevere il token
         :param user: dizionario uresrname, password
         :return: token or False
         """
->>>>>>> a4911dfa355a3129e61defed63cabedddf5e137c
         return self.login_gateway.get_token(user)
 
     def do_login(self, token):
