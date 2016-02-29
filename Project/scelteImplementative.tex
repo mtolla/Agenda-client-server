@@ -52,29 +52,44 @@ If the implementation is hard to explain, it's a bad idea.
 \begin{quotation}
 If the implementation is easy to explain, it may be a good idea.
 \end{quotation}
-Queste righe sembrano denotare in modo sarcastico la filosofia del linguaggio.
+Queste righe sembrano denotare con toni sarcastici la filosofia del linguaggio.
 Uno degli obiettivi del linguaggio \`e appunto far s\`i che il codice scritto
-abbia il miglior compromesso tra stringatezza e comprensibilit\`a. Si intende
+risulti il miglior compromesso tra stringatezza e comprensibilit\`a. Si intende
 quindi che codice estremamente compatto non \`e sinonimo di efficienza a lungo termine
 in quanto provocher\`a quasi sicuramente un dilatamento delle tempistiche
-sia fasi di sviluppo successive sia in fase di testing ed ottimizzazione.
-Un esmpio che pu\`o far notare il modo in cui questo tipo di filosofia inserito
+sia in fasi di sviluppo successive sia in fase di testing ed ottimizzazione.
+Un esmpio che pu\`o far notare il modo in cui questo tipo di filosofia \`e inserito
 nella struttura del linguaggio possa effettivamente influire sul codice \`e 
-quello dell'indentazione: per forzare il programmatore ad indentare sempr
+quello dell'indentazione: per forzare il programmatore ad indentare sempre
 e il codice (e a farlo in modo corretto) questo linguaggio non usa caratteri
-di begin ed end nella definzione di classi, funzioni e procedure,
-espressioni condizionali, espressioni iterative (come fa ad esempio Java con le
+di begin ed end nella definzione di classi, espressioni condizionali,
+espressioni iterative, funzioni e procedure (come fa ad esempio Java con le
 parentesi graffe) ma usa solo l'indentazione. In tal modo da una parte i programmatori
 che di norma non indentano il loro codice risulteranno "costretti" a farlo,
 e dall'altra i programmatori che gia` di norma indentano il proprio codice
 non dovranno inserire altri simboli per esprimere ci\`o che concettualmente
-pu\`o essere gi\`a presente nell'indentazione. \\ \\
+pu\`o essere gi\`a espresso dall'indentazione. \\ \\
 Secondo il nostro team di sviluppo questa caratteristica risultava molto
-interessante per la gestione di un progetto in cui e\` richiesta
+interessante per la gestione di un progetto in cui \`e richiesta
 particolare attenzione alla qualit\`a del codice prodotto. Inoltre a livello
-pratico tutto ci\`o e\` risultato addirittura comodo dato che ogni membro
-del gruppo presentava un proprio stile di stesura del codice e si e\` notata la
+pratico tutto ci\`o \`e risultato addirittura comodo dato che ogni membro
+del gruppo presentava un proprio stile di stesura del codice e si \`e mostrata la
 necessit\`a di uno stile univoco con cui lavorare.
+
+\subsection{Portabilit\`a}
+Python \`e un linguaggio precompilato e il suo interprete \`e disponibile per
+numerose piattaforme. La presenza di questa caratteristica non e` stata sicuramente
+dato che i quasi tutti i membri del team di sviluppo usano piattaforme ed ambienti
+diversi. Anche la distribuzione dell'applicazione e di pacchetti contenenti le 
+varie dipendenze richieste risulta estremamente semplificata grazie alla portabilit\`a di Python.
+
+
+\subsection{Dizionari}
+Una delle funzionalit\`a che sono state pi\`u apprezzate per la stesura del codice
+relativa al progetto \`e senza dubbio la gestione dei dizionari che Python offre
+e la loro semplice e diretta interazione con classi e anche dati Json.
+
+
 
 \begin{thebibliography}{10}	
 
