@@ -1,0 +1,83 @@
+\documentclass[12pt]{scrartcl}
+\usepackage{listings}
+\usepackage{epigraph}
+
+\title{Scelte Implementative}
+\subtitle{Ingegneria del Software}
+\author{Stefano Ravetta, Simone Renzo, Matteo Scarpone, Mattia Tollari}
+\date{29 Febbraio, 2016}
+
+\begin{document}
+\maketitle
+
+
+\section{Introduzione}	% Produces section heading.  Lower-level sections
+			% are begun with similar \subsection and
+			% \subsubsection commands; numbering is automatic!
+
+\subsection{Informazioni su questo ducumento}
+In questo documento verranno trattate e discusse le scelte
+implementative che sono state prese per la realizzazione del progetto "Team Diary Management"
+e le motivazioni delle stesse .
+
+\subsection{Contenuti}
+Si porr\`a l'attenzione in modo particolare su
+\begin{itemize}
+    \item Software per la creazione dei diagrammi
+    \item Software per la stesura della documentazione
+    \item Linguaggio di programmazione
+    \item Formato e struttura della base di dati
+    \item Librerie per la creazione dell'interfaccia utente
+    \item Struttura dei sistemi di sicurezza adottati
+\end{itemize}
+
+\section{Linguaggio}
+\subsection{Introduzione}
+\'E stato scelto il linguaggio di programmazione Python per alcune caratteristiche
+piuttosto interessanti che lo possono far risaltare nell'ecosistema dei linguaggi di programmazione odierno.
+\subsection{Alto livello}
+Python consente di programmare ad un livello molto alto: con poche righe riesce a gestire
+in modo semplice e diretto operazioni complesse senza che il codice risulti troppo complesso da leggere e comprendere.
+\\ \\
+Questo ha permesso al team di sviluppo di concentrarsi di pi\`u sulle parti pi\`u astratte
+e progettuali (come i design pattern e la rimozione di vari code smell) che
+su questioni pi\`u vicine alla comprensione del funzionamento del linguaggio.
+\subsection{Filosofia}
+Una parte di un famoso "easter egg" inserito nell'interprete Python (che pu\`o apparire appena si
+prova ad importare la libreria "this") recita:
+\begin{quotation}
+If the implementation is hard to explain, it's a bad idea.
+\end{quotation}
+
+\begin{quotation}
+If the implementation is easy to explain, it may be a good idea.
+\end{quotation}
+Queste righe sembrano denotare in modo sarcastico la filosofia del linguaggio.
+Uno degli obiettivi del linguaggio \`e appunto far s\`i che il codice scritto
+abbia il miglior compromesso tra stringatezza e comprensibilit\`a. Si intende
+quindi che codice estremamente compatto non \`e sinonimo di efficienza a lungo termine
+in quanto provocher\`a quasi sicuramente un dilatamento delle tempistiche
+sia fasi di sviluppo successive sia in fase di testing ed ottimizzazione.
+Un esmpio che pu\`o far notare il modo in cui questo tipo di filosofia inserito
+nella struttura del linguaggio possa effettivamente influire sul codice \`e 
+quello dell'indentazione: per forzare il programmatore ad indentare sempr
+e il codice (e a farlo in modo corretto) questo linguaggio non usa caratteri
+di begin ed end nella definzione di classi, funzioni e procedure,
+espressioni condizionali, espressioni iterative (come fa ad esempio Java con le
+parentesi graffe) ma usa solo l'indentazione. In tal modo da una parte i programmatori
+che di norma non indentano il loro codice risulteranno "costretti" a farlo,
+e dall'altra i programmatori che gia` di norma indentano il proprio codice
+non dovranno inserire altri simboli per esprimere ci\`o che concettualmente
+pu\`o essere gi\`a presente nell'indentazione. \\ \\
+Secondo il nostro team di sviluppo questa caratteristica risultava molto
+interessante per la progettazione di un progetto in cui e\` richiesta
+particolare attenzione alla qualit\`a del codice prodotta. Inoltre a livello
+pratico tutto ci\`o e\` risultato addirittura comodo dato che ogni membro
+del gruppo aveva un proprio stile di stesura del codice e si e\` notata la
+necessit\`a di uno stile univoco con cui lavorare.
+
+\begin{thebibliography}{10}	
+
+
+\end{thebibliography}
+\end{document}             % End of documen
