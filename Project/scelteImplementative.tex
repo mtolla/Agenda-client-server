@@ -123,8 +123,28 @@ gli oggetti usati ed i metodi  per accedervi.
 
 \section{Struttura dei sistemi di sicurezza adottati}
 \subsection{Codifica delle password}
-
+    Per evitare di salvare le password degli utenti in chiaro
+    \`e stato fatto ricorso ad un algoritmo di hashing one-way:
+    esiste una funzione semplice da calcolare che associa ad ogni stringa un hash
+    ma non esiste una funzione semplice da calcolare che associa ad ogni hash una stringa
+    tale che, se applicata la funzione iniziale, l'hash ottenuto sia quello di partenza.
+    \`E stato scelto SHA512 in quanto oggi risulta quello pi\`u robusto a 
+    livello di problemi di collisione e preimmagine. Per l'implementazione in Python
+    \`e stata usata la libreria Hashlib.
 \subsection{Token, autenticazione e gestione delle sessioni}
+    Per gestire autenticazione e sessioni \`e stato implementato un sistema di
+    token. Un token \`e un hash SHA512 di utente, password e timestamp. Con un controllo
+    su questi tre campi si impedisce ad un utente malintenzionato (che non dispone dei una
+    password valida) di poter accedere ad una sessione gi\`a attiva. 
+    Il timestamp serve per imporre scadenze al token (limite attualmente posto
+    uguale ad un giorno). Cos\`i facendo risulter\`a difficile anche provare un
+    attacco che mira a scoprire il token dato che in poco tempo i tentativi precedenti
+    risulteranno inutili.
 \subsection{Password dimenticate}
+    Nel caso venisse smarrita la password di un utente verr\`a visualizzato
+    un messaggio che indicher\`a di contattare gli amministratori di 
+    sistema. \`E stata presa questa scelta perch\`e non erano presenti
+    le risorse necessarie per implementare e testare a fondo un sistema
+    di recupero password che usi email o SMS.
 
 \end{document}
