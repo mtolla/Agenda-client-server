@@ -11,7 +11,8 @@ class CreateUser(Page):
         self.ui.setupui(self)
         self.connect(self.ui.push_button, QtCore.SIGNAL("clicked()"), self.create)
 
-    def popup(self, message):
+    @staticmethod
+    def popup(message):
         Popup(message, ALERT).exec_()
 
     def create(self):
