@@ -33,16 +33,16 @@ class ClassLoginManager:
         if usr in self.user_token:
             self.delete_token(usr, False)
         if self.db_manager.do_login(usr, psw):
-            return self.generate_token(usr)
+            return self.generate_token(usr, psw)
         return False
 
     def do_login_token(self, token):
         return self.check_token(token)
 
-    def generate_token(self, usr):
+    def generate_token(self, usr, psw):
         self.user_token[usr] = dict()
         self.user_token[usr]['time'] = time()
-        self.user_token[usr]['token'] = sha512(usr + str(self.user_token[usr]['time'])).hexdigest()
+        self.user_token[usr]['token'] = sha512(usr + psw + str(self.user_token[usr]['time'])).hexdigest()
         return self.user_token[usr]['token']
 
     def logout(self, token):
