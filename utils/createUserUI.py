@@ -84,19 +84,6 @@ class UiMainWindow(object):
         self.push_button.setGeometry(QtCore.QRect(140, 230, 88, 34))
         self.push_button.setObjectName(_fromutf8("push_button"))
         main_window.setCentralWidget(self.centralwidget)
-        self.statusbar = QtGui.QStatusBar(main_window)
-        self.statusbar.setObjectName(_fromutf8("statusbar"))
-        main_window.setStatusBar(self.statusbar)
-        self.menubar = QtGui.QMenuBar(main_window)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 385, 30))
-        self.menubar.setObjectName(_fromutf8("menubar"))
-        self.menu_file = QtGui.QMenu(self.menubar)
-        self.menu_file.setObjectName(_fromutf8("menu_file"))
-        main_window.setMenuBar(self.menubar)
-        self.action_quit = QtGui.QAction(main_window)
-        self.action_quit.setObjectName(_fromutf8("action_quit"))
-        self.menu_file.addAction(self.action_quit)
-        self.menubar.addAction(self.menu_file.menuAction())
 
         self.retranslate_ui(main_window)
         QtCore.QMetaObject.connectSlotsByName(main_window)
@@ -109,7 +96,3 @@ class UiMainWindow(object):
         self.name_label.setText(_translate("MainWindow", "Name", None))
         self.surname_label.setText(_translate("MainWindow", "Surname", None))
         self.push_button.setText(_translate("MainWindow", "Create", None))
-        self.menu_file.setTitle(_translate("MainWindow", "Fi&le", None))
-        self.action_quit.setText(_translate("MainWindow", "Quit", None))
-
-

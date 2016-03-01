@@ -2,16 +2,14 @@
 
 from createUserUI import *
 from populate import *
-from client.gui.popup import *
+from client.gui.page import *
 
-
-class CreateUser(QtGui.QMainWindow):
+class CreateUser(Page):
     def __init__(self):
-        QtGui.QMainWindow.__init__(self)
+        Page.__init__(self)
         self.ui = UiMainWindow()
         self.ui.setupui(self)
         self.connect(self.ui.push_button, QtCore.SIGNAL("clicked()"), self.create)
-        self.connect(self.ui.action_quit, QtCore.SIGNAL("triggered()"), QtCore.SLOT("close()"))
 
     def popup(self, message):
         Popup(message, ALERT).exec_()
