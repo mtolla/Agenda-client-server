@@ -1,6 +1,7 @@
 \documentclass[12pt]{scrartcl}
 \usepackage{listings}
 \usepackage{epigraph}
+\usepackage{dirtree}
 
 \title{Scelte Implementative}
 \subtitle{Ingegneria del Software}
@@ -31,7 +32,7 @@ Si porr\`a l'attenzione in modo particolare su
     \item Struttura dei sistemi di sicurezza adottati
 \end{itemize}
 
-\section{Linguaggio}
+\section{Linguaggio di Programmazione}
 \subsection{Introduzione}
 \'E stato scelto il linguaggio di programmazione Python\footnote{https://www.python.org/} per alcune caratteristiche
 piuttosto interessanti che lo possono far risaltare nell'ecosistema dei linguaggi di programmazione odierno.
@@ -120,6 +121,53 @@ che svolge il lavoro meccanico di conversione da file che descrive un'interfacci
 ad uno script Python che mette a disposizione classi che rappresentano
 gli oggetti usati ed i metodi  per accedervi.
 
+\section{Base di dati}
+\subsection{Introduzione}
+    Dato che la base di dati usata ha una struttura molto semplice \`e stato scelto
+    di non usare uno strumento complesso come un database relazionale. 
+    \`E stata creata una base di dati in formato Json che \`e risultata semplice da
+    strutturare e da gestire. \`E risultato comodo interagire assieme sulla base
+    di dati tramite Git. L'unico problema riscontrato \`e stato dover gestire i vari
+    file dal codice dell'applicazione. Questo problema \`e stato praticamente risolto
+    con l'introduzione di una struttura di metodi e costanti.
+    Con un database relazionale sarebbe stato necessario usare
+    i file ottenuti dal dump del database ed importarli in locale ad ogni modifica.
+    L'ideazione e la gestione del database relazionale avrebbero occupato pi\'u tempo
+    della soluzione adottata.
+\subsection{Struttura}
+    La struttura della base di dati \`e cos\`i definita:
+    
+    \dirtree{%
+    .1 database.
+    .2 user.json.
+    .2 location.json.
+    .2 activity.json.
+    .2 group.json.
+    .2 project.json.
+    }
+    
+    \subsubsection{User.json}
+        Contiene i dati relativi all'utente: id, username, password, nome, cognome, gruppi (una lista che
+        contiene l'id del gruppo e il ruolo ("partecipante" o "team leader"), vacanze (una listas che
+        contiene un id, un nome, data di inizio e data di fine).
+    
+    \subsubsection{Location.json}
+        Contiene i dati relativi ai luoghi: un id ed un nome.
+    
+    \subsubsection{Activity.json}
+        Contiene i dati relativi alle attivit\`a: id, nome, id del progetto di riferimento, 
+        id dell'utente che ha creato l'attivit\`a, tipo di attivit\`a (se di gruppo, di progetto
+        o singola), l'id del luogo, id del grupppo, lista di id dei partecipanti.
+    
+    \subsubsection{Group.json}
+        Contiene i dati relativi ai grupi: id, nome, father (False se il gruppo non \`e un sottogruppo,
+        id del sottogruppo altrimenti), lista degli id dei sottogruppi.
+        
+\subsection{Interazione con Python}
+    Per importare e gestire la base di dati dal programma sono stati usati i dizionari costruiti,
+    come Json, con [chiave: valore]. Questo tipo di dato ha reso molto agile
+    l'accesso e la generazione di codice Json.
+
 
 \section{Struttura dei sistemi di sicurezza adottati}
 \subsection{Codifica delle password}
@@ -146,27 +194,5 @@ gli oggetti usati ed i metodi  per accedervi.
     sistema. \`E stata presa questa scelta perch\`e non erano presenti
     le risorse necessarie per implementare e testare a fondo un sistema
     di recupero password che usi email o SMS.
-
-\section{Base di dati}
-\subsection{Introduzione}
-    Dato che la base di dati usata ha una struttura molto semplice \`e stato scelto
-    di non usare uno strumento complesso come un database relazionale. 
-    \`E stata creata una base di dati in formato Json che \`e risultata semplice da
-    strutturare e da gestire. \`E risultato comodo interagire assieme sulla base
-    di dati tramite Git. L'unico problema riscontrato \`e stato dover gestire i vari
-    file dal codice dell'applicazione. Questo problema \`e stato praticamente risolto
-    con l'introduzione di una struttura di metodi e costanti.
-    Con un database relazionale sarebbe stato necessario usare
-    i file ottenuti dal dump del database ed importarli in locale ad ogni modifica.
-    L'ideazione e la gestione del database relazionale avrebbero occupato pi\'u tempo
-    della soluzione adottata.
-\subsection{Struttura}
-    La struttura della base di dati \`e cos\`i definita:
-    
-    \begin{lstlisting}[frame=single]
-        user.json
-    \end{lstlisting}
-\subsection{Interazione con Python}
-
 
 \end{document}
