@@ -9,6 +9,10 @@ from loginManager import ClassLoginManager
 from PyQt4 import QtCore
 import time
 import json  # DA ELIMINARE FINITI I TEST
+# Thread
+from backgroundThread import TokenThread, SignalThread
+# Notification Queue
+from signalQueue import ClassSignalQueue
 
 
 class Api():
@@ -20,17 +24,22 @@ class Api():
         self.usrMaxLen = 10
         self.pswMaxLen = 10
         # Creazione thread controllo token
-        token_thread = TokenThread()
+        token_thread = TokenThread(self.loginManager)
         QtCore.QThreadPool.globalInstance().start(token_thread)
+        # Creazione gestione coda notifiche
+        self.signalQueue = ClassSignalQueue(self.loginManager, self.dbManager)
+        # Creazione thread controllo queue
+        signal_thread = SignalThread(self.signalQueue)
+        QtCore.QThreadPool.globalInstance().start(signal_thread)
 
     # Login con user, password
-    def do_login(self, user, password):
+    def do_login(self, user, password, ip):
         # if self.valid_credentials(user, password):
-        return self.loginManager.do_login(user, password)
+        return self.loginManager.do_login(user, password, ip)
 
     # Login con token
-    def do_login_token(self, token):
-        if self.loginManager.do_login_token(token):
+    def do_login_token(self, token, ip):
+        if self.loginManager.do_login_token(token, ip):
             return "OK", 200
         else:
             return "Unauthorized", 401
@@ -99,14 +108,5 @@ class Api():
         return json.dumps(self.loginManager.user_token)
 
 
-# Classe Thread controllo token
-class TokenThread(QtCore.QRunnable):
-    def __init__(self):
-        QtCore.QRunnable.__init__(self)
-        self.loginManager = ClassLoginManager()
-        self.sleep_time = 360  # 10 Minuti
 
-    def run(self):
-        while True:
-            self.loginManager.check_life_token()
-            time.sleep(self.sleep_time)
+

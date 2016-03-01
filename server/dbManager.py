@@ -147,6 +147,24 @@ class ClassDbManager:
                 return row['name']
         return False
 
+    def get_user_from_activity(self, id_act):
+        # Da una id di una attività restituire gli attributi
+        # Seleziono da activity l'attività con id passato
+        # diz_cond : field, table, where
+        f = open(self.db_file['activity'], "r")
+        list_return = []
+        dict_app = dict()
+        # Dizionario di appoggio
+        list_app = json.load(f)
+        for row in list_app:
+            if row['ID'] == id_act:
+                for user in row['partecipants']:
+                    dict_app['act'] = id_act
+                    dict_app['user'] = user
+                    list_return.append(dict_app)
+                return list_return
+        return False
+
     def error(self, app):
         if app:
             return self.er + '5UL9yj">'

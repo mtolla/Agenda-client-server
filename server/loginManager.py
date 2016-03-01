@@ -29,20 +29,21 @@ class ClassLoginManager:
         # Oggetto db_manager
         self.db_manager = ClassDbManager()
 
-    def do_login(self, usr, psw):
+    def do_login(self, usr, psw, ip):
         if usr in self.user_token:
             self.delete_token(usr, False)
         if self.db_manager.do_login(usr, psw):
-            return self.generate_token(usr, psw)
+            return self.generate_token(usr, psw, ip)
         return False
 
-    def do_login_token(self, token):
-        return self.check_token(token)
+    def do_login_token(self, token, ip):
+        return self.check_token(token, ip)
 
-    def generate_token(self, usr, psw):
+    def generate_token(self, usr, psw, ip):
         self.user_token[usr] = dict()
         self.user_token[usr]['time'] = time()
         self.user_token[usr]['token'] = sha512(usr + psw + str(self.user_token[usr]['time'])).hexdigest()
+        self.user_token[usr]['ip'] = ip
         return self.user_token[usr]['token']
 
     def logout(self, token):
@@ -60,9 +61,11 @@ class ClassLoginManager:
             self.user_token.pop(usr)
         return True
 
-    def check_token(self, token):
+    def check_token(self, token, ip):
         for key, users in self.user_token.items():
             if token == users['token']:
+                if ip != users['ip']:
+                    users['ip'] = ip
                 return True
         return False
 
@@ -75,3 +78,6 @@ class ClassLoginManager:
         for key, users in self.user_token.items():
             if token == users['token']:
                 return key
+
+    def from_user_get_ip(self, id):
+        return self.user_token[id]['ip']

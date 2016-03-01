@@ -21,3 +21,9 @@ dbManager
 - get_activities_from_proj          : da un id proj -> tutte le attività
 - get_holidays_from_proj            : da un id proj -> tutte le holidays
 - get_group_name_from_group         : da un id gruppo -> nome gruppo
+
+All'inizio restituire le attività di oggi
+
+SignalQueue:
+Coda di file modificati
+Coda

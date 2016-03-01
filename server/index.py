@@ -6,10 +6,19 @@ from flask import render_template
 from api import Api
 # Conversione Stringhe -> Dizionari
 import ast
+# Signals
+from blinker import Namespace
 
 index = Flask(__name__)
-index.debug = True
 api = Api()
+
+# Creazione signals
+signals = Namespace()
+message_signals = signals.signal('GET REKT')
+#using connect to register a signal callback
+#message_signals.connect(function, app)
+#send the signal
+#message_signals.send(current_app._get_current_object(),email = email)
 
 
 @index.route("/")
@@ -37,8 +46,9 @@ def do_login(token):
     dict_login = ast.literal_eval(request.form['dict_login'])
     usr = dict_login['username']
     psw = dict_login['password']
+    ip = dict_login['ip']
     if usr and psw:
-        response = api.do_login(usr, psw)
+        response = api.do_login(usr, psw, ip)
         if response:
             return response
         return 0
@@ -53,10 +63,10 @@ def do_login_token():
 
 ###########################################################################
 # DA ELIMINARE SERVE PER TEST
-@index.route('/login/<user>/<passw>', methods=['GET'])
-def asd(user, passw):
-    if user and passw:
-        response = api.do_login(user, passw)
+@index.route('/login/<user>/<passw>/<ip>', methods=['GET'])
+def asd(user, passw, ip):
+    if user and passw and ip:
+        response = api.do_login(user, passw, ip)
         if response:
             return response
         return 0
@@ -128,4 +138,6 @@ def page_not_found(app):
 
 
 if __name__ == "__main__":
-    index.run()
+    index.run(host='127.0.0.1', port=80, debug=True)
+
+

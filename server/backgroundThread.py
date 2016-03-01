@@ -1,22 +1,32 @@
 # Librerie underground Task
-import threading
+from PyQt4 import QtCore
 import time
 # Importo loginManager
 from loginManager import ClassLoginManager
 
 
-# Background work
-# Codice ispirato da http://sebastiandahlgren.se/2014/06/27/running-a-method-as-a-background-thread-in-python/
-class BackgroundThread():
-    def __init__(self, interval=360):  # 360 = 10 min
-        self.interval = interval
-        login_manager = ClassLoginManager()
-        thread = threading.Thread(target=self.run(login_manager), args=())
-        thread.daemon = True  # Daemonize thread
-        thread.start()  # Start the execution
+# Classe Thread controllo token
+class TokenThread(QtCore.QRunnable):
+    def __init__(self, loginManager):
+        QtCore.QRunnable.__init__(self)
+        self.sleep_time = 360  # 10 Minuti
+        self.loginManager = loginManager
 
-    @staticmethod
-    def run(login_manager):
+    def run(self):
         while True:
-            login_manager.check_life_token()
-            time.sleep(36000)
+            self.loginManager.check_life_token()
+            time.sleep(self.sleep_time)
+
+
+class SignalThread(QtCore.QRunnable):
+    def __init__(self, signal_queue):
+        QtCore.QRunnable.__init__(self)
+        self.sleep_time = 60  # 1 Minuti
+        self.signalQueue = signal_queue
+
+    def run(self):
+        while True:
+            self.signalQueue.check_activity()
+            self.signalQueue.send()
+            time.sleep(self.sleep_time)
+
