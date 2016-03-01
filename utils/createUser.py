@@ -2,6 +2,7 @@
 
 from createUserUI import *
 from populate import *
+from client.gui.popup import *
 
 
 class CreateUser(QtGui.QMainWindow):
@@ -12,6 +13,9 @@ class CreateUser(QtGui.QMainWindow):
         self.connect(self.ui.push_button, QtCore.SIGNAL("clicked()"), self.create)
         self.connect(self.ui.action_quit, QtCore.SIGNAL("triggered()"), QtCore.SLOT("close()"))
 
+    def popup(self, message):
+        Popup(message, ALERT).exec_()
+
     def create(self):
         # Recive data from UI
         self.username = str(self.ui.username_edit.text())
@@ -20,9 +24,13 @@ class CreateUser(QtGui.QMainWindow):
         self.name = str(self.ui.name_edit.text())
         self.surname = str(self.ui.surname_edit.text())
         # Put data into a dict
-        data = populate_user(self.username, self.password,self.email, self.name, self.surname)
-        # Write data into database
-        add_dict(data, user_file)
+        if self.username == "" or self.password == "" or self.email == "" or self.name == "" or self.surname == "":
+             self.popup("Inserire tutti i campi richiesti")
+        else:
+            data = populate_user(self.username, self.password,self.email, self.name, self.surname)
+            # Write data into database
+            add_dict(data, user_file)
+
 if __name__ == "__main__":
     import sys
     app = QtGui.QApplication(sys.argv)
