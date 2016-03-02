@@ -41,12 +41,12 @@ def testbg():
     return api.test()
 
 
-@index.route('/login/<token>', methods=['POST'])
-def do_login(token):
+@index.route('/login/token', methods=['POST'])
+def do_login():
     dict_login = ast.literal_eval(request.form['dict_login'])
     usr = dict_login['username']
     psw = dict_login['password']
-    ip = dict_login['ip']
+    ip = request.form['ip']
     if usr and psw:
         response = api.do_login(usr, psw, ip)
         if response:
@@ -57,8 +57,9 @@ def do_login(token):
 @index.route('/login', methods=['POST'])
 def do_login_token():
     token = request.form['token']
+    ip = request.form['ip']
     if token:
-        return api.do_login_token(token)
+        return api.do_login_token(token, ip)
 
 
 ###########################################################################
@@ -68,7 +69,7 @@ def asd(user, passw, ip):
     if user and passw and ip:
         response = api.do_login(user, passw, ip)
         if response:
-            return response
+            return response[0]
         return 0
 
 
@@ -138,6 +139,7 @@ def page_not_found(app):
 
 
 if __name__ == "__main__":
-    index.run(host='127.0.0.1', port=80, debug=True)
+    # index.run(host='127.0.0.1', port=5000, debug=True)
+    index.run(debug=True)
 
 

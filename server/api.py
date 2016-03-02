@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 # Importo librerie
 
 # Importo dbManager
@@ -35,11 +35,11 @@ class Api():
     # Login con user, password
     def do_login(self, user, password, ip):
         # if self.valid_credentials(user, password):
-        return self.loginManager.do_login(user, password, ip)
+        return self.loginManager.do_login(user, password, ip, self.signalQueue)
 
     # Login con token
-    def do_login_token(self, token, ip):
-        if self.loginManager.do_login_token(token, ip):
+    def do_login_token(self, token, ip, ):
+        if self.loginManager.do_login_token(token, ip, self.signalQueue):
             return "OK", 200
         else:
             return "Unauthorized", 401
