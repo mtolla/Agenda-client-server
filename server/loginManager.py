@@ -29,20 +29,28 @@ class ClassLoginManager:
         # Oggetto db_manager
         self.db_manager = ClassDbManager()
 
-    def do_login(self, usr, psw, ip):
+    def do_login(self, usr, psw, ip, signal_queue):
+        list_return = []
+        id_usr = self.db_manager.from_user_get_id(usr)
         if usr in self.user_token:
-            self.delete_token(usr, False)
+            self.delete_token(id_usr, False)
         if self.db_manager.do_login(usr, psw):
-            return self.generate_token(usr, psw, ip)
+            list_return.append(self.generate_token(id_usr, psw, ip))
+            list_return.append(signal_queue.send_user_logged(self.from_token_get_user(list_return[0])))
+            return list_return
         return False
 
-    def do_login_token(self, token, ip):
-        return self.check_token(token, ip)
+    def do_login_token(self, token, ip, signal_queue):
+        list_return = []
+        list_return.append(self.check_token(token, ip))
+        if list_return[0]:
+            list_return.append(signal_queue.send_user_logged(self.from_token_get_user(token)))
+        return list_return
 
     def generate_token(self, usr, psw, ip):
         self.user_token[usr] = dict()
         self.user_token[usr]['time'] = time()
-        self.user_token[usr]['token'] = sha512(usr + psw + str(self.user_token[usr]['time'])).hexdigest()
+        self.user_token[usr]['token'] = sha512(str(usr) + psw + str(self.user_token[usr]['time'])).hexdigest()
         self.user_token[usr]['ip'] = ip
         return self.user_token[usr]['token']
 

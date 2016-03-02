@@ -2,19 +2,19 @@
 import json
 import sys
 import ast
+import datetime
 
 
 class ClassDbManager:
     def __init__(self):
         # Dizionario del db
         self.db_file = {'user': sys.path[1] + '/database/user.json',
-                   'project': sys.path[1] + '/database/project.json',
-                   'location': sys.path[1] + '/database/location.json',
-                   'group': sys.path[1] + '/database/group.json',
-                   'activity': sys.path[1] + '/database/activity.json'}
+                        'project': sys.path[1] + '/database/project.json',
+                        'location': sys.path[1] + '/database/location.json',
+                        'group': sys.path[1] + '/database/group.json',
+                        'activity': sys.path[1] + '/database/activity.json'}
         self.er = '<img src="https://goo.gl/'
         # Inizializzo loginManager
-
 
     def do_login(self, usr, psw):
         f = open(self.db_file['user'], "r")
@@ -46,10 +46,10 @@ class ClassDbManager:
         # Dizionario di ritorno
         list_return = []
         for row in list_app:
-                for group in row['groups']:
-                    if group['ID'] == id_group:
-                        list_return.append(row)
-                        break
+            for group in row['groups']:
+                if group['ID'] == id_group:
+                    list_return.append(row)
+                    break
         return list_return
 
     def get_name_from_id_projects(self, list_id_proj):
@@ -103,9 +103,16 @@ class ClassDbManager:
         list_app = json.load(f)
         for row in list_app:
             if row['ID'] == id_user:
-                for group in row['groups']:
-                    if group['level'] == 'teamleader':
-                        return True
+                return self.is_teamleader_check(row)
+        return False
+
+    @staticmethod
+    def is_teamleader_check(row):
+        # Funzione di supporto per non far piangere sonar
+        for group in row['groups']:
+            if group['level'] == 'teamleader':
+                print "yeee"
+                return True
         return False
 
     def get_activities_from_proj(self, id_proj):
@@ -147,22 +154,66 @@ class ClassDbManager:
                 return row['name']
         return False
 
-    def get_user_from_activity(self, id_act):
+    def get_users_from_activity(self, id_act):
         # Da una id di una attività restituire gli attributi
         # Seleziono da activity l'attività con id passato
         # diz_cond : field, table, where
         f = open(self.db_file['activity'], "r")
         list_return = []
         dict_app = dict()
-        # Dizionario di appoggio
+        # Lista di appoggio
         list_app = json.load(f)
         for row in list_app:
             if row['ID'] == id_act:
                 for user in row['partecipants']:
                     dict_app['act'] = id_act
                     dict_app['user'] = user
+                    dict_app['attempt'] = 1
                     list_return.append(dict_app)
                 return list_return
+        return False
+
+    @property
+    def check_activity(self):
+        # Controllo tutte le attività e restituisco quelle con scadenza = 1 ora, 30 min, 24 ore
+        f = open(self.db_file['activity'], "r")
+        list_return = []
+        # Dizionario di appoggio
+        dict_app = dict()
+        # Lista di appoggio
+        list_app = json.load(f)
+        for row in list_app:
+            # Controllo se l'attività è di oggi o ha scadenza prossima
+            its_time = self.time_missing(row['date'])
+            if its_time:
+                for user in row['partecipants']:
+                    dict_app['act'] = row['ID']
+                    dict_app['user'] = user
+                    dict_app['attempt'] = 1
+                    dict_app['date'] = its_time
+                    list_return.append(dict_app)
+                return list_return
+        return False
+
+    @staticmethod
+    def time_missing(date_act):
+        # 30 min, 1 hour, 24 hours
+        app = date_act - datetime.date.today()
+        if 1800 >= app.total_seconds() >= 1740:
+            return 30
+        if 3600 >= app.total_seconds() >= 3540:
+            return 1
+        if 86.400 >= app.total_seconds() >= 86340:
+            return 24
+        return False
+
+    def from_user_get_id(self, user):
+        # Dal nome utente restituisco id
+        f = open(self.db_file['user'], "r")
+        list_app = json.load(f)
+        for row in list_app:
+            if row['username'] == user:
+                return row['ID']
         return False
 
     def error(self, app):
@@ -170,5 +221,3 @@ class ClassDbManager:
             return self.er + '5UL9yj">'
         else:
             return self.er + 'dmr6pW">'
-
-
