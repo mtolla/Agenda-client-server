@@ -5,12 +5,25 @@ import json
 
 
 class ServerPostRequest(ServerRequestInterface):
-    def __init__(self, server_url):
+    def __init__(self, server_url, client_url, token=None):
         ServerRequestInterface.__init__(self)
 
-        self.server_url = server_url
+        self.client_url = client_url
+
+        self.token = token
 
         self.request = requests
+
+        self.request_url = {
+            'get_token': server_url + "/login/token",
+            'do_login': server_url + "/login"
+        }
+
+    def get_response(self, response):
+        if response['status_code'] == 200:
+            return response['_content']
+
+        return False
 
     def get_token(self, user):
         """
@@ -20,12 +33,15 @@ class ServerPostRequest(ServerRequestInterface):
         :param user: dizionario uresrname, password
         :return: token or False
         """
-        response = self.request.post(self.server_url + "/get_token", data={'dict_login': json.dumps(user)}).__dict__
+        response = self.request.post(
+            self.request_url['get_token'],
+            data={
+                'dict_login': json.dumps(user),
+                'ip': self.client_url
+            }
+        ).__dict__
 
-        if response['status_code'] == 200 and response['_content'] != 0:
-            return response['_content']
-
-        return False
+        return self.get_response(response)
 
     def do_login(self, token):
         """
@@ -35,9 +51,12 @@ class ServerPostRequest(ServerRequestInterface):
         :param token: string
         :return: True or False
         """
-        response = self.request.post(self.server_url + "/login", data={'token': json.dumps(token)}).__dict__
+        response = self.request.post(
+            self.request_url['do_login'],
+            data={
+                'token': token,
+                'ip': self.client_url
+            }
+        ).__dict__
 
-        if response['status_code'] == 200 and response['_content'] != 0:
-            return True
-
-        return False
+        return self.get_response(response)

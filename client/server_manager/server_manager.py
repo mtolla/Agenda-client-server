@@ -7,9 +7,11 @@ class ServerManager:
     def __init__(self):
         self.server_url = "http://127.0.0.1:5000"
 
-        self.login_gateway = LoginGateway(self.server_url)
+        self.client_url = "127.0.0.1:5001"
 
-        self.server_request_handler = ServerRequestHandler(self.server_url)
+        self.login_gateway = LoginGateway(self.server_url, self.client_url)
+
+        self.server_request_handler = ServerRequestHandler(self.server_url, self.client_url)
 
     def get_token(self, user):
         """
@@ -25,4 +27,6 @@ class ServerManager:
         :param token: string
         :return: True or False
         """
+        self.server_request_handler.set_token(token)
+
         return self.login_gateway.do_login(token)
