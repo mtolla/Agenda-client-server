@@ -19,7 +19,8 @@ class ServerPostRequest(ServerRequestInterface):
             'do_login': server_url + "/login"
         }
 
-    def get_response(self, response):
+    @staticmethod
+    def get_response(response):
         if response['status_code'] == 200:
             return response['_content']
 

@@ -4,12 +4,12 @@ from server_post_request import ServerPostRequest
 
 
 class LoginGateway(LoginServerInterface):
-    def __init__(self, server_url):
+    def __init__(self, server_url, client_url):
         LoginServerInterface.__init__(self)
 
         self.server_url = server_url
 
-        self.server_post_request = ServerPostRequest(server_url)
+        self.server_post_request = ServerPostRequest(server_url, client_url)
 
     def get_token(self, user):
         """

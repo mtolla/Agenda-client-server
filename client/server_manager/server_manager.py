@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 from login_gateway import LoginGateway
 from server_request_handler import ServerRequestHandler
+from client.local.file_location import *
+import json
 
 
 class ServerManager:
     def __init__(self):
-        self.server_url = "http://127.0.0.1:5000"
+        self.local_save = open(LOCAL_SAVE)
+        self.variable = json.load(self.local_save)
+        self.local_save.close()
 
-        self.client_url = "127.0.0.1:5001"
+        self.server_url = self.variable['server_url']
+
+        self.client_url = self.variable['client_url']
 
         self.login_gateway = LoginGateway(self.server_url, self.client_url)
 

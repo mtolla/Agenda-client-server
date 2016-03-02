@@ -28,7 +28,8 @@ class ServerGetRequest(ServerRequestInterface):
             'day': "<int:day>"
         }
 
-    def get_response(self, response):
+    @staticmethod
+    def get_response(response):
         if response['status_code'] == 200:
             return response['_content']
 
