@@ -27,3 +27,111 @@ All'inizio restituire le attività di oggi
 SignalQueue:
 Coda di file modificati
 Coda
+
+SteamSteamSteam
+Vincoli:
+	1) project manager cambia ruolo a un team leader
+		se non è l'unico tm in quel gruppo -> True
+		altrimenti seleziona un'altro untente come team leader
+			poi elimina
+
+	2) project manager elimina un untente dal progetto
+		(prima di eliminare si controlla che sia tutto a true)
+		eliminare l'utente dai vari gruppi (del progetto)
+			se il gruppo è fromato da 2 utenti
+				return -> false
+		eliminare l'id dell'utente da tutte le attività di gruppo e di progetto (del progetto)
+			se l'attività è formata da 2 utenti
+				eliminare attività
+		eliminare tutte le attività singole dell'utente (del progetto)
+
+	3) project manager elimina progetto
+		eliminare tutti le attività singole, di gruppo e di progetto associate
+		eliminare tutti i gruppi
+		eliminare nell'utente i riferminenti ai gruppi
+
+	4) team leader elimina sottogruppo
+		eliminare tutte le attività di gruppo associate
+		eliminare nell'utente i riferminenti al sottogruppo
+
+	5) team leader toglie utente dal sottogruppo
+		eliminare tutti i riferimenti dell'utente dalle attività di gruppo associate
+		modifica nell'utente tolto i riferminenti al sottogruppo
+
+	6) utente inserisce vacanze o modifica
+		se la data coincide con un'attività in cui compare o altre sue vacanze
+			return false
+
+	7) utente inserisce attività singola o modifica
+		se la data coincide con sue vacanze
+			return -> false
+		se la data e l'ora coincidono con attività in cui compare
+			return -> false
+
+	8) project manager inserisce o modifica attività di progetto o team leader inserisce o modifica attività di gruppo
+		stessi controlli di 7) per ogni utente dell'attività che si vuole creare
+
+	9) tutte le date delle attività devono essere comprese nell'inervallo di date di inizio e fine del progetto
+
+	10) quando viene modificata la data di fine del progetto si controlla se taglia fuori qualche attività che verrà eliminata
+
+Query:
+	(Dopo che l'utente si è loggato)
+	- /projects/<token>/<ip>
+		return -> dizionario[ID] = name (di tutti i progetti dell'utente)
+
+	(Preparazione della grafica)
+	- /project/<int:id>/<token>/<ip>
+		return -> dizionario['project'] = dizionario progetto
+							['email'] = email project manager
+							['activities'] = lista di dizionari di attività del giorno corrente conteneti ID, name, begin, end
+							['holidays'] = lista di dizionari di vacanze del giorno corrente di tutti i memebri del progetto conteneti ID, name
+							['level'] = 'teamleader' se l'utente è team leader in almeno un gruppo
+										'projectmanager' se l'utente è project manager
+										'participant' altrimenti
+
+	(Selezionata una data sul calendario)
+	- /activities/<int:day>/<token>/<ip>
+		return -> dizionario['activities'] = lista di dizionari di attività del giorno corrente conteneti ID, name, begin, end
+
+	(Click su info di un'attività)
+	- /activity/<int:id>/<token>/<ip>
+		return -> dizionario['activity'] = dizionario attività
+							['participants'] = dizionario[ID] = name (se di gruppo o di progetto di tutti i partecipanti dell'attività)
+											   false se attività singola
+							['group'] = name se attività di gruppo
+										false altrimenti
+							['location'] = room
+							['modify'] = true se utente è taeam leader e attività di gruppo del suo gruppo o attività singola di un partecipante al suo gruppo
+														o è project manager e attività di progetto o singola
+														o l'utente e lo stesso dell'attività singola
+
+	- /locations/<token>/<ip>
+		return -> tutta la tabella location
+
+	- /groups/teamleader/<token>/<ip>
+		return -> dizionario[ID] = name di tutti i gruppi in cui è team leader
+
+	- /groups/<int:id>/participant/<token>/<ip>
+		return -> dizionario[ID] = name di tutti i partecipanti al gruppo
+
+	- /project/<int:id>/participant/<token>/<ip>
+		return -> dizionario[ID] = name di tutti i partcipanti al progetto
+
+	- /project/<int:id>/groups/<token>/<ip>
+		return -> dizionario[ID] = name di tutti i gruppi del progetto
+
+	- /groups/<int:id>/participant/level/<token>/<ip>
+		return -> dizionario[ID] = dizionario con level, name di tutti i partecipanti al gruppo
+
+	- /project/<int:id>/not/participant/<token>/<ip>
+		return -> dizionario[ID] = name di tutti i non partcipanti al progetto
+
+	- /participants/<token>/<ip>
+		return -> dizionario[ID] = name di tutti gli utenti
+
+	- /groups/<int:id>/father/<token>/<ip>
+		return -> dizionario[ID] = name di tutti i partecipanti che appartengono solo al gruppo padre
+
+	- /holiday/<int:id>/<token>/<ip>
+		return -> dizionario dell'holiday dell'utente

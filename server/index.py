@@ -81,9 +81,6 @@ def get_activity(id_att):
 def get_partecipants_group(id_group):
     return api.get_partecipants_group(id_group)
 
-
-###########################################################################
-# ASSOLUTAMENTE DA TESTARE
 @index.route('/name_projects/<list_id_proj>', methods=['GET'])
 def get_name_projects(list_id_proj):
     return api.get_name_projects(list_id_proj)
@@ -121,6 +118,11 @@ def get_holidays_proj(id_proj):
 def get_group_name(id_group):
     return api.get_group_name(id_group)
 
+###########################################################################
+# ASSOLUTAMENTE DA TESTARE
+@index.route('/projects/<token>/<ip>', methods=['GET'])
+def get_user_project(token, ip):
+    return api.get_user_project(token)
 
 @index.errorhandler(404)
 def page_not_found():

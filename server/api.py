@@ -30,13 +30,16 @@ class Api:
 
     # Login con user, password
     def do_login(self, user, password, ip):
-        # if self.valid_credentials(user, password):
-        return self.login_manager.do_login(user, password, ip)
+        token = self.login_manager.do_login(user, password, ip)
+        list_app = self.signal_queue.send_user_logged(self.login_manager.from_token_get_user(token))
+        list_return = [token, list_app]
+        return str(list_return)
 
     # Login con token
     def do_login_token(self, token, ip, ):
         if self.login_manager.do_login_token(token, ip):
-            return "OK", 200
+            list_return = self.signal_queue.send_user_logged(self.login_manager.from_token_get_user(token))
+            return str(list_return), 200
         else:
             return "Unauthorized", 401
 
@@ -95,3 +98,6 @@ class Api:
 
     def test(self):
         return json.dumps(self.login_manager.user_token)
+
+    def get_user_project(self, token):
+        return self.db_manager.get_proj_from_user(self.login_manager.from_token_get_user(token))

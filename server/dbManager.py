@@ -18,7 +18,6 @@ class ClassDbManager:
         self.tomorrow_act = []
         # Data di default, viene modificata al primo avvio di check_today_tomorrow_act()
         self.last_check = {'day': 12, 'month': 11, 'year': 1955, 'hour': 06, 'minute': 38}
-        # Inizializzo login_manager
 
     def do_login(self, usr, psw):
         f = open(self.db_file['user'], "r")
@@ -140,7 +139,7 @@ class ClassDbManager:
         app = 0
         for row in list_app_proj:
             if row['ID'] == id_proj:
-                app = row['groups']
+                app = row['group']
                 break
         for row in list_app_user:
             for group in row['groups']:
@@ -292,6 +291,75 @@ class ClassDbManager:
                 return row['ID']
         return False
 
+    def get_proj_from_user(self, id_usr):
+        # Prendo tutti i gruppi dell'utente e li confronto con quelli dei progetti
+        f1 = open(self.db_file['group'], "r")
+        f2 = open(self.db_file['user'], "r")
+        f3 = open(self.db_file['project'], "r")
+        # Lista di appoggio
+        list_group = json.load(f1)
+        list_usr = json.load(f2)
+        list_proj = json.load(f3)
+        list_app = []
+        dict_return = dict()
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                for group in user['groups']:
+                    list_app.append(group['ID'])
+            break
+        for proj in list_proj:
+            if list_app.__contains__(proj['group']):
+                dict_return[proj['ID']] = proj['name']
+        return json.dumps(dict_return)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def error(self, app):
         if app:
             return self.er + '5UL9yj">'
@@ -309,4 +377,5 @@ class ClassDbManager:
         actual_time['year'] = int(app.strftime("%Y"))
         actual_time['hour'] = int(app.strftime("%H"))
         actual_time['minute'] = int(app.strftime("%M"))
+        actual_time['seconds'] = int(app.strftime("%S"))
         return actual_time

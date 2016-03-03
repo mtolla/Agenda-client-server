@@ -22,9 +22,6 @@ class ClassLoginManager:
 
         # Dizionario di token
         self.user_token = dict()
-        # Durata max token: 24 ore = 60 sec * 60 min * 24 h * 1000 msec
-        # self.token_exp = 60 * 60 * 24
-        self.token_exp = 5  # Durata test
         # Oggetto db_manager
         self.db_manager = ClassDbManager()
 
@@ -33,9 +30,7 @@ class ClassLoginManager:
         if usr in self.user_token:
             self.delete_token(id_usr, False)
         if self.db_manager.do_login(usr, psw):
-            app = self.generate_token(id_usr, psw, ip)
-            print self.next_token_expire()
-            return app
+            return self.generate_token(id_usr, psw, ip)
         return False
 
     def do_login_token(self, token, ip):
@@ -77,8 +72,6 @@ class ClassLoginManager:
 
     def check_life_token(self, actual_time):
         for key, users in self.user_token.items():
-            print actual_time
-            print users['exp']
             if actual_time == users['exp']:
                 self.user_token.pop(key)
 
@@ -93,10 +86,9 @@ class ClassLoginManager:
     def next_token_expire(self):
         # Ora impostata di default
         next_exp = {"year": 9999, "minute": 99, "day": 99, "hour": 99, "month": 99}
-        print self.user_token
         for key, token in self.user_token.items():
-            if not next_exp or self.app_next_token_expire(next_exp, token):
-                print token
+            # Controllo se è minore
+            if self.app_next_token_expire(next_exp, token):
                 next_exp = token['exp']
         return next_exp
 
