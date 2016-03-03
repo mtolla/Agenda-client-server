@@ -43,8 +43,8 @@ class ServerManager:
     def project_id(self, _id):
         return self.server_request_handler.project_id(_id)
 
-    def activitys_day(self, day):
-        return self.server_request_handler.activitys_day(day)
+    def activities_day(self, day):
+        return self.server_request_handler.activities_day(day)
 
     def activity_id(self, _id):
         return self.server_request_handler.activity_id(_id)

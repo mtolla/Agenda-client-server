@@ -2,5 +2,6 @@ class ServerRequestInterface:
     def __init__(self):
         pass
 
-    def get_response(self, response):
+    @staticmethod
+    def get_response(response):
         pass

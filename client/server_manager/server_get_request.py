@@ -11,7 +11,7 @@ class ServerGetRequest(ServerRequestInterface):
         self.request_url = {
             'projects': server_url + "/projects",
             'project_id': server_url + "/project/<int:id>",
-            'activitys_day': server_url + "/activitys/<int:day>",
+            'activities_day': server_url + "/activities/<int:day>",
             'activity_id': server_url + "/activity/<int:id>",
             'locations': server_url + "/locations",
             'groups_teamleader': server_url + "/groups/teamleader",
@@ -45,8 +45,8 @@ class ServerGetRequest(ServerRequestInterface):
 
         return self.get_response(response)
 
-    def activitys_day(self, day):
-        response = self.request.get(self.request_url['activitys_day'].replace(self.request_url['day'], day)).__dict__
+    def activities_day(self, day):
+        response = self.request.get(self.request_url['activities_day'].replace(self.request_url['day'], day)).__dict__
 
         return self.get_response(response)
 

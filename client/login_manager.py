@@ -11,9 +11,9 @@ class LoginManager(LoginInterface):
     def __init__(self):
         LoginInterface.__init__(self)
 
-        self.local_save = open(LOCAL_SAVE)
-        self.variable = json.load(self.local_save)
-        self.local_save.close()
+        local_save = open(LOCAL_SAVE)
+        self.variable = json.load(local_save)
+        local_save.close()
 
         self.login = Login()
         self.login.connect(self.login.cmd_login, QtCore.SIGNAL("clicked()"), self.do_login)
@@ -45,8 +45,9 @@ class LoginManager(LoginInterface):
         """
 
         if self.server_manager.do_login(self.variable['token']):
-            agenda_manager = AgendaManager(self.server_manager, self.variable['token'])
-            agenda_manager.exec_()
+            self.login.close()
+            agenda_manager = AgendaManager(self.server_manager)
+            exit(agenda_manager.exec_())
         else:
             self.variable['token'] = False
             Popup("Sessione scaduta, rifare il login", ALERT).exec_()

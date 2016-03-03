@@ -20,8 +20,8 @@ class ServerRequestHandler:
     def project_id(self, _id):
         return self.server_get_request.project_id(_id)
 
-    def activitys_day(self, day):
-        return self.server_get_request.activitys_day(day)
+    def activities_day(self, day):
+        return self.server_get_request.activities_day(day)
 
     def activity_id(self, _id):
         return self.server_get_request.activity_id(_id)
