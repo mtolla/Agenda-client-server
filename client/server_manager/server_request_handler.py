@@ -13,3 +13,45 @@ class ServerRequestHandler:
 
         self.server_get_request = ServerGetRequest(self.server_url, self.client_url, token)
 
+    # Get method ------------------------------------------------------------------------------------------------------
+    def projects(self):
+        return self.server_get_request.projects()
+
+    def project_id(self, _id):
+        return self.server_get_request.project_id(_id)
+
+    def activitys_day(self, day):
+        return self.server_get_request.activitys_day(day)
+
+    def activity_id(self, _id):
+        return self.server_get_request.activity_id(_id)
+
+    def locations(self):
+        return self.server_get_request.locations()
+
+    def groups_teamleader(self):
+        return self.server_get_request.groups_teamleader()
+
+    def groups_id_participant(self, _id):
+        return self.server_get_request.groups_id_participant(_id)
+
+    def project_id_participant(self, _id):
+        return self.server_get_request.project_id_participant(_id)
+
+    def project_id_groups(self, _id):
+        return self.server_get_request.project_id_groups(_id)
+
+    def groups_id_participant_level(self, _id):
+        return self.server_get_request.groups_id_participant_level(_id)
+
+    def project_id_not_participant(self, _id):
+        return self.server_get_request.project_id_not_participant(_id)
+
+    def participants(self):
+        return self.server_get_request.participants()
+
+    def groups_id_father(self, _id):
+        return self.server_get_request.groups_id_father(_id)
+
+    def holiday_id(self, _id):
+        return self.server_get_request.holiday_id(_id)

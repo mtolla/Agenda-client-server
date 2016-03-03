@@ -36,3 +36,45 @@ class ServerManager:
         self.server_request_handler.set_token(token)
 
         return self.login_gateway.do_login(token)
+    
+    def projects(self):
+        return self.server_request_handler.projects()
+
+    def project_id(self, _id):
+        return self.server_request_handler.project_id(_id)
+
+    def activitys_day(self, day):
+        return self.server_request_handler.activitys_day(day)
+
+    def activity_id(self, _id):
+        return self.server_request_handler.activity_id(_id)
+
+    def locations(self):
+        return self.server_request_handler.locations()
+
+    def groups_teamleader(self):
+        return self.server_request_handler.groups_teamleader()
+
+    def groups_id_participant(self, _id):
+        return self.server_request_handler.groups_id_participant(_id)
+
+    def project_id_participant(self, _id):
+        return self.server_request_handler.project_id_participant(_id)
+
+    def project_id_groups(self, _id):
+        return self.server_request_handler.project_id_groups(_id)
+
+    def groups_id_participant_level(self, _id):
+        return self.server_request_handler.groups_id_participant_level(_id)
+
+    def project_id_not_participant(self, _id):
+        return self.server_request_handler.project_id_not_participant(_id)
+
+    def participants(self):
+        return self.server_request_handler.participants()
+
+    def groups_id_father(self, _id):
+        return self.server_request_handler.groups_id_father(_id)
+
+    def holiday_id(self, _id):
+        return self.server_request_handler.holiday_id(_id)
