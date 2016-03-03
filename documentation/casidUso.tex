@@ -1,0 +1,282 @@
+
+\documentclass[12pt]{scrartcl}
+\usepackage{booktabs}
+
+\title{Casi d'Uso}
+\subtitle{Ingegneria del Software}
+\author{Stefano Ravetta, Simone Renzo, Matteo Scarpone, Mattia Tollari}
+\date{03 Marzo, 2016}
+\begin{document}
+\maketitle
+
+\begin{table}[h!]
+  
+  \caption{AddHolidays}
+  \label{tab:table1}
+  \begin{tabular}{|l|l|}
+    \toprule
+    \textbf{Sezione del caso d'Uso} & \textbf{Commento}\\
+    \midrule
+    \textbf{Nome del caso d'Uso} & AddHolidays\\
+    \midrule
+    \textbf{Portata} & Sistema di registrazione utente\\
+    \midrule
+    \textbf{Livello} & Livello utente\\
+    \midrule
+    \textbf{Attore primario} & Qualsiasi tipo di utente \\& (Developer, TeamLeader, ProjectManager).\\
+    \midrule
+    \textbf{Parti interessate e Interessi} & L'utente \`e interessato ad 
+    \\ & inserire i propri giorni di vacanza.\\
+    \midrule
+    \textbf{Pre-condizioni} & L'utente deve essere presente nella base di dati \\
+    \midrule
+    \textbf{Garanzia di successo} & L'utente deve essere connesso al \\ & server ed aver effettuato il login. \\
+    \midrule
+    \textbf{Scenario principale di successo} & L'utente, dopo aver effettuato il login sul server,
+    \\& inserisce i propri periodi di  vacanza che vengono \\& registrati nella base di dati. \\
+    \midrule
+    \textbf{Estensione} & Pu\`o fallire se l'utente inserisce \\& una data di inzio maggiore di una data di fine.\\
+    \midrule
+    \textbf{Requisiti speciali} & - \\
+    \midrule
+    \textbf{Elenco delle varianti} & L'utente inserisce le varie date di inizio e fine 
+    \\& in un'interfaccia grafica Qt, ma \`e \\& possibile usare qualsiasi altra interfaccia.\\ 
+    \textbf{tecnologiche e dei dati} & \\
+    \midrule
+    \textbf{Frequenza di ripetizione} & Poco frequente in quanto questo caso d'uso \\& verr\`a chiamato solo alla registrazione di un utente.\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h!]
+    \caption{ViewDevelopersActivities}
+  \label{tab:table2}
+  \begin{tabular}{|l|l|}
+    \toprule
+    \textbf{Sezione del caso d'Uso} & \textbf{Commento}\\
+    \midrule
+    \textbf{Nome del caso d'Uso} & ViewDevelopersActivities\\
+    \midrule
+    \textbf{Portata} & Sistema di consultazione \\
+    \midrule
+    \textbf{Livello} & Livello utente\\
+    \midrule
+    \textbf{Attore primario} & Qualsiasi tipo di utente \\& (Developer, TeamLeader, ProjectManager).\\
+    \midrule
+    \textbf{Parti interessate e Interessi} & L'utente \`e interessato a \\& consultare l'agenda.\\
+    \midrule
+    \textbf{Pre-condizioni} & L'utente deve essere connesso al server.\\
+    \midrule
+    \textbf{Garanzia di successo} & L'utente deve aver effettuato il login.\\
+    \midrule
+    \textbf{Scenario principale di successo} & L'utente, dopo aver effettuato il login sul server,
+    \\& invia la richiesta per visualizzare l'agenda ed 
+    \\& il server invia i dati richiesti.\\
+    \midrule
+    \textbf{Estensione} & - \\
+    \midrule
+    \textbf{Requisiti speciali} & - \\
+    \midrule
+    \textbf{Elenco delle varianti}\\ \textbf{tecnologiche e dei dati} & Le richieste sono indipendenti dall'interfaccia usata.\\
+    \midrule
+    \textbf{Frequenza di ripetizione} & Molto frequente in quanto l'operazione pu\`o \\& 
+    essere richiamata pi\`u volte da diversi utenti in tempi brevi.\\
+    \midrule
+    \textbf{Varie} & - \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h!]
+  \caption{MenageSubgroups}
+  \label{tab:table3}
+  \begin{tabular}{|l|l|}
+    \toprule
+    \textbf{Sezione del caso d'Uso} & \textbf{Commento}\\
+    \midrule
+    \textbf{Nome del caso d'Uso} & MenageSubgroups\\
+    \midrule
+    \textbf{Portata} & Sistema di amministrazione utenti\\
+    \midrule
+    \textbf{Livello} & Livello utente\\
+    \midrule
+    \textbf{Attore primario} & TeamLeader\\
+    \midrule
+    \textbf{Parti interessate e Interessi} & Il TeamLeader vuole creare, eliminare \\& o modificare un gruppo di lavoro.\\
+    \midrule
+    \textbf{Pre-condizioni} & L'utente dev'essere online e \\& deve aver effettuato l'accesso al server.\\
+    \midrule
+    \textbf{Garanzia di successo} & Le operazioni sui gruppi devono essere 
+    \\& coerenti con la base di dati:\\& 
+    non \`e possibile modificare o eliminare un gruppo 
+    \\& che non esiste.\\
+    \midrule
+    \textbf{Scenario principale di successo} & L'utente, dopo aver effettuato il login sul server,
+    \\& invia la richiesta per gestire i gruppi; 
+    \\& verra mostrata un'interfaccia periodi
+    \\& a seconda dell'operazione scelta. 
+    \\& Verr\`a inviata la richiesta al server che
+    \\& provveder\`a a modificare la base di dati opportunamente.\\
+    \midrule
+    \textbf{Estensione} & - \\
+    \midrule
+    \textbf{Requisiti speciali} & - \\
+    \midrule
+    \textbf{Elenco delle varianti}\\ \textbf{tecnologiche e dei dati} & I metodi non dipendono dall'interfaccia grafica usata.\\
+    \midrule
+    \textbf{Frequenza di ripetizione} & Frequenza media.\\
+    \midrule
+    \textbf{Varie} & - \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\begin{table}[h!]
+  \caption{ManageIndividualActivites}
+  \label{tab:table4}
+  \begin{tabular}{|l|l|}
+    \toprule
+    \textbf{Sezione del caso d'Uso} & \textbf{Commento}\\
+    \midrule
+    \textbf{Nome del caso d'Uso} & MenageIndividualActivities\\
+    \midrule
+    \textbf{Portata} & Sisema amministrazione attivit\`a\\
+    \midrule
+    \textbf{Livello} & Livello utente\\
+    \midrule
+    \textbf{Attore primario} & TeamLeader, Developer\\
+    \midrule
+    \textbf{Parti interessate e Interessi} & L'utente \`e interessato a modificare il piano attivit\`a.\\
+    \midrule
+    \textbf{Pre-condizioni} & L'utente deve essere online ed aver effettuato il login\\
+    \midrule
+    \textbf{Garanzia di successo} & Le operazioni devono essere 
+    \\& coerenti con la base di dati.\\
+    \midrule
+    \textbf{Scenario principale di successo} & L'utente, dopo aver effettuato il login sul server,
+    \\& invia la richiesta per gestire le attivit\`a individuali;
+    \\& a seconda dell'operazione richeista 
+    \\& (aggiungere, modificare od eliminare un'attivit\`a)
+    \\& verr\`a presentata un'interfaccia che recuperer\`a ed
+    \\& invier\`a i dati al server che li memorizzer\`a nella base di dati.\\
+    \midrule
+    \textbf{Estensione} & \\
+    \midrule
+    \textbf{Requisiti speciali} & \\
+    \midrule
+    \textbf{Elenco delle varianti}\\ \textbf{tecnologiche e dei dati} & \\
+    \midrule
+    \textbf{Frequenza di ripetizione} & \\
+    \textbf{Varie} & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\begin{table}[h!]
+  \caption{ManageProjects}
+  \label{tab:table5}
+  \begin{tabular}{|l|l|}
+    \toprule
+    \textbf{Sezione del caso d'Uso} & \textbf{Commento}\\
+    \midrule
+    \textbf{Nome del caso d'Uso} & MenageProjects\\
+    \midrule
+    \textbf{Portata} & \\
+    \midrule
+    \textbf{Livello} & \\
+    \midrule
+    \textbf{Attore primario} & \\
+    \midrule
+    \textbf{Parti interessate e Interessi} & \\
+    \midrule
+    \textbf{Pre-condizioni} & \\
+    \midrule
+    \textbf{Garanzia di successo} & \\
+    \midrule
+    \textbf{Scenario principale di successo} & \\
+    \midrule
+    \textbf{Estensione} & \\
+    \midrule
+    \textbf{Requisiti speciali} & \\
+    \midrule
+    \textbf{Elenco delle varianti}\\ \textbf{tecnologiche e dei dati} & \\
+    \midrule
+    \textbf{Frequenza di ripetizione} & \\
+    \textbf{Varie} & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[h!]
+  \caption{ManageGroupActivities}
+  \label{tab:table6}
+  \begin{tabular}{|l|l|}
+    \toprule
+    \textbf{Sezione del caso d'Uso} & \textbf{Commento}\\
+    \midrule
+    \textbf{Nome del caso d'Uso} & ManageGroupActivities\\
+    \midrule
+    \textbf{Portata} & \\
+    \midrule
+    \textbf{Livello} & \\
+    \midrule
+    \textbf{Attore primario} & \\
+    \midrule
+    \textbf{Parti interessate e Interessi} & \\
+    \midrule
+    \textbf{Pre-condizioni} & \\
+    \midrule
+    \textbf{Garanzia di successo} & \\
+    \midrule
+    \textbf{Scenario principale di successo} & \\
+    \midrule
+    \textbf{Estensione} & \\
+    \midrule
+    \textbf{Requisiti speciali} & \\
+    \midrule
+    \textbf{Elenco delle varianti}\\ \textbf{tecnologiche e dei dati} & \\
+    \midrule
+    \textbf{Frequenza di ripetizione} & \\
+    \textbf{Varie} & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\begin{table}[h!]
+  \caption{ManageWorkgroups}
+  \label{tab:table6}
+  \begin{tabular}{|l|l|}
+    \toprule
+    \textbf{Sezione del caso d'Uso} & \textbf{Commento}\\
+    \midrule
+    \textbf{Nome del caso d'Uso} & ManageWorkgroups\\
+    \midrule
+    \textbf{Portata} & \\
+    \midrule
+    \textbf{Livello} & \\
+    \midrule
+    \textbf{Attore primario} & \\
+    \midrule
+    \textbf{Parti interessate e Interessi} & \\
+    \midrule
+    \textbf{Pre-condizioni} & \\
+    \midrule
+    \textbf{Garanzia di successo} & \\
+    \midrule
+    \textbf{Scenario principale di successo} & \\
+    \midrule
+    \textbf{Estensione} & \\
+    \midrule
+    \textbf{Requisiti speciali} & \\
+    \midrule
+    \textbf{Elenco delle varianti}\\ \textbf{tecnologiche e dei dati} & \\
+    \midrule
+    \textbf{Frequenza di ripetizione} & \\
+    \textbf{Varie} & \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\end{document}
