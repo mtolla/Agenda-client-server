@@ -1,9 +1,9 @@
 [{
   "ID" : 0,
   "name" : "Agenda",
-  "begin" : 0,
-  "end" : 0,
+  "begin" : {"day" : 2, "month": 12, "year": 2015},
+  "end" : {"day" : 2, "month": 12, "year": 2016},
   "status" : true,
   "projectManager" : 0,
-  "groups" : 0
+  "group" : 0
 }]

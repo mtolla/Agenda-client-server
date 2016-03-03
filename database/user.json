@@ -3,30 +3,27 @@
     "username": "carluca",
     "holiday": [
       {
-        "begin": 0,
-        "end": 0,
+        "begin": {"day" : 2, "month": 12, "year": 2018},
+        "end": {"day" : 3, "month": 12, "year": 2018},
         "ID": 0,
         "name": "vacanza"
       },
       {
-        "begin": 1,
-        "end": 10,
+        "begin": {"day" : 2, "month": 6, "year": 2016},
+        "end": {"day" : 5, "month": 6, "year": 2016},
         "name": "test",
         "ID": 1
       },
       {
-        "begin": 10,
-        "end": 100,
+        "begin": {"day" : 2, "month": 1, "year": 2015},
+        "end": {"day" : 8, "month": 2, "year": 2015},
         "name": "test2",
         "ID": 2
       }
     ],
     "surname": "Bianchi",
     "name": "Carluca",
-    "groups": [{
-        "ID": 0,
-        "level": "teamleader"
-      }],
+    "groups": [],
     "password": "68c58ddae9e0cde89cf6a0589644b7fb85bc7cec4c9a00e1a52512f9a06c20c4d376a9d1e124fab52da153c13ada4b95282c7756bc747a72fa734676a4eca746",
     "ID": 0,
     "email": "carluca@testprovider.nl"
@@ -35,20 +32,20 @@
     "username": "Angelica",
     "holiday": [
       {
-        "begin": 0,
-        "end": 0,
+        "begin": {"day" : 1, "month": 1, "year": 2016},
+        "end": {"day" : 5, "month": 1, "year": 2016},
         "ID": 0,
         "name": "vacanza"
       },
       {
-        "begin": 1,
-        "end": 10,
+        "begin": {"day" : 8, "month": 5, "year": 2016},
+        "end": {"day" : 9, "month": 5, "year": 2016},
         "name": "test",
         "ID": 1
       },
       {
-        "begin": 10,
-        "end": 100,
+        "begin": {"day" : 2, "month": 12, "year": 2018},
+        "end": {"day" : 1, "month": 1, "year": 2019},
         "name": "test2",
         "ID": 2
       }
