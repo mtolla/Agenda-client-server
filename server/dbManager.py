@@ -306,7 +306,7 @@ class ClassDbManager:
         actual_time = dict()
         actual_time['day'] = int(app.strftime("%d"))
         actual_time['month'] = int(app.strftime("%m"))
-        actual_time['year'] = int(app.strftime("%y"))
+        actual_time['year'] = int(app.strftime("%Y"))
         actual_time['hour'] = int(app.strftime("%H"))
         actual_time['minute'] = int(app.strftime("%M"))
         return actual_time
