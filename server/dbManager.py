@@ -117,6 +117,15 @@ class ClassDbManager:
                 return True
         return False
 
+    def is_projectmanager(self, id_user):
+        # Dall'user id trovo se è un project manager
+        f = open(self.db_file['project'], "r")
+        list_app = json.load(f)
+        for row in list_app:
+            if row['projectManager'] == id_user:
+                return True
+        return False
+
     def get_activities_from_proj(self, id_proj):
         # Da un id progetto trovo tutte le attività
         # Cerco in activity tutte quelle con id progetto uguale a quello richiesto
@@ -291,6 +300,15 @@ class ClassDbManager:
                 return row['ID']
         return False
 
+    def from_id_get_user(self, id_user):
+        # Dal nome utente restituisco id
+        f = open(self.db_file['user'], "r")
+        list_app = json.load(f)
+        for row in list_app:
+            if row['ID'] == id_user:
+                return row['username']
+        return False
+
     def get_proj_from_user(self, id_usr):
         # Prendo tutti i gruppi dell'utente e li confronto con quelli dei progetti
         f1 = open(self.db_file['group'], "r")
@@ -306,13 +324,14 @@ class ClassDbManager:
             if user['ID'] == id_usr:
                 for group in user['groups']:
                     list_app.append(group['ID'])
-            break
+                break
         for proj in list_proj:
-            if list_app.__contains__(proj['group']):
+            if proj['group'] in list_app:
                 dict_return[proj['ID']] = proj['name']
-        return json.dumps(dict_return)
+        return dict_return
 
-
+        # [i for i in L1 if i in L2]
+        # if [i for i in proj['group'] if i in list_app]:
 
 
 

@@ -62,13 +62,14 @@ def asd(user, passw, ip):
         return 0
 
 
-@index.route('/testbaf/<int:id_proj>', methods=['GET'])
-def piero(id_proj):
-    return api.badass_function(id_proj)
+@index.route('/testbaf/<int:id_proj>/<token>', methods=['GET'])
+def piero(id_proj, token):
+    return api.badass_function(token, id_proj)
 
-
-@index.route('/agenda/<token>/<int:id_proj>', methods=['GET'])
-def agenda(token, id_proj):
+# Modificata, da testare
+@index.route('/project/<int:id_proj>/<token>/<ip>', methods=['GET'])
+def project(id_proj, token, ip):
+    api.check_token(token, ip)
     return api.badass_function(token, id_proj)
 
 

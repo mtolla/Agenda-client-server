@@ -76,10 +76,12 @@ Vincoli:
 	10) quando viene modificata la data di fine del progetto si controlla se taglia fuori qualche attività che verrà eliminata
 
 Query:
+    BOOM BABY
 	(Dopo che l'utente si è loggato)
 	- /projects/<token>/<ip>
 		return -> dizionario[ID] = name (di tutti i progetti dell'utente)
 
+    BOOM BABY
 	(Preparazione della grafica)
 	- /project/<int:id>/<token>/<ip>
 		return -> dizionario['project'] = dizionario progetto
