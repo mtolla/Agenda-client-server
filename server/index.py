@@ -1,13 +1,10 @@
 # Librerie server
 from flask import Flask
 from flask import request
-from flask import render_template
 # Importo classe Api
 from api import Api
 # Conversione Stringhe -> Dizionari
 import ast
-# Signals
-from blinker import Namespace
 
 index = Flask(__name__)
 api = Api()
@@ -61,7 +58,7 @@ def asd(user, passw, ip):
     if user and passw and ip:
         response = api.do_login(user, passw, ip)
         if response:
-            return response[0]
+            return response
         return 0
 
 
@@ -126,7 +123,7 @@ def get_group_name(id_group):
 
 
 @index.errorhandler(404)
-def page_not_found(app):
+def page_not_found():
     return api.error(True), 404
 
 

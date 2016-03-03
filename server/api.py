@@ -20,7 +20,7 @@ class Api:
         self.db_manager = ClassDbManager()
         self.login_manager = ClassLoginManager()
         # Creazione thread controllo token
-        token_thread = TokenThread(self.login_manager)
+        token_thread = TokenThread(self.login_manager, self.db_manager)
         QtCore.QThreadPool.globalInstance().start(token_thread)
         # Creazione gestione coda notifiche
         self.signal_queue = ClassSignalQueue(self.login_manager, self.db_manager)

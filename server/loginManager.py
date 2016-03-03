@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from time import time
 from hashlib import sha512
 # Importo db_manager
 from dbManager import ClassDbManager
@@ -34,7 +33,9 @@ class ClassLoginManager:
         if usr in self.user_token:
             self.delete_token(id_usr, False)
         if self.db_manager.do_login(usr, psw):
-            return self.generate_token(id_usr, psw, ip)
+            app = self.generate_token(id_usr, psw, ip)
+            print self.next_token_expire()
+            return app
         return False
 
     def do_login_token(self, token, ip):
@@ -42,9 +43,13 @@ class ClassLoginManager:
 
     def generate_token(self, usr, psw, ip):
         self.user_token[usr] = dict()
-        self.user_token[usr]['time'] = time()
+        current_time = self.db_manager.time_now()
+        self.user_token[usr]['time'] = current_time
         self.user_token[usr]['token'] = sha512(str(usr) + psw + str(self.user_token[usr]['time'])).hexdigest()
         self.user_token[usr]['ip'] = ip
+        token_exp = self.db_manager.time_now()
+        token_exp['day'] += 1
+        self.user_token[usr]['exp'] = token_exp
         return self.user_token[usr]['token']
 
     def logout(self, token):
@@ -70,9 +75,11 @@ class ClassLoginManager:
                 return True
         return False
 
-    def check_life_token(self):
+    def check_life_token(self, actual_time):
         for key, users in self.user_token.items():
-            if time() - users['time'] >= self.token_exp:
+            print actual_time
+            print users['exp']
+            if actual_time == users['exp']:
                 self.user_token.pop(key)
 
     def from_token_get_user(self, token):
@@ -84,4 +91,20 @@ class ClassLoginManager:
         return self.user_token[id_usr]['ip']
 
     def next_token_expire(self):
-        pass
+        # Ora impostata di default
+        next_exp = {"year": 9999, "minute": 99, "day": 99, "hour": 99, "month": 99}
+        print self.user_token
+        for key, token in self.user_token.items():
+            if not next_exp or self.app_next_token_expire(next_exp, token):
+                print token
+                next_exp = token['exp']
+        return next_exp
+
+    @staticmethod
+    def app_next_token_expire(next_exp, token):
+        minor = True
+        for item in range(0, len(token)):
+            if next_exp[item] - token['exp'][item] < 0:
+                minor = False
+                break
+        return minor
