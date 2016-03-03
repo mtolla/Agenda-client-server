@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from time import time
 from hashlib import sha512
-# Importo dbManager
+# Importo db_manager
 from dbManager import ClassDbManager
 
 """
@@ -24,28 +24,21 @@ class ClassLoginManager:
         # Dizionario di token
         self.user_token = dict()
         # Durata max token: 24 ore = 60 sec * 60 min * 24 h * 1000 msec
-        # self.dur_token = 60 * 60 * 24
-        self.dur_token = 5  # Durata test
+        # self.token_exp = 60 * 60 * 24
+        self.token_exp = 5  # Durata test
         # Oggetto db_manager
         self.db_manager = ClassDbManager()
 
-    def do_login(self, usr, psw, ip, signal_queue):
-        list_return = []
+    def do_login(self, usr, psw, ip):
         id_usr = self.db_manager.from_user_get_id(usr)
         if usr in self.user_token:
             self.delete_token(id_usr, False)
         if self.db_manager.do_login(usr, psw):
-            list_return.append(self.generate_token(id_usr, psw, ip))
-            list_return.append(signal_queue.send_user_logged(self.from_token_get_user(list_return[0])))
-            return list_return
+            return self.generate_token(id_usr, psw, ip)
         return False
 
-    def do_login_token(self, token, ip, signal_queue):
-        list_return = []
-        list_return.append(self.check_token(token, ip))
-        if list_return[0]:
-            list_return.append(signal_queue.send_user_logged(self.from_token_get_user(token)))
-        return list_return
+    def do_login_token(self, token, ip):
+        return self.check_token(token, ip)
 
     def generate_token(self, usr, psw, ip):
         self.user_token[usr] = dict()
@@ -79,7 +72,7 @@ class ClassLoginManager:
 
     def check_life_token(self):
         for key, users in self.user_token.items():
-            if time() - users['time'] >= self.dur_token:
+            if time() - users['time'] >= self.token_exp:
                 self.user_token.pop(key)
 
     def from_token_get_user(self, token):
@@ -87,5 +80,8 @@ class ClassLoginManager:
             if token == users['token']:
                 return key
 
-    def from_user_get_ip(self, id):
-        return self.user_token[id]['ip']
+    def from_user_get_ip(self, id_usr):
+        return self.user_token[id_usr]['ip']
+
+    def next_token_expire(self):
+        pass

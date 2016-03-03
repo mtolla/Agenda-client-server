@@ -12,14 +12,6 @@ from blinker import Namespace
 index = Flask(__name__)
 api = Api()
 
-# Creazione signals
-signals = Namespace()
-message_signals = signals.signal('GET REKT')
-#using connect to register a signal callback
-#message_signals.connect(function, app)
-#send the signal
-#message_signals.send(current_app._get_current_object(),email = email)
-
 
 @index.route("/")
 def hello():

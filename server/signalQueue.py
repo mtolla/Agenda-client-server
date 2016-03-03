@@ -24,7 +24,7 @@ class ClassSignalQueue:
             self.modified_queue.append(item)
 
     def check_activity(self):
-        app_list = self.db_manager.check_activity
+        app_list = self.db_manager.check_activity()
         if app_list:
             self.add_to_activity(app_list)
 
@@ -35,14 +35,16 @@ class ClassSignalQueue:
     # Effettua 5 tentativi, al sesto mette la richiesta nella coda di errore
     def send(self):
         for user in self.modified_queue:
-            if not requests.post(self.login_manager.from_user_get_ip(user['user']), action="update", data={user['act']}):
+            if not requests.post(self.login_manager.from_user_get_ip(user['user']), action="update",
+                                 data={user['act']}):
                 if user['attempt'] < 5:
                     user['attempt'] += 1
                 else:
                     self.mod_error_queue.append(user)
 
         for user in self.activity_queue:
-            if not requests.post(self.login_manager.from_user_get_ip(user['user']), action="reminder", data={user['act']}):
+            if not requests.post(self.login_manager.from_user_get_ip(user['user']), action="reminder",
+                                 data={user['act']}):
                 if user['attempt'] < 5:
                     user['attempt'] += 1
                 else:
@@ -58,5 +60,3 @@ class ClassSignalQueue:
             if user['user'] == id_user:
                 self.act_error_queue.append(user)
         return list_return
-
-

@@ -23,7 +23,7 @@ class MyTestCase(unittest.TestCase):
         dbManager = ClassDbManager()
 
         ###########################################################################
-        # Test loginManager
+        # Test login_manager
         # Login usr,psw
         login_app = loginManager.do_login("carluca",
                                           "68c58ddae9e0cde89cf6a0589644b7fb85bc7cec4c9a00e1a52512f9a06c20c4d376a9d1e124fab52da153c13ada4b95282c7756bc747a72fa734676a4eca746")
@@ -74,7 +74,7 @@ class MyTestCase(unittest.TestCase):
         else:
             print ("Get Token From Id ERROR")
         ###########################################################################
-        # Test dbManager
+        # Test db_manager
 
         # get_activity_from_id_act
         app = dbManager.get_activity_from_id_act(0)

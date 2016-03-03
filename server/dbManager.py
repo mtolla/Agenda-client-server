@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 import sys
-import ast
 import datetime
 
 
@@ -14,7 +13,12 @@ class ClassDbManager:
                         'group': sys.path[1] + '/database/group.json',
                         'activity': sys.path[1] + '/database/activity.json'}
         self.er = '<img src="https://goo.gl/'
-        # Inizializzo loginManager
+        # Liste di dizionari ordinate con le attività di oggi e domani
+        self.today_act = []
+        self.tomorrow_act = []
+        # Data di default, viene modificata al primo avvio di check_today_tomorrow_act()
+        self.last_check = {'day': 12, 'month': 11, 'year': 1955, 'hour': 06, 'minute': 38}
+        # Inizializzo login_manager
 
     def do_login(self, usr, psw):
         f = open(self.db_file['user'], "r")
@@ -97,7 +101,7 @@ class ClassDbManager:
 
     def is_teamleader(self, id_user):
         # Dall'user id trovo se è un teamleader
-        # Ricevo l'ID dal loginManager e lo ricerco nel database utenti
+        # Ricevo l'ID dal login_manager e lo ricerco nel database utenti
         # Apro il file che mi serve
         f = open(self.db_file['user'], "r")
         list_app = json.load(f)
@@ -108,10 +112,9 @@ class ClassDbManager:
 
     @staticmethod
     def is_teamleader_check(row):
-        # Funzione di supporto per non far piangere sonar
+        # Funzione di supporto per non far piangere sonarqube
         for group in row['groups']:
             if group['level'] == 'teamleader':
-                print "yeee"
                 return True
         return False
 
@@ -155,7 +158,7 @@ class ClassDbManager:
         return False
 
     def get_users_from_activity(self, id_act):
-        # Da una id di una attività restituire gli attributi
+        # Da una id di una attività restituire id, user, tentativi
         # Seleziono da activity l'attività con id passato
         # diz_cond : field, table, where
         f = open(self.db_file['activity'], "r")
@@ -165,47 +168,120 @@ class ClassDbManager:
         list_app = json.load(f)
         for row in list_app:
             if row['ID'] == id_act:
-                for user in row['partecipants']:
+                for user in row['participants']:
                     dict_app['act'] = id_act
                     dict_app['user'] = user
-                    dict_app['attempt'] = 1
                     list_return.append(dict_app)
                 return list_return
-        return False
 
-    @property
     def check_activity(self):
         # Controllo tutte le attività e restituisco quelle con scadenza = 1 ora, 30 min, 24 ore
-        f = open(self.db_file['activity'], "r")
+        actual_time = self.time_now()
+        # Controllo scadenza ora e 30 min
+        list_return = self.secondary_hour_check_activity(actual_time)
+        list_app = self.secondary_day_check_activity(actual_time)
+        list_return[len(list_app):] = list_app[:]
+        return list_return
+
+    def secondary_hour_check_activity(self, actual_time):
         list_return = []
-        # Dizionario di appoggio
+        for act in self.today_act:
+            # Controllo ora
+            if act['date']['hour'] == actual_time['hour'] and act['date']['minute'] == actual_time['minute']:
+                list_app = self.secondary_check_activity(act, 1)
+                list_return[len(list_app):] = list_app[:]
+            # Controllo 30 min
+            # Se l'ora è la stessa basta controllare la differenza tra i minuti
+            # Se l'ora è maggiore di uno controllo la differenza tra i minuti
+            # ma quelli dell'attività vanno incrementati di 60
+            if (act['date']['hour'] == actual_time['hour'] and (
+                        act['date']['minute'] - actual_time['minute']) == 30) or (
+                                act['date']['hour'] - 1 == actual_time['hour'] and (
+                                    act['date']['minute'] + 60 - actual_time['minute']) == 30):
+                list_app = self.secondary_check_activity(act, 30)
+                list_return[len(list_app):] = list_app[:]
+        return list_return
+
+    def secondary_day_check_activity(self, actual_time):
+        list_return = []
+        # Controllo scadenza 24 h
+        for act in self.tomorrow_act:
+            if act['date']['hour'] == actual_time['hour'] and act['date']['minute'] == actual_time['minute']:
+                list_app = self.secondary_check_activity(act, 24)
+                list_return[len(list_app):] = list_app[:]
+        return list_return
+
+    def secondary_check_activity(self, act, time):
         dict_app = dict()
+        list_return = []
+        list_app = self.get_users_from_activity(act)
+        for user in list_app:
+            dict_app['act'] = user['act']
+            dict_app['user'] = user['user']
+            dict_app['attempt'] = 1
+            dict_app['date'] = time
+            list_return.append(dict_app)
+        return list_return
+
+    def check_today_tomorrow_act(self):
+        # Controllo tutte le attività di oggi e domani
+        f = open(self.db_file['activity'], "r")
         # Lista di appoggio
         list_app = json.load(f)
+        # Orario attuale
+        actual_time = self.time_now()
+        # Se l'ultima volta che è stato aggiornato è oggi non esegue il controllo
+        if self.last_check['day'] == actual_time['day'] or self.last_check['month'] == actual_time['month'] or \
+                        self.last_check['hour'] == actual_time['hour']:
+            return
         for row in list_app:
-            # Controllo se l'attività è di oggi o ha scadenza prossima
-            its_time = self.time_missing(row['date'])
-            if its_time:
-                for user in row['partecipants']:
-                    dict_app['act'] = row['ID']
-                    dict_app['user'] = user
-                    dict_app['attempt'] = 1
-                    dict_app['date'] = its_time
-                    list_return.append(dict_app)
-                return list_return
-        return False
+            if row['date']['year'] == actual_time['year'] and row['date']['month'] == actual_time['month']:
+                if row['date']['day'] == actual_time['day']:
+                    dict_app = {row['ID']: row['date']}
+                    self.insert_to_today_act(dict_app)
+                # +1 per il giorno dopo
+                if row['date']['day'] == actual_time['day'] + 1:
+                    dict_app = {row['ID']: row['date']}
+                    self.insert_to_tom_act(dict_app)
+        self.last_check = actual_time
 
-    @staticmethod
-    def time_missing(date_act):
-        # 30 min, 1 hour, 24 hours
-        app = date_act - datetime.date.today()
-        if 1800 >= app.total_seconds() >= 1740:
-            return 30
-        if 3600 >= app.total_seconds() >= 3540:
-            return 1
-        if 86.400 >= app.total_seconds() >= 86340:
-            return 24
-        return False
+    def insert_to_today_act(self, item):
+        app_list = []
+        if not self.today_act:
+            return self.today_act.append(item)
+        for act in range(0, len(self.today_act)):
+            if self.today_act[act]['date']['hour'] < item['hour']:
+                app_list.append(self.today_act[act])
+            if self.today_act[act]['date']['hour'] == item['hour']:
+                if self.today_act[act]['date']['minute'] < item['minute']:
+                    app_list.append(self.today_act[act])
+                if self.today_act[act]['date']['minute'] >= item['minute']:
+                    app_list.append(item)
+                    app_list[act + 1:] = self.today_act[act:]
+            if self.today_act[act]['date']['hour'] > item['hour']:
+                app_list.append(item)
+                app_list[act + 1:] = self.today_act[act:]
+        self.today_act = app_list
+
+    def insert_to_tom_act(self, item):
+        app_list = []
+        if not self.tomorrow_act:
+            return self.tomorrow_act.append(item)
+        for act in range(0, len(self.tomorrow_act)):
+            if self.tomorrow_act[act]['date']['hour'] < item['hour']:
+                app_list.append(self.tomorrow_act[act])
+            if self.tomorrow_act[act]['date']['hour'] == item['hour']:
+                if self.tomorrow_act[act]['date']['minute'] < item['minute']:
+                    app_list.append(self.tomorrow_act[act])
+                if self.tomorrow_act[act]['date']['minute'] >= item['minute']:
+                    app_list.append(item)
+                    app_list[act + 1:] = self.tomorrow_act[act:]
+                    break
+            if self.tomorrow_act[act]['date']['hour'] > item['hour']:
+                app_list.append(item)
+                app_list[act + 1:] = self.tomorrow_act[act:]
+                break
+        self.tomorrow_act = app_list
 
     def from_user_get_id(self, user):
         # Dal nome utente restituisco id
@@ -221,3 +297,16 @@ class ClassDbManager:
             return self.er + '5UL9yj">'
         else:
             return self.er + 'dmr6pW">'
+
+    @staticmethod
+    def time_now():
+        # Ricevo la data di oggi
+        app = datetime.datetime.today()
+        # Assegno i valori alla lista actual_time
+        actual_time = dict()
+        actual_time['day'] = int(app.strftime("%d"))
+        actual_time['month'] = int(app.strftime("%m"))
+        actual_time['year'] = int(app.strftime("%y"))
+        actual_time['hour'] = int(app.strftime("%H"))
+        actual_time['minute'] = int(app.strftime("%M"))
+        return actual_time

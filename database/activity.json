@@ -5,10 +5,10 @@
     "project": 0,
     "creator": 2,
     "location": 0,
-    "type": "group"
+    "type": "group",
     "group": 0,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       1,
       2,
       3
@@ -19,11 +19,11 @@
     "name": "AgAct1",
     "project": 0,
     "creator": 2,
-    "type": "group"
+    "type": "group",
     "location": 0,
     "group": 0,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       1,
       2,
       3,
@@ -40,7 +40,7 @@
     "location": 1,
     "group": 1,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       1,
       5
     ]
@@ -54,7 +54,7 @@
     "location": 2,
     "group": 1,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       1,
       4
     ]
@@ -67,7 +67,7 @@
     "location": 3,
     "group": 2,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       2,
       1
     ]
@@ -81,7 +81,7 @@
     "location": 3,
     "group": false,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       3
     ]
   },
@@ -94,7 +94,7 @@
     "location": 2,
     "group": false,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       3
     ]
   },
@@ -107,7 +107,7 @@
     "location": 1,
     "group": false,
     "description": "scrum",
-    "partecipants": [
+    "participants": [
       5
     ]
   }
