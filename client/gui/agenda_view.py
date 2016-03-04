@@ -145,7 +145,7 @@ class Agenda(Page):
         # self.connect(self.cmd_create_holiday, QtCore.SIGNAL("clicked()"), self.create_holiday)
         list_operations.append(self.cmd_create_holiday)
 
-        self.cmd_create_single_activity = QtGui.QPushButton("Inserisci un tua attivita'", self.vrt_opreations)
+        self.cmd_create_single_activity = QtGui.QPushButton("Inserisci una tua attivita'", self.vrt_opreations)
         self.cmd_create_single_activity.setFlat(True)
         self.cmd_create_single_activity.setStatusTip("Inserisci un tua attivita'")
         # self.connect(self.cmd_create_single_activity, QtCore.SIGNAL("clicked()"), self.create_single_activity)
@@ -344,4 +344,13 @@ class Agenda(Page):
     def set_list_activities(self, new_list):
         self.info_agenda['activities'] = new_list
 
+        self.lyt_agenda.removeWidget(self.scrl_activities)
+
+        self.scrl_activities.deleteLater()
+
         self.create_activities_list()
+
+        self.lyt_agenda.addWidget(self.scrl_activities, 3, 1, 7, 7)
+
+        # Set del layout della pagina
+        self.gdr_agenda.setLayout(self.lyt_agenda)
