@@ -103,3 +103,16 @@ def __init__():
     main.exec_()
 
     sys.exit(app.exec_())
+
+
+if __name__ == "__main__":
+    import sys
+
+    app = QtGui.QApplication(sys.argv)
+    app.setQuitOnLastWindowClosed(True)
+    agenda_manager = AgendaManager()
+
+    main = LoginManager(agenda_manager)
+    main.exec_()
+
+    sys.exit(app.exec_())
