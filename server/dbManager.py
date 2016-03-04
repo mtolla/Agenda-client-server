@@ -247,18 +247,19 @@ class ClassDbManager:
 
     def insert_to_today_act(self, item):
         app_list = []
+        #print item
         if not self.today_act:
             return self.today_act.append(item)
         for act in range(0, len(self.today_act)):
-            if self.today_act[act]['date']['hour'] < item['hour']:
+            if self.today_act[act].values()[0]['hour'] < item.values()[0]['hour']:
                 app_list.append(self.today_act[act])
-            if self.today_act[act]['date']['hour'] == item['hour']:
-                if self.today_act[act]['date']['minute'] < item['minute']:
+            if self.today_act[act].values()[0]['hour'] == item.values()[0]['hour']:
+                if self.today_act[act].values()[0]['minute'] < item.values()[0]['minute']:
                     app_list.append(self.today_act[act])
-                if self.today_act[act]['date']['minute'] >= item['minute']:
+                if self.today_act[act].values()[0]['minute'] >= item.values()[0]['minute']:
                     app_list.append(item)
                     app_list[act + 1:] = self.today_act[act:]
-            if self.today_act[act]['date']['hour'] > item['hour']:
+            if self.today_act[act].values()[0]['hour'] > item.values()[0]['hour']:
                 app_list.append(item)
                 app_list[act + 1:] = self.today_act[act:]
         self.today_act = app_list
@@ -268,16 +269,16 @@ class ClassDbManager:
         if not self.tomorrow_act:
             return self.tomorrow_act.append(item)
         for act in range(0, len(self.tomorrow_act)):
-            if self.tomorrow_act[act]['date']['hour'] < item['hour']:
+            if self.tomorrow_act[act].values()[0]['hour'] < item.values()[0]['hour']:
                 app_list.append(self.tomorrow_act[act])
-            if self.tomorrow_act[act]['date']['hour'] == item['hour']:
-                if self.tomorrow_act[act]['date']['minute'] < item['minute']:
+            if self.tomorrow_act[act].values()[0]['hour'] == item.values()[0]['hour']:
+                if self.tomorrow_act[act].values()[0]['minute'] < item.values()[0]['minute']:
                     app_list.append(self.tomorrow_act[act])
-                if self.tomorrow_act[act]['date']['minute'] >= item['minute']:
+                if self.tomorrow_act[act].values()[0]['minute'] >= item.values()[0]['minute']:
                     app_list.append(item)
                     app_list[act + 1:] = self.tomorrow_act[act:]
                     break
-            if self.tomorrow_act[act]['date']['hour'] > item['hour']:
+            if self.tomorrow_act[act].values()[0]['hour'] > item.values()[0]['hour']:
                 app_list.append(item)
                 app_list[act + 1:] = self.tomorrow_act[act:]
                 break
