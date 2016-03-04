@@ -123,7 +123,21 @@ def get_group_name(id_group):
 # ASSOLUTAMENTE DA TESTARE
 @index.route('/projects/<token>/<ip>', methods=['GET'])
 def get_user_project(token, ip):
-    return api.get_user_project(token)
+    if api.check_token(token, ip):
+        return api.get_user_project(token)
+    return False, 401
+
+@index.route('/activities/<int:day>/<token>/<ip>', methods=['GET'] )
+def get_activity_day(day, token, ip):
+    if api.check_token(token, ip):
+        return api.get_activity_day(day)
+    return False, 401
+
+@index.route('/activity/<int:id>/<token>/<ip>', methods=['GET'])
+def get_activity_info(id, token, ip):
+    if api.check_token(token, ip):
+        return api.get_activity_info(id, token)
+    return False, 401
 
 @index.errorhandler(404)
 def page_not_found(app):

@@ -92,6 +92,7 @@ Query:
 										'projectmanager' se l'utente è project manager
 										'participant' altrimenti
 
+    BOOM BABY
 	(Selezionata una data sul calendario)
 	- /activities/<int:day>/<token>/<ip>
 		return -> dizionario['activities'] = lista di dizionari di attività del giorno corrente conteneti ID, name, begin, end

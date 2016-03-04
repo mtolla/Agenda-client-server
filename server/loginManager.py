@@ -80,6 +80,11 @@ class ClassLoginManager:
             if token == users['token']:
                 return self.db_manager.from_id_get_user(key)
 
+    def from_token_get_iduser(self, token):
+        for key, users in self.user_token.items():
+            if token == users['token']:
+                return key
+
     def from_user_get_ip(self, id_usr):
         return self.user_token[id_usr]['ip']
 

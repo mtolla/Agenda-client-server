@@ -122,7 +122,6 @@ class ClassDbManager:
         # Cerco in activity tutte quelle con id progetto uguale a quello richiesto
         # ID, nome, inizio, fine con ora e minuti delle attività di oggi e nome della stanza
         dict_app = dict()
-        hour_app = dict()
         list_return = []
         for row in self.today_act:
             if row['project'] == id_proj:
@@ -174,7 +173,7 @@ class ClassDbManager:
                     dict_app['user'] = user
                     list_return.append(dict_app)
                 return list_return
-        return False
+        return list_return
 
     def check_activity(self):
         # Controllo tutte le attività e restituisco quelle con scadenza = 1 ora, 30 min, 24 ore
@@ -317,8 +316,6 @@ class ClassDbManager:
                 dict_return[proj['ID']] = proj['name']
         return dict_return
 
-        # [i for i in L1 if i in L2]
-        # if [i for i in proj['group'] if i in list_app]:
 
     def calc_duration(self, dict_hour, duration):
         # Funzione che data una data calcola la durata
@@ -326,7 +323,7 @@ class ClassDbManager:
         rest = duration % 60
         n_hour = duration / 60
         dict_hour['hour'] += n_hour
-        dict_hour['minutes'] += rest
+        dict_hour['minute'] += rest
         return dict_hour
 
     def get_room_from_id(self, id_room):
@@ -340,15 +337,157 @@ class ClassDbManager:
         return False
 
 
+    def get_activity_day(self, day):
+        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end)
+        list_app = self.open_file('activity')
+        list_return = []
+        dict_app = dict()
+        for activity in list_app:
+            if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date']['year'] == day['year']:
+                dict_duration = self.calc_duration(activity['date'], activity['duration'])
+                dict_app['hour'] = activity['date']['hour'] + dict_duration['hour']
+                dict_app['minute'] = activity['date']['minute'] + dict_duration['minute']
+                list_return.append({'ID': activity['ID'], 'name':activity['name'], 'begin': activity['date'], 'end': dict_app })
+        return list_return
+
+    def get_activity_info(self, id_act, id_user):
+        # Da un id di un attività un dizionario con le info:
+        """
+            ['activity'] = dizionario attività
+			['participants'] = dizionario[ID] = name (se di gruppo o di progetto di tutti i partecipanti dell'attività)
+								false se attività singola
+			['group'] = name se attività di gruppo false altrimenti
+			['location'] = room
+			['modify'] = true se:
+			                utente è taeam leader è del suo gruppo
+			                attività singola di un partecipante
+						    è project manager e attività di progetto o singola
+						    l'utente é lo stesso dell'attività singola
+		"""
+        dict_return = dict()
+        dict_return['activity'] = self.get_activity_from_id_act(id_act)
+        dict_return['participants'] = self.get_participants_from_activity(id_act)
+        dict_return['group'] = self.get_group_name_from_activity(id_act)
+        dict_return['location'] = self.get_room_from_activity(id_act)
+
+
+    def get_participants_from_activity(self, id_act):
+        list_act = self.open_file('activity')
+        dict_return = dict()
+        for activity in list_act:
+            if activity['ID'] == id_act:
+                for part in activity['participants']:
+                    dict_return[part] = self.from_id_get_user(part)
+                return dict_return
+        return False
+
+    def get_group_name_from_activity(self, id_act):
+        # Dall'attività trovo l'id del gruppo, poi chiamo get_group_name_from_group
+        list_act = self.open_file('activity')
+        for activity in list_act:
+            if activity['ID'] == id_act:
+                if activity['type'] == 'group':
+                    return self.get_group_name_from_group(activity['group'])
+                return False
+        return False
+
+    def get_room_from_activity(self, id_act):
+        # Dall'attività trovo l'id della stanza, poi chiamo get_room_from_id
+        list_act = self.open_file('activity')
+        for activity in list_act:
+            if activity['ID'] == id_act:
+                return self.get_room_from_id(activity['location'])
+        return False
+
+    def can_modify(self, id_act, id_user):
+        # Funzione cattivella, restituisce true se:
+        # - Utente è taeamleader del suo gruppo
+        # - Attività singola di un partecipante
+        # - É project manager e attività di progetto o singola
+        # - L'utente é lo stesso dell'attività singola
+        id_group = self.get_group_from_activity(id_act)
+        if id_group: #id gruppo
+            level = self.get_level_user_group(id_user, id_group)
+            type = self.get_type_activity_from_activity(id_act) #'group' o 'project'
+            if level == 'teamleader' and type == 'group':
+                return True
+            #Project manager
+            if not level and type == 'project':
+                return True
+            return False
+        # Attività singola
+        # Il project manager può sempre
+        if self.is_projectmanager_of(id_user, self.get_id_proj_from_activity(id_act)):
+            return True
+        # Il teamleader
+        # Dall'attività salgo al progetto, trovo tutti i gruppi
+        # Trovo tutti i gruppi del teamlea
+
+
+
+    def is_projectmanager_of(self, id_user, id_proj):
+        #Da un attività restituisco l'id del gruppo
+        list_proj = self.open_file('project')
+        for project in list_proj:
+            if project['ID'] == id_proj and project['projectManager'] == id_user:
+                return True
+        return False
+
+    def get_id_proj_from_activity(self, id_act):
+        #Da un attività restituisco l'id del progetto
+        list_act = self.open_file('activity')
+        for activity in list_act:
+            if activity['ID'] == id_act:
+                return activity['project']
+        return False
+
+
+
+    def get_group_from_activity(self, id_act):
+        #Da un attività restituisco l'id del gruppo
+        list_act = self.open_file('activity')
+        for activity in list_act:
+            if activity['ID'] == id_act:
+                if activity['type'] != 'single':
+                    return activity['group']
+                return False
+        return False
+
+    def get_level_user_group(self, id_user, id_group):
+        list_app = self.open_file('user')
+        for user in list_app:
+            if user['ID'] == id_user:
+                for group in user['group']:
+                    if group['ID'] == id_group:
+                        return group['level']
+                return False
+        return False
+
+    def get_type_activity_from_activity(self, id_act):
+        #Da un attività restituisco il tipo
+        list_act = self.open_file('activity')
+        for activity in list_act:
+            if activity['ID'] == id_act:
+               return activity['type']
+        return False
 
 
 
 
 
 
-    def open_file(self, namefile, method = "r"):
+
+
+
+
+
+
+
+
+
+    def open_file(self, filename, method = "r"):
         try:
-            f = open(self.db_file[namefile], method)
+            f = open(self.db_file[filename], method)
         except IOError:
             return False
         else:

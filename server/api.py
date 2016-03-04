@@ -83,11 +83,11 @@ class Api:
         return self.db_manager.get_pjmanager_email(id_proj)
 
     def get_is_teamleader(self, token):
-        id_user = self.login_manager.from_token_get_user(token)
+        id_user = self.login_manager.from_token_get_iduser(token)
         return self.db_manager.is_teamleader(id_user)
 
     def get_is_projectmanager(self, token):
-        id_user = self.login_manager.from_token_get_user(token)
+        id_user = self.login_manager.from_token_get_iduser(token)
         return self.db_manager.is_projectmanager(id_user)
 
     def get_level_usr(self, token):
@@ -113,12 +113,16 @@ class Api:
         return json.dumps(self.login_manager.user_token)
 
     def get_user_project(self, token):
-        return json.dumps(self.db_manager.get_proj_from_user(self.login_manager.from_token_get_user(token)))
+        return json.dumps(self.db_manager.get_proj_from_user(self.login_manager.from_token_get_iduser(token)))
 
     def check_token(self, token, ip):
         return self.login_manager.check_token(token, ip)
 
+    def get_activity_day(self, day):
+        return json.dumps(self.db_manager.get_activity_day(day))
 
+    def get_activity_info(self, id_act, token):
+         return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
 
 
 
@@ -131,6 +135,9 @@ class Api:
 
     def from_token_get_user(self, token):
         return self.login_manager.from_token_get_user(token)
+
+    def from_token_get_iduser(self, token):
+        return self.login_manager.from_token_get_iduser(token)
 
     def get_activity_from_id_act(self, id_act):
         return self.db_manager.get_activity_from_id_act(id_act)
