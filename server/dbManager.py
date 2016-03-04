@@ -145,7 +145,6 @@ class ClassDbManager:
         for act in list_act:
             if act['ID'] in list_keys:
                 list_return.append(act)
-        print list_return
         return list_return
 
     def get_holidays_from_proj(self, id_proj):
@@ -261,8 +260,8 @@ class ClassDbManager:
         self.last_check = actual_time
 
     def order_list(self):
-        #Ordino le due liste congli eventi di oggi e domani
-        #Today
+        # Ordino le due liste congli eventi di oggi e domani
+        # Today
         app_list = []
         for app in range(0, len(self.today_act), 1):
             dict_min = self.today_act[0]
@@ -272,16 +271,18 @@ class ClassDbManager:
                 if dict_min['date']['hour'] > self.today_act[act]['date']['hour']:
                     dict_min = self.today_act[act]
                     n_min = act
-                 # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
-                if dict_min['date']['hour'] == self.today_act[act]['date']['hour']:
-                    if dict_min['date']['minute'] > self.today_act[act]['date']['minute']:
-                        dict_min = self.today_act[act]
-                        n_min = act
+                    # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
+                if dict_min['date']['hour'] == self.today_act[act]['date']['hour'] and dict_min['date']['minute'] > \
+                        self.today_act[act]['date']['minute']:
+                    dict_min = self.today_act[act]
+                    n_min = act
             app_list.append(dict_min)
             self.today_act.pop(n_min)
         self.today_act = app_list
+        self.order_list_tomorrow()
 
-        #Tomorrow
+    def order_list_tomorrow(self):
+        # Tomorrow
         app_list = []
         for act in range(0, len(self.tomorrow_act), 1):
             dict_min = self.tomorrow_act[0]
@@ -291,15 +292,15 @@ class ClassDbManager:
                 if dict_min['date']['hour'] > self.tomorrow_act[act]['date']['hour']:
                     dict_min = self.tomorrow_act[act]['date']
                     n_min = act
-                 # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
-                if dict_min['date']['hour'] == self.tomorrow_act[act]['date']['hour']:
-                    if dict_min['date']['minute'] > self.tomorrow_act[act]['date']['minute']:
-                        dict_min = self.tomorrow_act[act]['date']
-                        n_min = act
+                    # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
+                if dict_min['date']['hour'] == self.tomorrow_act[act]['date']['hour'] and dict_min['date']['minute'] > \
+                        self.tomorrow_act[act]['date']['minute']:
+                    dict_min = self.tomorrow_act[act]['date']
+                    n_min = act
             app_list.append(dict_min)
             self.tomorrow_act.pop(n_min)
         self.tomorrow_act = app_list
-        #Toyota
+        # Toyota
 
     def from_user_get_id(self, user):
         # Dal nome utente restituisco id
@@ -406,6 +407,7 @@ class ClassDbManager:
         # - Attività singola di un partecipante
         # - É project manager e attività di progetto o singola
         # - L'utente é lo stesso dell'attività singola
+        # Attività di gruppo
         id_group = self.get_group_from_activity(id_act)
         if id_group:  # id gruppo
             level = self.get_level_user_group(id_user, id_group)
@@ -416,6 +418,9 @@ class ClassDbManager:
             if not level and type == 'project':
                 return True
             return False
+        self.can_modify_app(id_act, id_user)
+
+    def can_modify_app(self, id_act, id_user):
         # Attività singola
         # Il project manager può sempre
         if self.is_projectmanager_of(id_user, self.get_id_proj_from_activity(id_act)):
@@ -449,9 +454,7 @@ class ClassDbManager:
         list_return = []
         for user in list_user:
             if user['ID'] == id_user:
-                for group in user['groups']:
-                    if group['level'] == level:
-                        list_return.append(group['ID'])
+                list_return += self.get_group_where_lvl_app(user['group'], level)
         return list_return
 
     def get_group_from_proj(self, id_proj):
@@ -492,9 +495,9 @@ class ClassDbManager:
         list_app = self.open_file('user')
         for user in list_app:
             if user['ID'] == id_user:
-                for group in user['group']:
-                    if group['ID'] == id_group:
-                        return group['level']
+                app = self.get_level_user_group_app(user['groups'], id_group)
+                if app:
+                    return app
                 return False
         return False
 
@@ -523,14 +526,12 @@ class ClassDbManager:
         return list_return
 
     def get_teamleader_groups(self, id_usr):
-        #Ritorno tutti i gruppi di cui è teamleader
+        # Ritorno tutti i gruppi di cui è teamleader
         list_user = self.open_file('user')
         list_return = []
         for user in list_user:
             if user['ID'] == id_usr:
-                for group in user['groups']:
-                    if group['level'] == 'teamleader':
-                        list_return.append(group['ID'])
+                list_return += self.get_teamleader_groups_app(user['groups'])
                 break
         # Avendo assegnano l'id sia alla chiave che al valore posso usarli per ricavare il nome del gruppo
         for group in list_return:
@@ -551,22 +552,9 @@ class ClassDbManager:
         for user in list_usr:
             for group in user:
                 if group['ID'] == id_group:
-                    list_return.append({user['ID'] : user['username']})
+                    list_return.append({user['ID']: user['username']})
                     break
         return list_return
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def open_file(self, filename, method="r"):
         try:
@@ -613,3 +601,26 @@ class ClassDbManager:
             if group['level'] == 'teamleader':
                 return True
         return False
+
+    @staticmethod
+    def get_teamleader_groups_app(groups):
+        list_return = []
+        for group in groups:
+            if group['level'] == 'teamleader':
+                list_return.append(group['ID'])
+        return list_return
+
+    @staticmethod
+    def get_level_user_group_app(groups, id_group):
+        for group in groups:
+            if group['ID'] == id_group:
+                return group['level']
+        return False
+
+    @staticmethod
+    def get_group_where_lvl_app(groups, level):
+        list_return = []
+        for group in groups:
+            if group['level'] == level:
+                list_return.append(group['ID'])
+        return list_return
