@@ -92,7 +92,7 @@ class LoginManager(LoginInterface):
             return False
 
 
-if __name__ == "__main__":
+def __init__():
     import sys
 
     app = QtGui.QApplication(sys.argv)

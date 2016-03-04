@@ -132,37 +132,48 @@ class Agenda(Page):
 
         self.lyt_opreations = QtGui.QVBoxLayout()
 
+        list_operations = []
         # Creazione bottoni operazioni
         self.cmd_create_holiday = QtGui.QPushButton("Inserisci le vacanze", self.vrt_opreations)
         self.cmd_create_holiday.setFlat(True)
         self.cmd_create_holiday.setStatusTip("Inserisci le vacanze")
         # self.connect(self.cmd_create_holiday, QtCore.SIGNAL("clicked()"), self.create_holiday)
-        self.lyt_opreations.addWidget(self.cmd_create_holiday)
+        list_operations.append(self.cmd_create_holiday)
 
         self.cmd_create_single_activity = QtGui.QPushButton("Inserisci un tua attivita'", self.vrt_opreations)
         self.cmd_create_single_activity.setFlat(True)
         self.cmd_create_single_activity.setStatusTip("Inserisci un tua attivita'")
         # self.connect(self.cmd_create_single_activity, QtCore.SIGNAL("clicked()"), self.create_single_activity)
-        self.lyt_opreations.addWidget(self.cmd_create_single_activity)
+        list_operations.append(self.cmd_create_single_activity)
 
         if self.info_agenda['level'] == 'teamleader':
             self.cmd_create_group_activity = QtGui.QPushButton("Inserisci un'attivita' di gruppo", self.vrt_opreations)
             self.cmd_create_group_activity.setFlat(True)
             self.cmd_create_group_activity.setStatusTip("Inserisci un'attivita' di gruppo")
             # self.connect(self.cmd_create_group_activity, QtCore.SIGNAL("clicked()"), self.create_group_activity)
-            self.lyt_opreations.addWidget(self.cmd_create_group_activity)
+            list_operations.append(self.cmd_create_group_activity)
 
             self.cmd_create_group = QtGui.QPushButton("Crea un nuovo gruppo", self.vrt_opreations)
             self.cmd_create_group.setFlat(True)
             self.cmd_create_group.setStatusTip("Crea un nuovo gruppo")
             # self.connect(self.cmd_create_group, QtCore.SIGNAL("clicked()"), self.create_group)
-            self.lyt_opreations.addWidget(self.cmd_create_group)
+            list_operations.append(self.cmd_create_group)
 
             self.cmd_modify_group = QtGui.QPushButton("Crea un nuovo gruppo", self.vrt_opreations)
             self.cmd_modify_group.setFlat(True)
             self.cmd_modify_group.setStatusTip("Crea un nuovo gruppo")
             # self.connect(self.cmd_modify_group, QtCore.SIGNAL("clicked()"), self.modify_group)
-            self.lyt_opreations.addWidget(self.cmd_modify_group)
+            list_operations.append(self.cmd_modify_group)
+
+            self.cmd_modify_group = QtGui.QPushButton("Modifica un gruppo", self.vrt_opreations)
+            self.cmd_modify_group.setFlat(True)
+            self.cmd_modify_group.setStatusTip("Crea un nuovo gruppo")
+            # self.connect(self.cmd_modify_group, QtCore.SIGNAL("clicked()"), self.modify_group)
+            list_operations.append(self.cmd_modify_group)
+
+        # Aggiunta bottoni al layout
+        for cmd in list_operations:
+            self.lyt_opreations.addWidget(cmd)
 
         # Set del layout della pagina
         self.vrt_opreations.setLayout(self.lyt_opreations)
