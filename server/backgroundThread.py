@@ -56,3 +56,20 @@ class SignalThread(QtCore.QRunnable):
             self.signal_queue.send()
             self.signal_queue.clean_queue()
             time.sleep(self.sleep_time)
+
+
+class JournalThread(QtCore.QRunnable):
+    def __init__(self, db_manager):
+        QtCore.QRunnable.__init__(self)
+        self.db_manager = db_manager
+
+    def run(self):
+        while True:
+            self.db_manager.check_today_tomorrow_act()
+            time.sleep(self.i_can_sleep_until_midnight())
+
+    def i_can_sleep_until_midnight(self):
+        actual_time = self.db_manager.time_now()
+        sleep_time = (24 - actual_time['hour']) * 3600
+        sleep_time += (60 - actual_time['minute']) * 60
+        return sleep_time

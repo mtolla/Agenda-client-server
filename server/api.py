@@ -9,7 +9,7 @@ from loginManager import ClassLoginManager
 from PyQt4 import QtCore
 import json  # DA ELIMINARE FINITI I TEST
 # Thread
-from backgroundThread import TokenThread, SignalThread
+from backgroundThread import TokenThread, SignalThread, JournalThread
 # Notification Queue
 from signalQueue import ClassSignalQueue
 
@@ -27,7 +27,9 @@ class Api:
         # Creazione thread controllo queue
         signal_thread = SignalThread(self.signal_queue)
         QtCore.QThreadPool.globalInstance().start(signal_thread)
-
+        # Creazione thread giornaliero
+        journal_thread = JournalThread(self.db_manager)
+        QtCore.QThreadPool.globalInstance().start(journal_thread)
     # Login con user, password
     def do_login(self, user, password, ip):
         token = self.login_manager.do_login(user, password, ip)
@@ -124,7 +126,8 @@ class Api:
     def get_activity_info(self, id_act, token):
          return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
 
-
+    def get_locations(self):
+        return json.dumps(self.db_manager.get_locations())
 
 
 

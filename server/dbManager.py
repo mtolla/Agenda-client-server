@@ -424,14 +424,14 @@ class ClassDbManager:
         # Trovo tutti i gruppi dell'utente dove è teamleader
         # Trovo tutti i gruppi del creatore dove è partecipant
         # Merge
-        if self.gigamergedellamuerteholachica(id_act, id_user):
+        if self.mega_merge(id_act, id_user):
             return True
         return False
 
-    def gigamergedellamuerteholachica(self, id_act, id_user):
+    def mega_merge(self, id_act, id_user):
         id_proj = self.get_id_proj_from_activity(id_act)
         # Lista di gruppi del progetto
-        list_proj_group = self.grom_group_return_sub(self.get_group_from_proj(id_proj))
+        list_proj_group = self.from_group_return_sub(self.get_group_from_proj(id_proj))
         # Lista di gruppi del tipello che guarda ed è teamleader
         list_team_group = self.get_group_where_lvl(id_user, 'teamleader')
         list_part_group = self.get_group_where_lvl(id_user, 'participant')
@@ -441,7 +441,6 @@ class ClassDbManager:
         if merge:
             return True
         return False
-
 
 
     def get_group_where_lvl(self, id_user, level):
@@ -510,7 +509,7 @@ class ClassDbManager:
         return False
 
 
-    def grom_group_return_sub(self, id_group):
+    def from_group_return_sub(self, id_group):
         #Da un gruppo ritorno un sottogruppo
         list_group = self.open_file('group')
         for group in list_group:
@@ -519,7 +518,13 @@ class ClassDbManager:
         return []
 
 
-
+    def get_locations(self):
+        # Ritorno tutti gli edifici
+        list_location = self.open_file('location')
+        list_return = []
+        for location in list_location:
+            list_return.append({location['ID']: location['building'] + "-" + location['room']})
+        return list_return
 
 
 
