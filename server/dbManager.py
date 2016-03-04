@@ -369,7 +369,7 @@ class ClassDbManager:
         dict_return['participants'] = self.get_participants_from_activity(id_act)
         dict_return['group'] = self.get_group_name_from_activity(id_act)
         dict_return['location'] = self.get_room_from_activity(id_act)
-
+        dict_return['modify'] = self.can_modify(id_act, id_user)
 
     def get_participants_from_activity(self, id_act):
         list_act = self.open_file('activity')
@@ -421,9 +421,47 @@ class ClassDbManager:
             return True
         # Il teamleader
         # Dall'attività salgo al progetto, trovo tutti i gruppi
-        # Trovo tutti i gruppi del teamlea
+        # Trovo tutti i gruppi dell'utente dove è teamleader
+        # Trovo tutti i gruppi del creatore dove è partecipant
+        # Merge
+        if self.gigamergedellamuerteholachica(id_act, id_user):
+            return True
+        return False
+
+    def gigamergedellamuerteholachica(self, id_act, id_user):
+        id_proj = self.get_id_proj_from_activity(id_act)
+        # Lista di gruppi del progetto
+        list_proj_group = self.grom_group_return_sub(self.get_group_from_proj(id_proj))
+        # Lista di gruppi del tipello che guarda ed è teamleader
+        list_team_group = self.get_group_where_lvl(id_user, 'teamleader')
+        list_part_group = self.get_group_where_lvl(id_user, 'participant')
+        # Tiro fuori il risultato
+        #set(a).intersection(b)
+        merge = set(list_proj_group).intersection(set(list_team_group).intersection(list_part_group))
+        if merge:
+            return True
+        return False
 
 
+
+    def get_group_where_lvl(self, id_user, level):
+        # Da un id user ritorno tutti i gruppi dove è teamleader
+        list_user = self.open_file('user')
+        list_return = []
+        for user in list_user:
+            if user['ID'] == id_user:
+                for group in user['groups']:
+                    if group['level'] == level:
+                        list_return.append(group['ID'])
+        return list_return
+
+    def get_group_from_proj(self, id_proj):
+        #Da un progetto restituisco l'id del gruppo
+        list_proj = self.open_file('project')
+        for project in list_proj:
+            if project['ID'] == id_proj:
+                return project['group']
+        return False
 
     def is_projectmanager_of(self, id_user, id_proj):
         #Da un attività restituisco l'id del gruppo
@@ -468,11 +506,17 @@ class ClassDbManager:
         list_act = self.open_file('activity')
         for activity in list_act:
             if activity['ID'] == id_act:
-               return activity['type']
+                return activity['type']
         return False
 
 
-
+    def grom_group_return_sub(self, id_group):
+        #Da un gruppo ritorno un sottogruppo
+        list_group = self.open_file('group')
+        for group in list_group:
+            if group['ID'] == id_group:
+                return group['subgroup']
+        return []
 
 
 

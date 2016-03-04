@@ -55,7 +55,7 @@
     "groups": [
       {
         "ID": 0,
-        "level": "partecipant"
+        "level": "participant"
       },
       {
         "ID": 1,
@@ -63,7 +63,7 @@
       },
       {
         "ID": 2,
-        "level": "partecipant"
+        "level": "participant"
       }
     ],
     "password": "3554bf083166693b1282b9aa2b2485c805c4cea4beb2f693f7a948694095bd9dee92e1f828ae5d5c43f8ec94f93f8678e62889fe842455e3ed2fa8b3c4795d10",
@@ -87,7 +87,7 @@
       },
       {
         "ID": 3,
-        "level": "partecipant"
+        "level": "participant"
       }
     ],
     "holiday": [],
@@ -101,11 +101,11 @@
     "groups": [
       {
         "ID": 0,
-        "level": "partecipant"
+        "level": "participant"
       },
       {
         "ID": 2,
-        "level": "partecipant"
+        "level": "participant"
       },
       {
         "ID": 3,
@@ -124,11 +124,11 @@
     "groups": [
       {
         "ID": 0,
-        "level": "partecipant"
+        "level": "participant"
       },
       {
         "ID": 1,
-        "level": "partecipant"
+        "level": "participant"
       }
     ],
     "email": "mattia@myemail.li",
@@ -143,11 +143,11 @@
     "groups": [
       {
         "ID": 0,
-        "level": "partecipant"
+        "level": "participant"
       },
       {
         "ID": 1,
-        "level": "partecipant"
+        "level": "participant"
       }
     ],
     "ID": 5,
