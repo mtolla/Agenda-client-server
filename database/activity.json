@@ -67,6 +67,7 @@
     "ID": 4,
     "name": "AgAct4",
     "project": 0,
+    "type": "groups",
     "creator": 2,
     "location": 3,
     "group": 2,

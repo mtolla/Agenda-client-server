@@ -130,26 +130,29 @@ class ClassDbManager:
         list_today = self.check_act_is_today(list_act)
         dict_app = dict()
         list_return = []
+
         for row in list_today:
-            print row.keys()
+            dict_app = {}
             if row['project'] == id_proj:
                 dict_app['ID'] = row['ID']
                 dict_app['name'] = row['name']
                 dict_app['begin'] = {'hour': row['date']['hour'], 'minute': row['date']['minute']}
                 hour_app = self.calc_duration(row['date'], row['duration'])
                 dict_app['end'] = {'hour': hour_app['hour'], 'minute': hour_app['minute']}
-                dict_app['location'] = self.get_room_from_id(row['location'])
-                list_return.append(row)
+                dict_app['room'] = self.get_room_from_id(row['location'])
+                dict_app['type'] = row['type']
+                list_return.append(dict_app)
         return list_return
 
     def check_act_is_today(self, list_act):
         list_keys = []
         list_return = []
         for act in self.today_act:
-            list_keys.append(act.keys()[0])
+            list_keys.append(act['ID'])
         for act in list_act:
             if act['ID'] in list_keys:
                 list_return.append(act)
+        print list_return
         return list_return
 
     def get_holidays_from_proj(self, id_proj):
@@ -255,53 +258,55 @@ class ClassDbManager:
         for row in list_app:
             if row['date']['year'] == actual_time['year'] and row['date']['month'] == actual_time['month']:
                 if row['date']['day'] == actual_time['day']:
-                    dict_app = {row['ID']: row['date']}
-                    self.insert_to_today_act(dict_app)
+                    dict_app = {'ID': row['ID'], 'date': row['date']}
+                    self.today_act.append(dict_app)
                 # +1 per il giorno dopo
                 if row['date']['day'] == actual_time['day'] + 1:
                     dict_app = {row['ID']: row['date']}
-                    self.insert_to_tom_act(dict_app)
+                    self.tomorrow_act.append(dict_app)
+        self.order_list()
         self.last_check = actual_time
 
-    def insert_to_today_act(self, item):
-        # Dizionario con {id_att : data}
+    def order_list(self):
+        #Ordino le due liste congli eventi di oggi e domani
+        #Today
         app_list = []
-        if not self.today_act:
-            return self.today_act.append(item)
-        for act in range(0, len(self.today_act)):
-            if self.today_act[act].values()[0]['hour'] < item.values()[0]['hour']:
-                app_list.append(self.today_act[act])
-            if self.today_act[act].values()[0]['hour'] == item.values()[0]['hour']:
-                if self.today_act[act].values()[0]['minute'] < item.values()[0]['minute']:
-                    app_list.append(self.today_act[act])
-                if self.today_act[act].values()[0]['minute'] >= item.values()[0]['minute']:
-                    app_list.append(item)
-                    app_list[act + 1:] = self.today_act[act:]
-            if self.today_act[act].values()[0]['hour'] > item.values()[0]['hour']:
-                app_list.append(item)
-                app_list[act + 1:] = self.today_act[act:]
+        for app in range(0, len(self.today_act), 1):
+            dict_min = self.today_act[0]
+            n_min = 0
+            for act in range(0, len(self.today_act), 1):
+                # Se l'ora nel dict_min è maggiore cambio
+                if dict_min['date']['hour'] > self.today_act[act]['date']['hour']:
+                    dict_min = self.today_act[act]
+                    n_min = act
+                 # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
+                if dict_min['date']['hour'] == self.today_act[act]['date']['hour']:
+                    if dict_min['date']['minute'] > self.today_act[act]['date']['minute']:
+                        dict_min = self.today_act[act]
+                        n_min = act
+            app_list.append(dict_min)
+            self.today_act.pop(n_min)
         self.today_act = app_list
 
-    def insert_to_tom_act(self, item):
-        # Dizionario con {id_att : data}
+        #Tomorrow
         app_list = []
-        if not self.tomorrow_act:
-            return self.tomorrow_act.append(item)
-        for act in range(0, len(self.tomorrow_act)):
-            if self.tomorrow_act[act].values()[0]['hour'] < item.values()[0]['hour']:
-                app_list.append(self.tomorrow_act[act])
-            if self.tomorrow_act[act].values()[0]['hour'] == item.values()[0]['hour']:
-                if self.tomorrow_act[act].values()[0]['minute'] < item.values()[0]['minute']:
-                    app_list.append(self.tomorrow_act[act])
-                if self.tomorrow_act[act].values()[0]['minute'] >= item.values()[0]['minute']:
-                    app_list.append(item)
-                    app_list[act + 1:] = self.tomorrow_act[act:]
-                    break
-            if self.tomorrow_act[act].values()[0]['hour'] > item.values()[0]['hour']:
-                app_list.append(item)
-                app_list[act + 1:] = self.tomorrow_act[act:]
-                break
+        for act in range(0, len(self.tomorrow_act), 1):
+            dict_min = self.tomorrow_act[0]
+            n_min = 0
+            for act2 in range(0, len(self.tomorrow_act), 1):
+                # Se l'ora nel dict_min è maggiore cambio
+                if dict_min['date']['hour'] > self.tomorrow_act[act]['date']['hour']:
+                    dict_min = self.tomorrow_act[act]['date']
+                    n_min = act
+                 # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
+                if dict_min['date']['hour'] == self.tomorrow_act[act]['date']['hour']:
+                    if dict_min['date']['minute'] > self.tomorrow_act[act]['date']['minute']:
+                        dict_min = self.tomorrow_act[act]['date']
+                        n_min = act
+            app_list.append(dict_min)
+            self.tomorrow_act.pop(n_min)
         self.tomorrow_act = app_list
+        #Toyota
 
     def from_user_get_id(self, user):
         # Dal nome utente restituisco id
@@ -336,16 +341,6 @@ class ClassDbManager:
                 dict_return[proj['ID']] = proj['name']
         return dict_return
 
-
-    def calc_duration(self, dict_hour, duration):
-        # Funzione che data una data calcola la durata
-        # Calcolo della durata in ore con resto
-        rest = duration % 60
-        n_hour = duration / 60
-        dict_hour['hour'] += n_hour
-        dict_hour['minute'] += rest
-        return dict_hour
-
     def get_room_from_id(self, id_room):
         # Dall'id di una stanza restituisco il nome
         list_app = self.open_file('location')
@@ -356,34 +351,23 @@ class ClassDbManager:
                 return app_return
         return False
 
-
     def get_activity_day(self, day):
         # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end)
         list_app = self.open_file('activity')
         list_return = []
         dict_app = dict()
         for activity in list_app:
-            if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date']['year'] == day['year']:
+            if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
+                'year'] == day['year']:
                 dict_duration = self.calc_duration(activity['date'], activity['duration'])
                 dict_app['hour'] = activity['date']['hour'] + dict_duration['hour']
                 dict_app['minute'] = activity['date']['minute'] + dict_duration['minute']
-                list_return.append({'ID': activity['ID'], 'name':activity['name'], 'begin': activity['date'], 'end': dict_app })
+                list_return.append(
+                    {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_app})
         return list_return
 
     def get_activity_info(self, id_act, id_user):
         # Da un id di un attività un dizionario con le info:
-        """
-            ['activity'] = dizionario attività
-			['participants'] = dizionario[ID] = name (se di gruppo o di progetto di tutti i partecipanti dell'attività)
-								false se attività singola
-			['group'] = name se attività di gruppo false altrimenti
-			['location'] = room
-			['modify'] = true se:
-			                utente è taeam leader è del suo gruppo
-			                attività singola di un partecipante
-						    è project manager e attività di progetto o singola
-						    l'utente é lo stesso dell'attività singola
-		"""
         dict_return = dict()
         dict_return['activity'] = self.get_activity_from_id_act(id_act)
         dict_return['participants'] = self.get_participants_from_activity(id_act)
@@ -426,12 +410,12 @@ class ClassDbManager:
         # - É project manager e attività di progetto o singola
         # - L'utente é lo stesso dell'attività singola
         id_group = self.get_group_from_activity(id_act)
-        if id_group: #id gruppo
+        if id_group:  # id gruppo
             level = self.get_level_user_group(id_user, id_group)
-            type = self.get_type_activity_from_activity(id_act) #'group' o 'project'
+            type = self.get_type_activity_from_activity(id_act)  # 'group' o 'project'
             if level == 'teamleader' and type == 'group':
                 return True
-            #Project manager
+            # Project manager
             if not level and type == 'project':
                 return True
             return False
@@ -456,12 +440,11 @@ class ClassDbManager:
         list_team_group = self.get_group_where_lvl(id_user, 'teamleader')
         list_part_group = self.get_group_where_lvl(id_user, 'participant')
         # Tiro fuori il risultato
-        #set(a).intersection(b)
+        # set(a).intersection(b)
         merge = set(list_proj_group).intersection(set(list_team_group).intersection(list_part_group))
         if merge:
             return True
         return False
-
 
     def get_group_where_lvl(self, id_user, level):
         # Da un id user ritorno tutti i gruppi dove è teamleader
@@ -475,7 +458,7 @@ class ClassDbManager:
         return list_return
 
     def get_group_from_proj(self, id_proj):
-        #Da un progetto restituisco l'id del gruppo
+        # Da un progetto restituisco l'id del gruppo
         list_proj = self.open_file('project')
         for project in list_proj:
             if project['ID'] == id_proj:
@@ -483,7 +466,7 @@ class ClassDbManager:
         return False
 
     def is_projectmanager_of(self, id_user, id_proj):
-        #Da un attività restituisco l'id del gruppo
+        # Da un attività restituisco l'id del gruppo
         list_proj = self.open_file('project')
         for project in list_proj:
             if project['ID'] == id_proj and project['projectManager'] == id_user:
@@ -491,17 +474,15 @@ class ClassDbManager:
         return False
 
     def get_id_proj_from_activity(self, id_act):
-        #Da un attività restituisco l'id del progetto
+        # Da un attività restituisco l'id del progetto
         list_act = self.open_file('activity')
         for activity in list_act:
             if activity['ID'] == id_act:
                 return activity['project']
         return False
 
-
-
     def get_group_from_activity(self, id_act):
-        #Da un attività restituisco l'id del gruppo
+        # Da un attività restituisco l'id del gruppo
         list_act = self.open_file('activity')
         for activity in list_act:
             if activity['ID'] == id_act:
@@ -521,22 +502,20 @@ class ClassDbManager:
         return False
 
     def get_type_activity_from_activity(self, id_act):
-        #Da un attività restituisco il tipo
+        # Da un attività restituisco il tipo
         list_act = self.open_file('activity')
         for activity in list_act:
             if activity['ID'] == id_act:
                 return activity['type']
         return False
 
-
     def from_group_return_sub(self, id_group):
-        #Da un gruppo ritorno un sottogruppo
+        # Da un gruppo ritorno un sottogruppo
         list_group = self.open_file('group')
         for group in list_group:
             if group['ID'] == id_group:
                 return group['subgroup']
         return []
-
 
     def get_locations(self):
         # Ritorno tutti gli edifici
@@ -546,47 +525,13 @@ class ClassDbManager:
             list_return.append({location['ID']: location['building'] + "-" + location['room']})
         return list_return
 
-
-
-
-
-
-
-
-
-    def open_file(self, filename, method = "r"):
+    def open_file(self, filename, method="r"):
         try:
             f = open(self.db_file[filename], method)
         except IOError:
             return False
         else:
             return json.load(f)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def error(self, app):
         if app:
@@ -607,3 +552,13 @@ class ClassDbManager:
         actual_time['minute'] = int(app.strftime("%M"))
         actual_time['seconds'] = int(app.strftime("%S"))
         return actual_time
+
+    @staticmethod
+    def calc_duration(dict_hour, duration):
+        # Funzione che data una data calcola la durata
+        # Calcolo della durata in ore con resto
+        rest = duration % 60
+        n_hour = duration / 60
+        dict_hour['hour'] += n_hour
+        dict_hour['minute'] += rest
+        return dict_hour
