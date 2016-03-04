@@ -32,10 +32,7 @@ class LoginManager(LoginInterface):
         """
 
         if self.credential_digest():
-            # ------- Controllare se ci sono notifiche in self.token[1]
-            self.token = json.loads(self.server_manager.get_token(self.user))
-            self.variable['token'] = self.token[0]
-            print self.variable['token']
+            self.variable['token'] = self.server_manager.get_token(self.user)
 
             if self.variable['token']:
                 self.exec_agenda_manager()

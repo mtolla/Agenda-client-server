@@ -2,6 +2,7 @@
 from login_gateway import LoginGateway
 from server_request_handler import ServerRequestHandler
 from client.local.file_location import *
+from client.gui.popup import Popup
 import json
 
 
@@ -19,13 +20,24 @@ class ServerManager:
 
         self.server_request_handler = ServerRequestHandler(self.server_url, self.client_url)
 
+    @staticmethod
+    def notify(notifications):
+        if not notifications:
+            return
+
+        Popup("Ei hai delle notifiche!!!!", ALERT).exec_()
+
     def get_token(self, user):
         """
         Dato l'utente richiama il login_gateway per ricevere il token
         :param user: dizionario uresrname, password
         :return: token or False
         """
-        return self.login_gateway.get_token(user)
+        contents = json.loads(self.login_gateway.get_token(user))
+
+        self.notify(contents[1])
+
+        return contents[0]
 
     def do_login(self, token):
         """
