@@ -60,7 +60,7 @@ class ClassLoginManager:
                     break
         else:
             self.user_token.pop(usr)
-        return True
+        return "True", 200
 
     def check_token(self, token, ip):
         for key, users in self.user_token.items():

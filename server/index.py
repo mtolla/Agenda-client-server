@@ -50,6 +50,12 @@ def do_login_token():
     if token:
         return api.do_login_token(token, ip)
 
+@index.route('/logout/<token>/<ip>', methods=['POST'])
+def do_logut(token, ip):
+    if api.check_token(token, ip):
+        return api.do_logout(token)
+    return False, 401
+
 
 ###########################################################################
 # DA ELIMINARE SERVE PER TEST
@@ -78,9 +84,6 @@ def get_activity(id_att):
     return api.get_activity(id_att)
 
 
-@index.route('/partecipants_group/<int:id_group>', methods=['GET'])
-def get_partecipants_group(id_group):
-    return api.get_partecipants_group(id_group)
 
 @index.route('/name_projects/<list_id_proj>', methods=['GET'])
 def get_name_projects(list_id_proj):
@@ -103,11 +106,6 @@ def get_is_teamleader(token):
         return "True", 200
     else:
         return "False", 404
-
-
-@index.route('/activities_project/<int:id_proj>', methods=['GET'])
-def get_activities_project(id_proj):
-    return api.get_activities_project(id_proj)
 
 
 @index.route('/holidays_proj/<int:id_proj>', methods=['GET'])

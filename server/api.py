@@ -45,6 +45,9 @@ class Api:
         else:
             return "Unauthorized", 401
 
+    def do_logout(self, token):
+        return self.login_manager.delete_token(self.login_manager.from_token_get_iduser(token), token)
+
     ####################################################################################################################
     # Query
     def badass_function(self, token, id_proj):
