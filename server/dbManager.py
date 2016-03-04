@@ -556,6 +556,86 @@ class ClassDbManager:
                     break
         return list_return
 
+    def get_not_participants_from_proj(self, id_proj):
+        # Trovo il gruppo del progetto, cerco tutti gli utenti che non sono dentro a quel gruppo
+        list_proj = self.open_file('project')
+        list_usr = self.open_file('user')
+        id_group = 0
+        list_return = []
+        for proj in list_proj:
+            if proj['ID'] == id_proj:
+                id_group = proj['group']
+                break
+        for user in list_usr:
+            found = True
+            for group in user:
+                if group['ID'] == id_group:
+                    found = False
+                    break
+            if found:
+                list_return.append({user['ID']: user['username']})
+        return list_return
+
+    def get_partecipants_name_lvl_from_group(self, id_group):
+        # Da un id di un gruppo restituisco tutti i nomi dei partecipanti con livello
+        list_usr = self.open_file('user')
+        list_return = []
+        for user in list_usr:
+            for group in user['groups']:
+                if group['ID'] == id_group:
+                    dict_app = {user['ID']:{'username': user['username'], 'level': group['level']}}
+                    list_return.append(dict_app)
+                    break
+        return list_return
+
+    def everybody(self):
+        # Restituisco tutti gli utenti
+        list_usr = self.open_file('user')
+        list_return = []
+        for user in list_usr:
+            list_return.append({user['ID']: user['username']})
+        return list_return
+
+
+    def user_father_group(self, id_group):
+        # Restituisco gli utenti del gruppo padre
+        # Trovo i partecipanti del gruppo figlio, quelli del gruppo padre e restituisco la differenza
+        list_son = self.get_participants_from_group(id_group)
+        id_father = 0
+        list_group = self.open_file('group')
+        for group in list_group:
+            if group['ID'] == id_group:
+                id_father = group['father']
+                break
+        if id_father:
+            list_father = self.get_participants_from_group(id_father)
+            return [user for user in list_father if user not in list_son]
+        return False
+
+    def user_holiday(self, id_usr):
+        # Restituisco tutte le vacanze dell'utente
+        list_usr = self.open_file('user')
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                return user['holiday']
+        return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def open_file(self, filename, method="r"):
         try:
             f = open(self.db_file[filename], method)
