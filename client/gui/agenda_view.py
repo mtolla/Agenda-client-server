@@ -115,14 +115,6 @@ class Agenda(Page):
         for key, value in self.info_agenda['projects'].items():
             self.cmb_project.addItem(value)
 
-
-
-
-
-
-
-
-
     def create_operation_list(self):
         self.scrl_operation = QtGui.QScrollArea(self.gdr_agenda)
         self.scrl_operation.setBackgroundRole(QtGui.QPalette.NoRole)
@@ -172,6 +164,24 @@ class Agenda(Page):
             # self.connect(self.cmd_create_project, QtCore.SIGNAL("clicked()"), self.create_project)
             list_operations.append(self.cmd_create_project)
 
+            self.cmd_modify_role = QtGui.QPushButton("Modifica ruolo ad un partecipante", self.vrt_opreations)
+            self.cmd_modify_role.setFlat(True)
+            self.cmd_modify_role.setStatusTip("Modifica ruolo ad un partecipante")
+            # self.connect(self.cmd_modify_role, QtCore.SIGNAL("clicked()"), self.modify_role)
+            list_operations.append(self.cmd_modify_role)
+
+            self.cmd_modify_project = QtGui.QPushButton("Modifica progetto", self.vrt_opreations)
+            self.cmd_modify_project.setFlat(True)
+            self.cmd_modify_project.setStatusTip("Modifica progetto")
+            # self.connect(self.cmd_modify_project, QtCore.SIGNAL("clicked()"), self.modify_project)
+            list_operations.append(self.cmd_modify_project)
+
+            self.cmd_create_activity_project = QtGui.QPushButton("Crea nuova attivita' di progetto",
+                                                                 self.vrt_opreations)
+            self.cmd_create_activity_project.setFlat(True)
+            self.cmd_create_activity_project.setStatusTip("Crea nuova attivita' di progetto")
+            # self.connect(self.cmd_create_activity_project, QtCore.SIGNAL("clicked()"), self.create_activity_project)
+            list_operations.append(self.cmd_create_activity_project)
 
         # Aggiunta bottoni al layout
         for cmd in list_operations:
@@ -180,18 +190,8 @@ class Agenda(Page):
         # Set del layout della pagina
         self.vrt_opreations.setLayout(self.lyt_opreations)
 
-
-
-
-
-
-
-
-
-
-
-
-
+        # Set layout dello scroll
+        self.scrl_operation.setWidget(self.vrt_opreations)
 
     def create_lbl_status(self):
         if self.info_agenda['project']['status']:
