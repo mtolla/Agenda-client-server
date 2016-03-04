@@ -27,6 +27,7 @@ Si porr\`a l'attenzione in modo particolare su
     \item Linguaggio di programmazione
     \item Librerie per la creazione dell'interfaccia utente
     \item Formato e struttura della base di dati
+    \item Librerie usate per la gestione del flusso di dati
     \item Struttura dei sistemi di sicurezza adottati
     \item Software per la stesura della documentazione
 \end{itemize}
@@ -118,7 +119,9 @@ Per far interagire il file XML generato da QtDesigner con Python
 \`e stato usato lo strumento Pyuic4\footnote{http://pyqt.sourceforge.net/Docs/PyQt4/designer.html}
 che svolge il lavoro meccanico di conversione da file che descrive un'interfaccia
 ad uno script Python che mette a disposizione classi che rappresentano
-gli oggetti usati ed i metodi  per accedervi.
+gli oggetti usati ed i metodi  per accedervi. \\ \\
+Le librerie Qt sono inoltre state usate sulla parte server per implementare una
+gestione dei thread.
 
 \section{Base di dati}
 \subsection{Introduzione}
@@ -167,6 +170,12 @@ gli oggetti usati ed i metodi  per accedervi.
     come Json, con [chiave: valore]. Questo tipo di dato ha reso molto agile
     l'accesso e la generazione di codice Json.
 
+\subsection{Librerie usate per la gestione del flusso di dati}
+\`E stato scelto di usare la libreria Flask\footnote{http://flask.pocoo.org/} che permette
+una semplice implementazione delle REST Api. \`E stato scelto questo strumento in quanto
+risulta avere una curva d'apprendimento leggera. Ha meno funzionalit\`a di altre soluzioni,
+ma per le il progetto implementato era pi\`u che sufficiente. Questo ha comunque reso
+il pacchetto software finale pi\`u leggero e pi\`u reattivo.
 
 \section{Struttura dei sistemi di sicurezza adottati}
 \subsection{Codifica delle password}
