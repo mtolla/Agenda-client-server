@@ -1,3 +1,4 @@
 #!/bin/sh
-python2 startServer.py &
-python2 startClient.py
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+python2 $DIR"/startServer.py" &&
+python2 $DIR"/startClient.py" &
