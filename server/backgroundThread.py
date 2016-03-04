@@ -27,7 +27,10 @@ class TokenThread(QtCore.QRunnable):
         if next_exp['hour'] - actual_time['hour'] < 0:
             return self.i_can_sleep_until_midnight()
         else:
-            sleep_time += (next_exp['hour'] - actual_time['hour']) * 3600
+            if next_exp['hour'] - actual_time['hour'] == 0:
+                sleep_time = 23 * 3600
+            else:
+                sleep_time += (next_exp['hour'] - actual_time['hour']) * 3600
             if next_exp['minute'] - actual_time['minute'] < 0:
                 return sleep_time
             sleep_time += (next_exp['minute'] - actual_time['minute']) * 60

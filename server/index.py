@@ -126,7 +126,7 @@ def get_user_project(token, ip):
     return api.get_user_project(token)
 
 @index.errorhandler(404)
-def page_not_found():
+def page_not_found(app):
     return api.error(True), 404
 
 

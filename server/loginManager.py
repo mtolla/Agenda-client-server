@@ -92,11 +92,10 @@ class ClassLoginManager:
                 next_exp = token['exp']
         return next_exp
 
-    @staticmethod
-    def app_next_token_expire(next_exp, token):
-        minor = True
-        for item in range(0, len(token)):
-            if next_exp[item] - token['exp'][item] < 0:
-                minor = False
-                break
-        return minor
+    def app_next_token_expire(self, next_exp, token):
+        if next_exp['hour'] - token['exp']['hour'] > 0:
+            return True
+        if next_exp['hour'] - token['exp']['hour'] == 0:
+            if next_exp['minute'] - token['exp']['minute'] > 0:
+                return True
+        return False
