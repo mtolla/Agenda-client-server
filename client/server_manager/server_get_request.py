@@ -33,7 +33,7 @@ class ServerGetRequest(ServerRequestInterface):
     @staticmethod
     def get_response(response):
         if response['status_code'] == 200:
-            return json.loads(response['_content'])
+            return response['_content']
 
         return False
 

@@ -33,4 +33,4 @@ class Page(QtGui.QMainWindow):
 
     @staticmethod
     def about():
-        Popup("Copyright 2016 @ TeamIT").exec_()
+        Popup("Copyright 2016 @ TeamIT \nGraphics powered by Rave Productions").exec_()

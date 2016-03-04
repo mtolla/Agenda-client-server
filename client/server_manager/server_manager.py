@@ -50,20 +50,17 @@ class ServerManager:
         return self.login_gateway.do_login(token)
 
     def info_agenda(self):
-        # projects = json.loads(self.server_request_handler.projects())
-        projects = self.server_request_handler.projects()
+        projects = json.loads(self.server_request_handler.projects())
 
         if projects:
-            # agenda = json.loads(self.server_request_handler.project_id(projects.keys()[0]))
-            agenda = self.server_request_handler.project_id(projects.keys()[0])
+            agenda = json.loads(self.server_request_handler.project_id(projects.keys()[0]))
             if agenda:
                 agenda['projects'] = projects
                 return agenda
         return False
 
     def activities_day(self, day):
-        # return json.loads(self.server_request_handler.activities_day(day))
-        return self.server_request_handler.activities_day(day)
+        return json.loads(self.server_request_handler.activities_day(day))
 
     def activity_id(self, _id):
         return self.server_request_handler.activity_id(_id)
