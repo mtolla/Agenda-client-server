@@ -48,7 +48,8 @@ class ClassDbManager:
         for row in list_app:
             for group in row['groups']:
                 if group['ID'] == id_group:
-                    list_return.append(row)
+                    dict_app = {row['ID']: row['username']}
+                    list_return.append(dict_app)
                     break
         return list_return
 
@@ -99,14 +100,6 @@ class ClassDbManager:
         for row in list_app:
             if row['ID'] == id_user:
                 return self.is_teamleader_check(row)
-        return False
-
-    @staticmethod
-    def is_teamleader_check(row):
-        # Funzione di supporto per non far piangere sonarqube
-        for group in row['groups']:
-            if group['level'] == 'teamleader':
-                return True
         return False
 
     def is_projectmanager(self, id_user):
@@ -326,11 +319,13 @@ class ClassDbManager:
 
     def get_proj_from_user(self, id_usr):
         # Prendo tutti i gruppi dell'utente e li confronto con quelli dei progetti
+        # Ma prima controllo se è project manager
         list_usr = self.open_file('user')
         list_proj = self.open_file('project')
         # Lista di appoggio
         list_app = []
         dict_return = dict()
+
         for user in list_usr:
             if user['ID'] == id_usr:
                 for group in user['groups']:
@@ -338,6 +333,8 @@ class ClassDbManager:
                 break
         for proj in list_proj:
             if proj['group'] in list_app:
+                dict_return[proj['ID']] = proj['name']
+            if proj['projectManager'] == id_usr:
                 dict_return[proj['ID']] = proj['name']
         return dict_return
 
@@ -525,6 +522,52 @@ class ClassDbManager:
             list_return.append({location['ID']: location['building'] + "-" + location['room']})
         return list_return
 
+    def get_teamleader_groups(self, id_usr):
+        #Ritorno tutti i gruppi di cui è teamleader
+        list_user = self.open_file('user')
+        list_return = []
+        for user in list_user:
+            if user['ID'] == id_usr:
+                for group in user['groups']:
+                    if group['level'] == 'teamleader':
+                        list_return.append(group['ID'])
+                break
+        # Avendo assegnano l'id sia alla chiave che al valore posso usarli per ricavare il nome del gruppo
+        for group in list_return:
+            group['ID'] = self.get_group_name_from_group(group['ID'])
+        return list_return
+
+    def get_participants_from_proj(self, id_proj):
+        # Da un id di un progetto trovo tutti i partecipanti
+        # Prendo il gruppo padre e trovo tutti quelli che partecipano
+        list_proj = self.open_file('project')
+        list_usr = self.open_file('user')
+        id_group = 0
+        list_return = []
+        for proj in list_proj:
+            if proj['ID'] == id_proj:
+                id_group = proj['group']
+                break
+        for user in list_usr:
+            for group in user:
+                if group['ID'] == id_group:
+                    list_return.append({user['ID'] : user['username']})
+                    break
+        return list_return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def open_file(self, filename, method="r"):
         try:
             f = open(self.db_file[filename], method)
@@ -562,3 +605,11 @@ class ClassDbManager:
         dict_hour['hour'] += n_hour
         dict_hour['minute'] += rest
         return dict_hour
+
+    @staticmethod
+    def is_teamleader_check(row):
+        # Funzione di supporto per non far piangere sonarqube
+        for group in row['groups']:
+            if group['level'] == 'teamleader':
+                return True
+        return False

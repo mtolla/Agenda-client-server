@@ -146,6 +146,49 @@ def get_locations(token, ip):
         return api.get_locations()
     return False, 401
 
+@index.route('/groups/teamleader/<token>/<ip>', methods=['GET'])
+def get_teamleader_groups(token, ip):
+    if api.check_token(token, ip):
+        return api.get_teamleader_groups(token)
+    return False, 401
+
+@index.route('/group/<int:id_group>/participants/<token>/<ip>', methods=['GET'])
+def get_participants_from_group(id_group, token, ip):
+    if api.check_token(token, ip):
+        return api.get_participants_from_group(id_group)
+    return False, 401
+
+@index.route('/project/<int:id_proj>/participants/<token>/<ip>', methods=['GET'])
+def get_participants_from_proj(id_proj, token, ip):
+    if api.check_token(token, ip):
+        return api.get_participants_from_proj(id_proj)
+    return False, 401
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

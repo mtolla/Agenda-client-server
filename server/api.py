@@ -72,8 +72,6 @@ class Api:
         dict_return['group'] = self.get_group_name_from_group(dict_return['activity']['group'])
         return json.dumps(dict_return)
 
-    def get_partecipants_group(self, id_group):
-        return self.db_manager.get_participants_from_group(id_group)
 
     def get_name_projects(self, list_id_proj):
         return self.db_manager.get_name_from_id_projects(list_id_proj)
@@ -129,7 +127,11 @@ class Api:
     def get_locations(self):
         return json.dumps(self.db_manager.get_locations())
 
+    def get_teamleader_groups(self, token):
+        return json.dumps(self.db_manager.get_teamleader_groups(self.from_token_get_iduser(token)))
 
+    def get_participants_from_proj(self, id_proj):
+        return json.dumps(self.db_manager.get_participants_from_proj(id_proj))
 
     # Implementazioni per test, se non serviranno più eliminare pure
 
@@ -146,7 +148,7 @@ class Api:
         return self.db_manager.get_activity_from_id_act(id_act)
 
     def get_participants_from_group(self, id_group):
-        return self.db_manager.get_participants_from_group(id_group)
+        return json.dumps(self.db_manager.get_participants_from_group(id_group))
 
     def get_name_from_id_projects(self, id_proj):
         return self.db_manager.get_name_from_id_projects(id_proj)
@@ -159,9 +161,6 @@ class Api:
 
     def is_teamleader(self, id_group):
         return self.db_manager.is_teamleader(id_group)
-
-    def get_activities_from_proj(self, id_proj):
-        return self.db_manager.get_activities_from_proj(id_proj)
 
     def get_holidays_from_proj(self, id_proj):
         return self.db_manager.get_holidays_from_proj(id_proj)

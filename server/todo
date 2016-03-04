@@ -109,15 +109,19 @@ Query:
 														o è project manager e attività di progetto o singola
 														o l'utente e lo stesso dell'attività singola
 
+    BOOM BABY
 	- /locations/<token>/<ip>
 		return -> tutta la tabella location
 
+    BOOM BABY
 	- /groups/teamleader/<token>/<ip>
 		return -> dizionario[ID] = name di tutti i gruppi in cui è team leader
 
-	- /groups/<int:id>/participant/<token>/<ip>
+    BOOM BABY
+	- /group/<int:id>/participants/<token>/<ip>
 		return -> dizionario[ID] = name di tutti i partecipanti al gruppo
 
+    BOOM BABY
 	- /project/<int:id>/participant/<token>/<ip>
 		return -> dizionario[ID] = name di tutti i partcipanti al progetto
 
