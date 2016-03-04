@@ -8,11 +8,9 @@
     "type": "group",
     "group": 0,
     "description": "scrum",
-    "participants": [
-      1,
-      2,
-      3
-    ]
+    "participants": [1,2,3],
+    "date": {"day" : 2, "month": 12, "year": 2016, "hour": 12, "minute": 50},
+    "duration": 60
   },
   {
     "ID": 1,
@@ -29,7 +27,9 @@
       3,
       4,
       5
-    ]
+    ],
+    "date": {"day" : 22, "month": 2, "year": 2016, "hour": 9, "minute": 0},
+    "duration": 50
   },
   {
     "ID": 2,
@@ -43,7 +43,9 @@
     "participants": [
       1,
       5
-    ]
+    ],
+    "date": {"day" : 2, "month": 1, "year": 2016, "hour": 14, "minute": 33},
+    "duration": 120
   },
   {
     "ID": 3,
@@ -57,7 +59,9 @@
     "participants": [
       1,
       4
-    ]
+    ],
+    "date": {"day" : 2, "month": 3, "year": 2016, "hour": 11, "minute": 0},
+    "duration": 150
   },
   {
     "ID": 4,
@@ -70,7 +74,9 @@
     "participants": [
       2,
       1
-    ]
+    ],
+    "date": {"day" : 7, "month": 4, "year": 2016, "hour": 17, "minute": 0},
+    "duration": 90
   },
   {
     "ID": 5,
@@ -83,7 +89,9 @@
     "description": "scrum",
     "participants": [
       3
-    ]
+    ],
+    "date": {"day" : 13, "month": 3, "year": 2016, "hour": 14, "minute": 22},
+    "duration": 2260
   },
   {
     "ID": 6,
@@ -96,7 +104,9 @@
     "description": "scrum",
     "participants": [
       3
-    ]
+    ],
+    "date": {"day" : 2, "month": 3, "year": 2016, "hour": 5, "minute": 50},
+    "duration": 2
   },
   {
     "ID": 7,
@@ -109,6 +119,8 @@
     "description": "scrum",
     "participants": [
       5
-    ]
+    ],
+    "date": {"day" : 30, "month": 3, "year": 2016, "hour": 16, "minute": 50},
+    "duration": 12
   }
 ]

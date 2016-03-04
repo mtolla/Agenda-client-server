@@ -20,7 +20,7 @@ class Api:
         self.db_manager = ClassDbManager()
         self.login_manager = ClassLoginManager()
         # Creazione thread controllo token
-        token_thread = TokenThread(self.login_manager)
+        token_thread = TokenThread(self.login_manager, self.db_manager)
         QtCore.QThreadPool.globalInstance().start(token_thread)
         # Creazione gestione coda notifiche
         self.signal_queue = ClassSignalQueue(self.login_manager, self.db_manager)
@@ -30,13 +30,16 @@ class Api:
 
     # Login con user, password
     def do_login(self, user, password, ip):
-        # if self.valid_credentials(user, password):
-        return self.login_manager.do_login(user, password, ip)
+        token = self.login_manager.do_login(user, password, ip)
+        list_app = self.signal_queue.send_user_logged(self.login_manager.from_token_get_user(token))
+        list_return = [token, list_app]
+        return json.dumps(list_return)
 
     # Login con token
     def do_login_token(self, token, ip, ):
         if self.login_manager.do_login_token(token, ip):
-            return "OK", 200
+            list_return = self.signal_queue.send_user_logged(self.login_manager.from_token_get_user(token))
+            return json.dumps(list_return)
         else:
             return "Unauthorized", 401
 
@@ -51,9 +54,9 @@ class Api:
         dict_return = dict()
         dict_return['project'] = self.get_project(id_proj)
         dict_return['email'] = self.get_pjmanager_mail(id_proj)
-        dict_return['isteamleader'] = self.get_is_teamleader(token)
         dict_return['activities'] = self.get_activities_project(id_proj)
         dict_return['holidays'] = self.get_holidays_proj(id_proj)
+        dict_return['level'] = self.get_level_usr(token)
         return dict_return
 
     def get_activity(self, id_att):
@@ -81,6 +84,17 @@ class Api:
         id_user = self.login_manager.from_token_get_user(token)
         return self.db_manager.is_teamleader(id_user)
 
+    def get_is_projectmanager(self, token):
+        id_user = self.login_manager.from_token_get_user(token)
+        return self.db_manager.is_projectmanager(id_user)
+
+    def get_level_usr(self, token):
+        if self.get_is_projectmanager(token):
+            return "projectmanager"
+        if self.get_is_teamleader(token):
+            return "teamleader"
+        return "participant"
+
     def get_activities_project(self, id_proj):
         return self.db_manager.get_activities_from_proj(id_proj)
 
@@ -95,3 +109,50 @@ class Api:
 
     def test(self):
         return json.dumps(self.login_manager.user_token)
+
+    def get_user_project(self, token):
+        return json.dumps(self.db_manager.get_proj_from_user(self.login_manager.from_token_get_user(token)))
+
+    def check_token(self, token, ip):
+        return self.login_manager.check_token(token, ip)
+
+    # Implementazioni per test, se non serviranno più eliminare pure
+
+    def delete_token(self, app, login_app):
+        return self.login_manager.delete_token(app, login_app)
+
+    def from_token_get_user(self, token):
+        return self.login_manager.from_token_get_user(token)
+
+    def get_activity_from_id_act(self, id_act):
+        return self.db_manager.get_activity_from_id_act(id_act)
+
+    def get_participants_from_group(self, id_group):
+        return self.db_manager.get_participants_from_group(id_group)
+
+    def get_name_from_id_projects(self, id_proj):
+        return self.db_manager.get_name_from_id_projects(id_proj)
+
+    def get_proj_from_id_proj(self, id_proj):
+        return self.db_manager.get_proj_from_id_proj(id_proj)
+
+    def get_pjmanager_email(self, id_proj):
+        return self.db_manager.get_pjmanager_email(id_proj)
+
+    def is_teamleader(self, id_group):
+        return self.db_manager.is_teamleader(id_group)
+
+    def get_activities_from_proj(self, id_proj):
+        return self.db_manager.get_activities_from_proj(id_proj)
+
+    def get_holidays_from_proj(self, id_proj):
+        return self.db_manager.get_holidays_from_proj(id_proj)
+
+    def get_group_name_from_group(self, id_group):
+        return self.db_manager.get_group_name_from_group(id_group)
+
+    def get_proj_from_user(self, id_user):
+        return self.db_manager.get_proj_from_user(id_user)
+
+    def get_user_token(self):
+        return self.login_manager.user_token

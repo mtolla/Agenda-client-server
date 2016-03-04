@@ -1,18 +1,22 @@
 [
   {
     "ID": 0,
-    "room": "U14-00"
+    "building": "U14",
+    "room": "00"
   },
   {
     "ID": 1,
-    "room": "U14-01"
+    "building": "U14",
+    "room": "01"
   },
   {
     "ID": 2,
-    "room": "U14-02"
+    "building": "U14",
+    "room": "02"
   },
   {
     "ID": 3,
-    "room": "U14-03"
+    "building": "U14",
+    "room": "03"
   }
 ]

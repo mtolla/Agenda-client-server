@@ -1,13 +1,10 @@
 # Librerie server
 from flask import Flask
 from flask import request
-from flask import render_template
 # Importo classe Api
 from api import Api
 # Conversione Stringhe -> Dizionari
 import ast
-# Signals
-from blinker import Namespace
 
 index = Flask(__name__)
 api = Api()
@@ -61,17 +58,18 @@ def asd(user, passw, ip):
     if user and passw and ip:
         response = api.do_login(user, passw, ip)
         if response:
-            return response[0]
+            return response
         return 0
 
 
-@index.route('/testbaf/<int:id_proj>', methods=['GET'])
-def piero(id_proj):
-    return api.badass_function(id_proj)
+@index.route('/testbaf/<int:id_proj>/<token>', methods=['GET'])
+def piero(id_proj, token):
+    return api.badass_function(token, id_proj)
 
-
-@index.route('/agenda/<token>/<int:id_proj>', methods=['GET'])
-def agenda(token, id_proj):
+# Modificata, da testare
+@index.route('/project/<int:id_proj>/<token>/<ip>', methods=['GET'])
+def project(id_proj, token, ip):
+    api.check_token(token, ip)
     return api.badass_function(token, id_proj)
 
 
@@ -84,9 +82,6 @@ def get_activity(id_att):
 def get_partecipants_group(id_group):
     return api.get_partecipants_group(id_group)
 
-
-###########################################################################
-# ASSOLUTAMENTE DA TESTARE
 @index.route('/name_projects/<list_id_proj>', methods=['GET'])
 def get_name_projects(list_id_proj):
     return api.get_name_projects(list_id_proj)
@@ -124,6 +119,11 @@ def get_holidays_proj(id_proj):
 def get_group_name(id_group):
     return api.get_group_name(id_group)
 
+###########################################################################
+# ASSOLUTAMENTE DA TESTARE
+@index.route('/projects/<token>/<ip>', methods=['GET'])
+def get_user_project(token, ip):
+    return api.get_user_project(token)
 
 @index.errorhandler(404)
 def page_not_found(app):

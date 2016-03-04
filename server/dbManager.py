@@ -18,7 +18,6 @@ class ClassDbManager:
         self.tomorrow_act = []
         # Data di default, viene modificata al primo avvio di check_today_tomorrow_act()
         self.last_check = {'day': 12, 'month': 11, 'year': 1955, 'hour': 06, 'minute': 38}
-        # Inizializzo login_manager
 
     def do_login(self, usr, psw):
         f = open(self.db_file['user'], "r")
@@ -118,6 +117,15 @@ class ClassDbManager:
                 return True
         return False
 
+    def is_projectmanager(self, id_user):
+        # Dall'user id trovo se è un project manager
+        f = open(self.db_file['project'], "r")
+        list_app = json.load(f)
+        for row in list_app:
+            if row['projectManager'] == id_user:
+                return True
+        return False
+
     def get_activities_from_proj(self, id_proj):
         # Da un id progetto trovo tutte le attività
         # Cerco in activity tutte quelle con id progetto uguale a quello richiesto
@@ -140,7 +148,7 @@ class ClassDbManager:
         app = 0
         for row in list_app_proj:
             if row['ID'] == id_proj:
-                app = row['groups']
+                app = row['group']
                 break
         for row in list_app_user:
             for group in row['groups']:
@@ -292,6 +300,85 @@ class ClassDbManager:
                 return row['ID']
         return False
 
+    def from_id_get_user(self, id_user):
+        # Dal nome utente restituisco id
+        f = open(self.db_file['user'], "r")
+        list_app = json.load(f)
+        for row in list_app:
+            if row['ID'] == id_user:
+                return row['username']
+        return False
+
+    def get_proj_from_user(self, id_usr):
+        # Prendo tutti i gruppi dell'utente e li confronto con quelli dei progetti
+        f1 = open(self.db_file['group'], "r")
+        f2 = open(self.db_file['user'], "r")
+        f3 = open(self.db_file['project'], "r")
+        # Lista di appoggio
+        list_group = json.load(f1)
+        list_usr = json.load(f2)
+        list_proj = json.load(f3)
+        list_app = []
+        dict_return = dict()
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                for group in user['groups']:
+                    list_app.append(group['ID'])
+                break
+        for proj in list_proj:
+            if proj['group'] in list_app:
+                dict_return[proj['ID']] = proj['name']
+        return dict_return
+
+        # [i for i in L1 if i in L2]
+        # if [i for i in proj['group'] if i in list_app]:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def error(self, app):
         if app:
             return self.er + '5UL9yj">'
@@ -306,7 +393,8 @@ class ClassDbManager:
         actual_time = dict()
         actual_time['day'] = int(app.strftime("%d"))
         actual_time['month'] = int(app.strftime("%m"))
-        actual_time['year'] = int(app.strftime("%y"))
+        actual_time['year'] = int(app.strftime("%Y"))
         actual_time['hour'] = int(app.strftime("%H"))
         actual_time['minute'] = int(app.strftime("%M"))
+        actual_time['seconds'] = int(app.strftime("%S"))
         return actual_time

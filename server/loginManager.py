@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from time import time
 from hashlib import sha512
 # Importo db_manager
 from dbManager import ClassDbManager
@@ -23,9 +22,6 @@ class ClassLoginManager:
 
         # Dizionario di token
         self.user_token = dict()
-        # Durata max token: 24 ore = 60 sec * 60 min * 24 h * 1000 msec
-        # self.token_exp = 60 * 60 * 24
-        self.token_exp = 5  # Durata test
         # Oggetto db_manager
         self.db_manager = ClassDbManager()
 
@@ -42,9 +38,13 @@ class ClassLoginManager:
 
     def generate_token(self, usr, psw, ip):
         self.user_token[usr] = dict()
-        self.user_token[usr]['time'] = time()
+        current_time = self.db_manager.time_now()
+        self.user_token[usr]['time'] = current_time
         self.user_token[usr]['token'] = sha512(str(usr) + psw + str(self.user_token[usr]['time'])).hexdigest()
         self.user_token[usr]['ip'] = ip
+        token_exp = self.db_manager.time_now()
+        token_exp['day'] += 1
+        self.user_token[usr]['exp'] = token_exp
         return self.user_token[usr]['token']
 
     def logout(self, token):
@@ -70,18 +70,32 @@ class ClassLoginManager:
                 return True
         return False
 
-    def check_life_token(self):
+    def check_life_token(self, actual_time):
         for key, users in self.user_token.items():
-            if time() - users['time'] >= self.token_exp:
+            if actual_time == users['exp']:
                 self.user_token.pop(key)
 
     def from_token_get_user(self, token):
         for key, users in self.user_token.items():
             if token == users['token']:
-                return key
+                return self.db_manager.from_id_get_user(key)
 
     def from_user_get_ip(self, id_usr):
         return self.user_token[id_usr]['ip']
 
     def next_token_expire(self):
-        pass
+        # Ora impostata di default
+        next_exp = {"year": 9999, "minute": 99, "day": 99, "hour": 99, "month": 99}
+        for key, token in self.user_token.items():
+            # Controllo se è minore
+            if self.app_next_token_expire(next_exp, token):
+                next_exp = token['exp']
+        return next_exp
+
+    def app_next_token_expire(self, next_exp, token):
+        if next_exp['hour'] - token['exp']['hour'] > 0:
+            return True
+        if next_exp['hour'] - token['exp']['hour'] == 0:
+            if next_exp['minute'] - token['exp']['minute'] > 0:
+                return True
+        return False
