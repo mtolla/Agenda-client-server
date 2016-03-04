@@ -20,9 +20,8 @@ class ClassDbManager:
         self.last_check = {'day': 12, 'month': 11, 'year': 1955, 'hour': 06, 'minute': 38}
 
     def do_login(self, usr, psw):
-        f = open(self.db_file['user'], "r")
         # Dizionario di appoggio
-        list_app = json.load(f)
+        list_app = self.open_file('user')
         for user in list_app:
             if user['username'] == usr and user['password'] == psw:
                 return True
@@ -32,9 +31,8 @@ class ClassDbManager:
         # Da una id di una attività restituire gli attributi
         # Seleziono da activity l'attività con id passato
         # diz_cond : field, table, where
-        f = open(self.db_file['activity'], "r")
         # Dizionario di appoggio
-        list_app = json.load(f)
+        list_app = self.open_file('activity')
         for row in list_app:
             if row['ID'] == id_att:
                 return row
@@ -43,9 +41,8 @@ class ClassDbManager:
     def get_participants_from_group(self, id_group):
         # Da una id di un gruppo restituire id partecipanti
         # Seleziono da utenti tutti quelli che tra i gruppi hanno quello passato
-        f = open(self.db_file['user'], "r")
         # Dizionario di appoggio
-        list_app = json.load(f)
+        list_app = self.open_file('user')
         # Dizionario di ritorno
         list_return = []
         for row in list_app:
@@ -58,9 +55,8 @@ class ClassDbManager:
     def get_name_from_id_projects(self, list_id_proj):
         # Da una lista di id progetti restituire id e nome
         # Seleziono da progetti quelli che mi servono e li passo
-        f = open(self.db_file['project'], "r")
         # Dizionario di appoggio
-        list_app = json.load(f)
+        list_app = self.open_file('project')
         # Dizionario di ritorno
         dict_return = dict()
         for proj in list_id_proj:
@@ -73,9 +69,8 @@ class ClassDbManager:
     def get_proj_from_id_proj(self, id_proj):
         # Da id del progetto restituire tutto
         # Seleziono il progetto che mi serve e lo restituisco
-        f = open(self.db_file['project'], "r")
         # Dizionario di appoggio
-        list_app = json.load(f)
+        list_app = self.open_file('project')
         for row in list_app:
             if row['ID'] == id_proj:
                 return row
@@ -84,10 +79,8 @@ class ClassDbManager:
     def get_pjmanager_email(self, id_proj):
         # Da id del progetto restituisco la mail del project manager
         # Seleziono il progetto, ricavo id del PM, lo cerco tra gli utenti e restituisco la mail
-        fproj = open(self.db_file['project'], "r")
-        fuser = open(self.db_file['user'], "r")
-        list_app_proj = json.load(fproj)
-        list_app_user = json.load(fuser)
+        list_app_proj = self.open_file('project')
+        list_app_user = self.open_file('user')
         app = 0
         for row in list_app_proj:
             if row['ID'] == id_proj:
@@ -102,8 +95,7 @@ class ClassDbManager:
         # Dall'user id trovo se è un teamleader
         # Ricevo l'ID dal login_manager e lo ricerco nel database utenti
         # Apro il file che mi serve
-        f = open(self.db_file['user'], "r")
-        list_app = json.load(f)
+        list_app = self.open_file('user')
         for row in list_app:
             if row['ID'] == id_user:
                 return self.is_teamleader_check(row)
@@ -119,8 +111,7 @@ class ClassDbManager:
 
     def is_projectmanager(self, id_user):
         # Dall'user id trovo se è un project manager
-        f = open(self.db_file['project'], "r")
-        list_app = json.load(f)
+        list_app = self.open_file('project')
         for row in list_app:
             if row['projectManager'] == id_user:
                 return True
@@ -129,21 +120,26 @@ class ClassDbManager:
     def get_activities_from_proj(self, id_proj):
         # Da un id progetto trovo tutte le attività
         # Cerco in activity tutte quelle con id progetto uguale a quello richiesto
-        f = open(self.db_file['activity'], "r")
-        list_app = json.load(f)
+        # ID, nome, inizio, fine con ora e minuti delle attività di oggi e nome della stanza
+        dict_app = dict()
+        hour_app = dict()
         list_return = []
-        for row in list_app:
+        for row in self.today_act:
             if row['project'] == id_proj:
+                dict_app['ID'] = row['ID']
+                dict_app['name'] = row['name']
+                dict_app['begin'] = {'hour': row['date']['hour'], 'minute': row['date']['minute']}
+                hour_app = self.calc_duration(row['date'], row['duration'])
+                dict_app['end'] = {'hour': hour_app['hour'], 'minute': hour_app['minute']}
+                dict_app['room'] = self.get_room_from_id(dict_app['room'])
                 list_return.append(row)
         return list_return
 
     def get_holidays_from_proj(self, id_proj):
         # Da un id di un progetto restituisco tutte le vacanze degli utenti
         # Cerco l'id del gruppo dal progetto, lo confronto nella tabella user
-        fproj = open(self.db_file['project'], "r")
-        fuser = open(self.db_file['user'], "r")
-        list_app_proj = json.load(fproj)
-        list_app_user = json.load(fuser)
+        list_app_proj = self.open_file('project')
+        list_app_user = self.open_file('user')
         dict_return = dict()
         app = 0
         for row in list_app_proj:
@@ -158,8 +154,7 @@ class ClassDbManager:
 
     def get_group_name_from_group(self, id_group):
         # Da un id di un gruppo restituice il nome
-        f = open(self.db_file['group'], "r")
-        list_app = json.load(f)
+        list_app = self.open_file('group')
         for row in list_app:
             if row['ID'] == id_group:
                 return row['name']
@@ -169,11 +164,9 @@ class ClassDbManager:
         # Da una id di una attività restituire id, user, tentativi
         # Seleziono da activity l'attività con id passato
         # diz_cond : field, table, where
-        f = open(self.db_file['activity'], "r")
+        list_app = self.open_file('activity')
         list_return = []
         dict_app = dict()
-        # Lista di appoggio
-        list_app = json.load(f)
         for row in list_app:
             if row['ID'] == id_act:
                 for user in row['participants']:
@@ -181,6 +174,7 @@ class ClassDbManager:
                     dict_app['user'] = user
                     list_return.append(dict_app)
                 return list_return
+        return False
 
     def check_activity(self):
         # Controllo tutte le attività e restituisco quelle con scadenza = 1 ora, 30 min, 24 ore
@@ -233,9 +227,8 @@ class ClassDbManager:
 
     def check_today_tomorrow_act(self):
         # Controllo tutte le attività di oggi e domani
-        f = open(self.db_file['activity'], "r")
         # Lista di appoggio
-        list_app = json.load(f)
+        list_app = self.open_file('activity')
         # Orario attuale
         actual_time = self.time_now()
         # Se l'ultima volta che è stato aggiornato è oggi non esegue il controllo
@@ -293,8 +286,7 @@ class ClassDbManager:
 
     def from_user_get_id(self, user):
         # Dal nome utente restituisco id
-        f = open(self.db_file['user'], "r")
-        list_app = json.load(f)
+        list_app = self.open_file('user')
         for row in list_app:
             if row['username'] == user:
                 return row['ID']
@@ -302,8 +294,7 @@ class ClassDbManager:
 
     def from_id_get_user(self, id_user):
         # Dal nome utente restituisco id
-        f = open(self.db_file['user'], "r")
-        list_app = json.load(f)
+        list_app = self.open_file('user')
         for row in list_app:
             if row['ID'] == id_user:
                 return row['username']
@@ -311,13 +302,9 @@ class ClassDbManager:
 
     def get_proj_from_user(self, id_usr):
         # Prendo tutti i gruppi dell'utente e li confronto con quelli dei progetti
-        f1 = open(self.db_file['group'], "r")
-        f2 = open(self.db_file['user'], "r")
-        f3 = open(self.db_file['project'], "r")
+        list_usr = self.open_file('user')
+        list_proj = self.open_file('project')
         # Lista di appoggio
-        list_group = json.load(f1)
-        list_usr = json.load(f2)
-        list_proj = json.load(f3)
         list_app = []
         dict_return = dict()
         for user in list_usr:
@@ -333,6 +320,24 @@ class ClassDbManager:
         # [i for i in L1 if i in L2]
         # if [i for i in proj['group'] if i in list_app]:
 
+    def calc_duration(self, dict_hour, duration):
+        # Funzione che data una data calcola la durata
+        # Calcolo della durata in ore con resto
+        rest = duration % 60
+        n_hour = duration / 60
+        dict_hour['hour'] += n_hour
+        dict_hour['minutes'] += rest
+        return dict_hour
+
+    def get_room_from_id(self, id_room):
+        # Dall'id di una stanza restituisco il nome
+        list_app = self.open_file('location')
+        app_return = ""
+        for room in list_app:
+            if room['ID'] == id_room:
+                app_return += room['building'] + "-" + room['room']
+                return app_return
+        return False
 
 
 
@@ -341,17 +346,13 @@ class ClassDbManager:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+    def open_file(self, namefile, method = "r"):
+        try:
+            f = open(self.db_file[namefile], method)
+        except IOError:
+            return False
+        else:
+            return json.load(f)
 
 
 

@@ -43,6 +43,8 @@ class Api:
         else:
             return "Unauthorized", 401
 
+    ####################################################################################################################
+    # Query
     def badass_function(self, token, id_proj):
         # Dato token e id progetto restituire:
         #   - L'oggetto del progetto
@@ -57,16 +59,16 @@ class Api:
         dict_return['activities'] = self.get_activities_project(id_proj)
         dict_return['holidays'] = self.get_holidays_proj(id_proj)
         dict_return['level'] = self.get_level_usr(token)
-        return dict_return
+        return json.dumps(dict_return)
 
     def get_activity(self, id_att):
         # Dato id attività restituire:
         #   - Attività
         #   - Gruppo se è un attività di gruppo
         dict_return = dict()
-        dict_return['activity'] = self.db_manager.get_activity_from_id_act(id_att)
-        dict_return['group'] = self.db_manager.get_group_name_from_group(dict_return['activity']['group'])
-        return dict_return
+        dict_return['activity'] = self.get_activity_from_id_act(id_att)
+        dict_return['group'] = self.get_group_name_from_group(dict_return['activity']['group'])
+        return json.dumps(dict_return)
 
     def get_partecipants_group(self, id_group):
         return self.db_manager.get_participants_from_group(id_group)
@@ -115,6 +117,12 @@ class Api:
 
     def check_token(self, token, ip):
         return self.login_manager.check_token(token, ip)
+
+
+
+
+
+
 
     # Implementazioni per test, se non serviranno più eliminare pure
 
