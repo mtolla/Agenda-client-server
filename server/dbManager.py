@@ -576,14 +576,14 @@ class ClassDbManager:
                 list_return.append({user['ID']: user['username']})
         return list_return
 
-    def get_partecipants_name_lvl_from_group(self, id_group):
+    def get_participants_name_lvl_group(self, id_group):
         # Da un id di un gruppo restituisco tutti i nomi dei partecipanti con livello
         list_usr = self.open_file('user')
         list_return = []
         for user in list_usr:
             for group in user['groups']:
                 if group['ID'] == id_group:
-                    dict_app = {user['ID']:{'username': user['username'], 'level': group['level']}}
+                    dict_app = {user['ID']: {'username': user['username'], 'level': group['level']}}
                     list_return.append(dict_app)
                     break
         return list_return
@@ -595,7 +595,6 @@ class ClassDbManager:
         for user in list_usr:
             list_return.append({user['ID']: user['username']})
         return list_return
-
 
     def user_father_group(self, id_group):
         # Restituisco gli utenti del gruppo padre
@@ -619,22 +618,6 @@ class ClassDbManager:
             if user['ID'] == id_usr:
                 return user['holiday']
         return False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def open_file(self, filename, method="r"):
         try:

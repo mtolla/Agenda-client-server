@@ -30,6 +30,7 @@ class Api:
         # Creazione thread giornaliero
         journal_thread = JournalThread(self.db_manager)
         QtCore.QThreadPool.globalInstance().start(journal_thread)
+
     # Login con user, password
     def do_login(self, user, password, ip):
         token = self.login_manager.do_login(user, password, ip)
@@ -74,7 +75,6 @@ class Api:
         dict_return['activity'] = self.get_activity_from_id_act(id_att)
         dict_return['group'] = self.get_group_name_from_group(dict_return['activity']['group'])
         return json.dumps(dict_return)
-
 
     def get_name_projects(self, list_id_proj):
         return self.db_manager.get_name_from_id_projects(list_id_proj)
@@ -126,7 +126,7 @@ class Api:
         return json.dumps(self.db_manager.get_activity_day(dict_app))
 
     def get_activity_info(self, id_act, token):
-         return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
+        return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
 
     def get_locations(self):
         return json.dumps(self.db_manager.get_locations())
@@ -140,8 +140,8 @@ class Api:
     def get_not_participants_from_proj(self, id_proj):
         return json.dumps(self.db_manager.get_not_participants_from_proj(id_proj))
 
-    def get_partecipants_name_lvl_from_group(self, id_group):
-        return json.dumps(self.db_manager.get_partecipants_name_lvl_from_group(id_group))
+    def get_participants_name_lvl_group(self, id_group):
+        return json.dumps(self.db_manager.get_participants_name_lvl_group(id_group))
 
     def everybody(self):
         return json.dumps(self.db_manager.everybody())
@@ -151,24 +151,6 @@ class Api:
 
     def user_holiday(self, id_usr):
         return json.dumps(self.db_manager.user_holiday(id_usr))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     # Implementazioni per test, se non serviranno più eliminare pure
 
