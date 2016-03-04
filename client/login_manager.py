@@ -93,6 +93,7 @@ class LoginManager(LoginInterface):
 
 
 def __init__():
+    import sys
     app1 = QtGui.QApplication(sys.argv)
     app1.setQuitOnLastWindowClosed(True)
     agenda_manager1 = AgendaManager()

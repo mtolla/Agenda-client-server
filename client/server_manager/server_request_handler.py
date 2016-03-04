@@ -32,8 +32,8 @@ class ServerRequestHandler:
     def groups_teamleader(self):
         return self.server_get_request.groups_teamleader()
 
-    def groups_id_participant(self, _id):
-        return self.server_get_request.groups_id_participant(_id)
+    def group_id_participants(self, _id):
+        return self.server_get_request.group_id_participants(_id)
 
     def project_id_participant(self, _id):
         return self.server_get_request.project_id_participant(_id)

@@ -15,7 +15,7 @@ class ServerGetRequest(ServerRequestInterface):
             'activity_id': server_url + "/activity/<int:id>",
             'locations': server_url + "/locations",
             'groups_teamleader': server_url + "/groups/teamleader",
-            'groups_id_participant': server_url + "/groups/<int:id>/participant",
+            'group_id_participants': server_url + "/group/<int:id>/participants",
             'project_id_participant': server_url + "/project/<int:id>/participant",
             'project_id_groups': server_url + "/project/<int:id>/groups",
             'groups_id_participant_level': server_url + "/groups/<int:id>/participant/level",
@@ -71,8 +71,8 @@ class ServerGetRequest(ServerRequestInterface):
 
         return self.get_response(response)
 
-    def groups_id_participant(self, _id):
-        response = self.request.get(self.url_generator('groups_id_participant', 'id', _id)).__dict__
+    def group_id_participants(self, _id):
+        response = self.request.get(self.url_generator('group_id_participants', 'id', _id)).__dict__
 
         return self.get_response(response)
 

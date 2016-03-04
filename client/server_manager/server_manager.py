@@ -59,8 +59,8 @@ class ServerManager:
     def groups_teamleader(self):
         return self.server_request_handler.groups_teamleader()
 
-    def groups_id_participant(self, _id):
-        return self.server_request_handler.groups_id_participant(_id)
+    def group_id_participants(self, _id):
+        return self.server_request_handler.group_id_participants(_id)
 
     def project_id_participant(self, _id):
         return self.server_request_handler.project_id_participant(_id)

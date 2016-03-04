@@ -1,10 +1,12 @@
-import sys
+import os
+project_path = os.path.dirname(os.path.abspath(__file__))
+path = "\\".join(project_path.split("\\")[:-2])
 
 # Icone
-ALERT = sys.path[1] + "/client/gui/icon/alert.png"
-INFO = sys.path[1] + "/client/gui/icon/info.png"
-MANAGE_IT = sys.path[1] + "/client/gui/icon/ManageIT.png"
-QUIT = sys.path[1] + "/client/gui/icon/quit.png"
+ALERT = path + "/client/gui/icon/alert.png"
+INFO = path + "/client/gui/icon/info.png"
+MANAGE_IT = path + "/client/gui/icon/ManageIT.png"
+QUIT = path + "/client/gui/icon/quit.png"
 
 # Altro
-LOCAL_SAVE = sys.path[1] + "/client/local/local_save.json"
+LOCAL_SAVE = path + "/client/local/local_save.json"
