@@ -355,15 +355,16 @@ class ClassDbManager:
         list_return = []
         dict_app = dict()
         for activity in list_app:
+            dict_app = {}
             if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
                 'year'] == day['year']:
-                dict_duration = self.calc_duration(activity['date'], activity['duration'])
-                dict_app['hour'] = activity['date']['hour'] + dict_duration['hour']
-                dict_app['minute'] = activity['date']['minute'] + dict_duration['minute']
-
+                dict_app['hour'] = activity['date']['hour']
+                dict_app['minute'] = activity['date']['minute']
+                dict_duration = self.calc_duration(dict_app, activity['duration'])
                 list_return.append(
-                    {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_app,
+                    {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
                      'type': activity['type'], 'room': self.get_room_from_id(activity['location'])})
+            print dict_app
         return list_return
 
     def get_activity_info(self, id_act, id_user):
