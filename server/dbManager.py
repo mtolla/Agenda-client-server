@@ -117,21 +117,39 @@ class ClassDbManager:
                 return True
         return False
 
-    def get_activities_from_proj(self, id_proj):
+    def get_today_activities_from_proj(self, id_proj):
         # Da un id progetto trovo tutte le attività
         # Cerco in activity tutte quelle con id progetto uguale a quello richiesto
         # ID, nome, inizio, fine con ora e minuti delle attività di oggi e nome della stanza
+        list_app = self.open_file('activity')
+        list_act = []
+        for row in list_app:
+            if row['project'] == id_proj:
+                list_act.append(row)
+        # Controllo che siano di oggi
+        list_today = self.check_act_is_today(list_act)
         dict_app = dict()
         list_return = []
-        for row in self.today_act:
+        for row in list_today:
+            print row.keys()
             if row['project'] == id_proj:
                 dict_app['ID'] = row['ID']
                 dict_app['name'] = row['name']
                 dict_app['begin'] = {'hour': row['date']['hour'], 'minute': row['date']['minute']}
                 hour_app = self.calc_duration(row['date'], row['duration'])
                 dict_app['end'] = {'hour': hour_app['hour'], 'minute': hour_app['minute']}
-                dict_app['room'] = self.get_room_from_id(dict_app['room'])
+                dict_app['location'] = self.get_room_from_id(row['location'])
                 list_return.append(row)
+        return list_return
+
+    def check_act_is_today(self, list_act):
+        list_keys = []
+        list_return = []
+        for act in self.today_act:
+            list_keys.append(act.keys()[0])
+        for act in list_act:
+            if act['ID'] in list_keys:
+                list_return.append(act)
         return list_return
 
     def get_holidays_from_proj(self, id_proj):
@@ -246,8 +264,8 @@ class ClassDbManager:
         self.last_check = actual_time
 
     def insert_to_today_act(self, item):
+        # Dizionario con {id_att : data}
         app_list = []
-        #print item
         if not self.today_act:
             return self.today_act.append(item)
         for act in range(0, len(self.today_act)):
@@ -265,6 +283,7 @@ class ClassDbManager:
         self.today_act = app_list
 
     def insert_to_tom_act(self, item):
+        # Dizionario con {id_att : data}
         app_list = []
         if not self.tomorrow_act:
             return self.tomorrow_act.append(item)

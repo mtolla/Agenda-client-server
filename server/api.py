@@ -52,13 +52,13 @@ class Api:
         #   - L'oggetto del progetto
         #   - eMail project manager
         #   - T/F se è almeno teamleader in un gruppo
-        #   - Tutte attività del progetto dell'utente (attività da singolo(group = NULL))
+        #   - Tutte attività del progetto dell'utente di oggi (attività da singolo(group = NULL))
         #   - Vacanze del progetto
         # Dizionario di ritorno
         dict_return = dict()
         dict_return['project'] = self.get_project(id_proj)
         dict_return['email'] = self.get_pjmanager_mail(id_proj)
-        dict_return['activities'] = self.get_activities_project(id_proj)
+        dict_return['activities'] = self.get_activities_project_today(id_proj)
         dict_return['holidays'] = self.get_holidays_proj(id_proj)
         dict_return['level'] = self.get_level_usr(token)
         return json.dumps(dict_return)
@@ -99,8 +99,8 @@ class Api:
             return "teamleader"
         return "participant"
 
-    def get_activities_project(self, id_proj):
-        return self.db_manager.get_activities_from_proj(id_proj)
+    def get_activities_project_today(self, id_proj):
+        return self.db_manager.get_today_activities_from_proj(id_proj)
 
     def get_holidays_proj(self, id_proj):
         return self.db_manager.get_holidays_from_proj(id_proj)
