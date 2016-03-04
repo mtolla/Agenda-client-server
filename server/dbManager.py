@@ -260,7 +260,7 @@ class ClassDbManager:
         self.last_check = actual_time
 
     def order_list(self):
-        # Ordino le due liste congli eventi di oggi e domani
+        # Ordino le due liste con gli eventi di oggi e domani
         # Today
         app_list = []
         for app in range(0, len(self.today_act), 1):
@@ -360,6 +360,8 @@ class ClassDbManager:
                 dict_duration = self.calc_duration(activity['date'], activity['duration'])
                 dict_app['hour'] = activity['date']['hour'] + dict_duration['hour']
                 dict_app['minute'] = activity['date']['minute'] + dict_duration['minute']
+                dict_app['type'] = activity['type']
+                dict_app['room'] = self.get_room_from_id(activity['room'])
                 list_return.append(
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_app})
         return list_return
@@ -618,6 +620,12 @@ class ClassDbManager:
             if user['ID'] == id_usr:
                 return user['holiday']
         return False
+
+    def home(self):
+        return 'Welcome to TollaServer! V:0.9'
+
+    def omg_tolla(self):
+        return open(sys.path[1] + '/server/app.html', "r").read()
 
     def open_file(self, filename, method="r"):
         try:

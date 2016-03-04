@@ -12,12 +12,16 @@ api = Api()
 
 @index.route("/")
 def hello():
-    return 'Welcome to TollaServer 0.1'
+    return api.home()
 
 
 @index.route("/Tolla")
 def tolla():
     return api.error(False)
+
+@index.route("/OMGTOLLA")
+def omg_tolla():
+    return api.omg_tolla()
 
 
 @index.route("/ping")

@@ -49,6 +49,9 @@ class Api:
     def do_logout(self, token):
         return self.login_manager.delete_token(False, token)
 
+    def home(self):
+        return self.db_manager.home()
+
     ####################################################################################################################
     # Query
     def badass_function(self, token, id_proj):
@@ -111,6 +114,9 @@ class Api:
 
     def error(self, app):
         return self.db_manager.error(app)
+
+    def omg_tolla(self):
+        return self.db_manager.omg_tolla()
 
     def test(self):
         return json.dumps(self.login_manager.user_token)

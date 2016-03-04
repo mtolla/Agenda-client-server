@@ -145,5 +145,6 @@ Query:
 	- /groups/<int:id>/father/<token>/<ip>
 		return -> dizionario[ID] = name di tutti i partecipanti che appartengono solo al gruppo padre
 
+    BOOM BABY
 	- /holiday/<int:id>/<token>/<ip>
 		return -> dizionario dell'holiday dell'utente
