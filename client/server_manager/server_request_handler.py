@@ -55,3 +55,6 @@ class ServerRequestHandler:
 
     def holiday_id(self, _id):
         return self.server_get_request.holiday_id(_id)
+
+    def logout(self):
+        return self.server_get_request.logout()

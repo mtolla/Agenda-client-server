@@ -1,5 +1,6 @@
 from client.interface.server_request_interface import ServerRequestInterface
 import requests
+import json
 
 
 class ServerGetRequest(ServerRequestInterface):
@@ -22,7 +23,8 @@ class ServerGetRequest(ServerRequestInterface):
             'project_id_not_participant': server_url + "/project/<int:id>/not/participant",
             'participants': server_url + "/participants",
             'groups_id_father': server_url + "/groups/<int:id>/father",
-            'holiday_id>': server_url + "/holiday/<int:id>",
+            'holiday_id': server_url + "/holiday/<int:id>",
+            'logout': server_url + "/logout",
             'token_ip': "/" + token + "/" + client_url,
             'id': "<int:id>",
             'day': "<int:day>"
@@ -31,7 +33,7 @@ class ServerGetRequest(ServerRequestInterface):
     @staticmethod
     def get_response(response):
         if response['status_code'] == 200:
-            return response['_content']
+            return json.loads(response['_content'])
 
         return False
 
@@ -108,6 +110,11 @@ class ServerGetRequest(ServerRequestInterface):
 
     def holiday_id(self, _id):
         response = self.request.get(self.url_generator('holiday_id', 'id', _id)).__dict__
+
+        return self.get_response(response)
+
+    def logout(self):
+        response = self.request.get(self.url_generator('logout')).__dict__
 
         return self.get_response(response)
 

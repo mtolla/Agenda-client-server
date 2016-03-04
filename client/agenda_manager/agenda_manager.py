@@ -30,16 +30,15 @@ class AgendaManager:
         self.agenda.set_list_activities(new_list)
 
     def logout(self):
-        local_save = open(LOCAL_SAVE)
-        variable = json.load(local_save)
-        local_save.close()
+        if self.server_manager.logout() == "True":
+            local_save = open(LOCAL_SAVE)
+            variable = json.load(local_save)
+            local_save.close()
 
-        variable['token'] = False
+            variable['token'] = False
 
-        local_save = open(LOCAL_SAVE, "w")
-        json.dump(variable, local_save)
-        local_save.close()
+            local_save = open(LOCAL_SAVE, "w")
+            json.dump(variable, local_save)
+            local_save.close()
 
-        # self.server_manager.logout()
-
-        self.agenda.setHidden(True)
+            self.agenda.setHidden(True)
