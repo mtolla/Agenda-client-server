@@ -125,18 +125,23 @@ Query:
 	- /project/<int:id>/participant/<token>/<ip>
 		return -> dizionario[ID] = name di tutti i partcipanti al progetto
 
+    BOOM BABY
 	- /project/<int:id>/groups/<token>/<ip>
 		return -> dizionario[ID] = name di tutti i gruppi del progetto
 
+    BOOM BABY
 	- /groups/<int:id>/participant/level/<token>/<ip>
 		return -> dizionario[ID] = dizionario con level, name di tutti i partecipanti al gruppo
 
+    BOOM BABY
 	- /project/<int:id>/not/participant/<token>/<ip>
-		return -> dizionario[ID] = name di tutti i non partcipanti al progetto
+		return -> dizionario[ID] = name di tutti i non partecipanti al progetto
 
+    BOOM BABY
 	- /participants/<token>/<ip>
 		return -> dizionario[ID] = name di tutti gli utenti
 
+    BOOM BABY
 	- /groups/<int:id>/father/<token>/<ip>
 		return -> dizionario[ID] = name di tutti i partecipanti che appartengono solo al gruppo padre
 

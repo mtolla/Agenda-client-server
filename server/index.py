@@ -127,10 +127,10 @@ def get_user_project(token, ip):
         return api.get_user_project(token)
     return False, 401
 
-@index.route('/activities/<int:day>/<token>/<ip>', methods=['GET'] )
-def get_activity_day(day, token, ip):
+@index.route('/activities/<int:day>/<int:month>/<int:year>/<token>/<ip>', methods=['GET'] )
+def get_activity_day(day, month, year, token, ip):
     if api.check_token(token, ip):
-        return api.get_activity_day(day)
+        return api.get_activity_day(day, month, year)
     return False, 401
 
 @index.route('/activity/<int:id_act>/<token>/<ip>', methods=['GET'])
@@ -164,6 +164,35 @@ def get_participants_from_proj(id_proj, token, ip):
         return api.get_participants_from_proj(id_proj)
     return False, 401
 
+@index.route('/groups/<int:id_group>/participant/level/<token>/<ip>', methods=['GET'])
+def get_partecipants_name_lvl_from_group(id_group, token, ip):
+    if api.check_token(token, ip):
+        return api.get_partecipants_name_lvl_from_group(id_group)
+    return False, 401
+
+@index.route('/project/<int:id_proj>/not/participant/<token>/<ip>', methods=['GET'])
+def get_not_participants_from_proj(id_proj, token, ip):
+    if api.check_token(token, ip):
+        return api.get_not_participants_from_proj(id_proj)
+    return False, 401
+
+@index.route('/participants/<token>/<ip>', methods=['GET'])
+def everybody(token, ip):
+    if api.check_token(token, ip):
+        return api.everybody()
+    return False, 401
+
+@index.route('/groups/<int:id_group>/father/<token>/<ip>', methods=['GET'])
+def user_father_group(id_group, token, ip):
+    if api.check_token(token, ip):
+        return api.user_father_group(id_group)
+    return False, 401
+
+@index.route('/holiday/<int:id_usr>/<token>/<ip>', methods=['GET'])
+def user_holiday(id_usr,token,ip):
+    if api.check_token(token, ip):
+        return api.user_holiday(id_usr)
+    return False, 401
 
 
 

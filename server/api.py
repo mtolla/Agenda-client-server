@@ -118,8 +118,9 @@ class Api:
     def check_token(self, token, ip):
         return self.login_manager.check_token(token, ip)
 
-    def get_activity_day(self, day):
-        return json.dumps(self.db_manager.get_activity_day(day))
+    def get_activity_day(self, day, month, year):
+        dict_app = {'day': day, 'month': month, 'year': year}
+        return json.dumps(self.db_manager.get_activity_day(dict_app))
 
     def get_activity_info(self, id_act, token):
          return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
@@ -132,6 +133,39 @@ class Api:
 
     def get_participants_from_proj(self, id_proj):
         return json.dumps(self.db_manager.get_participants_from_proj(id_proj))
+
+    def get_not_participants_from_proj(self, id_proj):
+        return json.dumps(self.db_manager.get_not_participants_from_proj(id_proj))
+
+    def get_partecipants_name_lvl_from_group(self, id_group):
+        return json.dumps(self.db_manager.get_partecipants_name_lvl_from_group(id_group))
+
+    def everybody(self):
+        return json.dumps(self.db_manager.everybody())
+
+    def user_father_group(self, id_group):
+        return json.dumps(self.db_manager.user_father_group(id_group))
+
+    def user_holiday(self, id_usr):
+        return json.dumps(self.db_manager.user_holiday(id_usr))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     # Implementazioni per test, se non serviranno più eliminare pure
 
