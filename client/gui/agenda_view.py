@@ -288,6 +288,7 @@ class Agenda(Page):
 
         # Creazione elementi dell'attivita'
         lbl_color = QtGui.QLabel("", gdr_activity)
+        print activity
         if activity['type'] == "project":
             style = "background-color: rgb(255, 0, 0);"
         elif activity['type'] == "group":
