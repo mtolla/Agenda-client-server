@@ -621,10 +621,12 @@ class ClassDbManager:
                 return user['holiday']
         return False
 
-    def home(self):
+    @staticmethod
+    def home():
         return 'Welcome to TollaServer! V:0.9'
 
-    def omg_tolla(self):
+    @staticmethod
+    def omg_tolla():
         return open(sys.path[1] + '/server/app.html', "r").read()
 
     def open_file(self, filename, method="r"):
