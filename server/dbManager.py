@@ -361,7 +361,7 @@ class ClassDbManager:
                 dict_app['hour'] = activity['date']['hour'] + dict_duration['hour']
                 dict_app['minute'] = activity['date']['minute'] + dict_duration['minute']
                 dict_app['type'] = activity['type']
-                dict_app['room'] = self.get_room_from_id(activity['room'])
+                dict_app['room'] = self.get_room_from_id(activity['location'])
                 list_return.append(
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_app})
         return list_return
