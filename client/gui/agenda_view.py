@@ -159,17 +159,19 @@ class Agenda(Page):
             # self.connect(self.cmd_create_group, QtCore.SIGNAL("clicked()"), self.create_group)
             list_operations.append(self.cmd_create_group)
 
-            self.cmd_modify_group = QtGui.QPushButton("Crea un nuovo gruppo", self.vrt_opreations)
+            self.cmd_modify_group = QtGui.QPushButton("Modifica un gruppo", self.vrt_opreations)
             self.cmd_modify_group.setFlat(True)
-            self.cmd_modify_group.setStatusTip("Crea un nuovo gruppo")
+            self.cmd_modify_group.setStatusTip("Modifica un gruppo")
             # self.connect(self.cmd_modify_group, QtCore.SIGNAL("clicked()"), self.modify_group)
             list_operations.append(self.cmd_modify_group)
 
-            self.cmd_modify_group = QtGui.QPushButton("Modifica un gruppo", self.vrt_opreations)
-            self.cmd_modify_group.setFlat(True)
-            self.cmd_modify_group.setStatusTip("Crea un nuovo gruppo")
-            # self.connect(self.cmd_modify_group, QtCore.SIGNAL("clicked()"), self.modify_group)
-            list_operations.append(self.cmd_modify_group)
+        elif self.info_agenda['level'] == 'projectmanager':
+            self.cmd_create_project = QtGui.QPushButton("Crea un nuovo progetto", self.vrt_opreations)
+            self.cmd_create_project.setFlat(True)
+            self.cmd_create_project.setStatusTip("Crea un nuovo progetto")
+            # self.connect(self.cmd_create_project, QtCore.SIGNAL("clicked()"), self.create_project)
+            list_operations.append(self.cmd_create_project)
+
 
         # Aggiunta bottoni al layout
         for cmd in list_operations:

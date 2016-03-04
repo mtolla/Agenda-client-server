@@ -93,16 +93,14 @@ class LoginManager(LoginInterface):
 
 
 def __init__():
-    import sys
+    app1 = QtGui.QApplication(sys.argv)
+    app1.setQuitOnLastWindowClosed(True)
+    agenda_manager1 = AgendaManager()
 
-    app = QtGui.QApplication(sys.argv)
-    app.setQuitOnLastWindowClosed(True)
-    agenda_manager = AgendaManager()
+    main1 = LoginManager(agenda_manager1)
+    main1.exec_()
 
-    main = LoginManager(agenda_manager)
-    main.exec_()
-
-    sys.exit(app.exec_())
+    sys.exit(app1.exec_())
 
 
 if __name__ == "__main__":
