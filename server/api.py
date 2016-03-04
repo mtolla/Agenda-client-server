@@ -47,7 +47,7 @@ class Api:
             return "Unauthorized", 401
 
     def do_logout(self, token):
-        return self.login_manager.delete_token(self.login_manager.from_token_get_iduser(token), token)
+        return self.login_manager.delete_token(False, token)
 
     ####################################################################################################################
     # Query

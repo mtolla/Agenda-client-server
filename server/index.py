@@ -51,7 +51,7 @@ def do_login_token():
         return api.do_login_token(token, ip)
 
 
-@index.route('/logout/<token>/<ip>', methods=['POST'])
+@index.route('/logout/<token>/<ip>', methods=['GET'])
 def do_logut(token, ip):
     if api.check_token(token, ip):
         return api.do_logout(token)
