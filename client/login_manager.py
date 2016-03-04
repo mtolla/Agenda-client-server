@@ -8,7 +8,7 @@ import json
 
 
 class LoginManager(LoginInterface):
-    def __init__(self):
+    def __init__(self, agenda_manager):
         LoginInterface.__init__(self)
 
         local_save = open(LOCAL_SAVE)
@@ -22,6 +22,8 @@ class LoginManager(LoginInterface):
 
         self.server_manager = ServerManager()
 
+        self.agenda_manager = agenda_manager
+
     def do_login(self):
         """
         Login con user e id:
@@ -30,7 +32,10 @@ class LoginManager(LoginInterface):
         """
 
         if self.credential_digest():
-            self.variable['token'] = self.server_manager.get_token(self.user)
+            # ------- Controllare se ci sono notifiche in self.token[1]
+            self.token = json.loads(self.server_manager.get_token(self.user))
+            self.variable['token'] = self.token[0]
+            print self.variable['token']
 
             if self.variable['token']:
                 self.exec_agenda_manager()
@@ -46,8 +51,8 @@ class LoginManager(LoginInterface):
 
         if self.server_manager.do_login(self.variable['token']):
             self.login.close()
-            agenda_manager = AgendaManager(self.server_manager)
-            exit(agenda_manager.exec_())
+            self.agenda_manager.set_server_manager(self.server_manager)
+            self.agenda_manager.show()
         else:
             self.variable['token'] = False
             Popup("Sessione scaduta, rifare il login", ALERT).exec_()
@@ -89,7 +94,12 @@ class LoginManager(LoginInterface):
 
 if __name__ == "__main__":
     import sys
+
     app = QtGui.QApplication(sys.argv)
-    main = LoginManager()
+    app.setQuitOnLastWindowClosed(True)
+    agenda_manager = AgendaManager()
+
+    main = LoginManager(agenda_manager)
     main.exec_()
+
     sys.exit(app.exec_())

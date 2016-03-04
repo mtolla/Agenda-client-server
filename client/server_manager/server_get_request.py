@@ -35,73 +35,79 @@ class ServerGetRequest(ServerRequestInterface):
 
         return False
 
+    def url_generator(self, url, replace=False, value=None):
+        if replace:
+            return self.request_url[url].replace(self.request_url[replace], value) + self.request_url['token_ip']
+        else:
+            return self.request_url[url] + self.request_url['token_ip']
+
     def projects(self):
-        response = self.request.get(self.request_url['projects']).__dict__
+        response = self.request.get(self.url_generator('projects')).__dict__
 
         return self.get_response(response)
 
     def project_id(self, _id):
-        response = self.request.get(self.request_url['project_id'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('project_id', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def activities_day(self, day):
-        response = self.request.get(self.request_url['activities_day'].replace(self.request_url['day'], day)).__dict__
+        response = self.request.get(self.url_generator('activities_day', 'day', day)).__dict__
 
         return self.get_response(response)
 
     def activity_id(self, _id):
-        response = self.request.get(self.request_url['activity_id'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('activity_id', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def locations(self):
-        response = self.request.get(self.request_url['locations']).__dict__
+        response = self.request.get(self.url_generator('locations')).__dict__
 
         return self.get_response(response)
 
     def groups_teamleader(self):
-        response = self.request.get(self.request_url['groups_teamleader']).__dict__
+        response = self.request.get(self.url_generator('groups_teamleader')).__dict__
 
         return self.get_response(response)
 
     def groups_id_participant(self, _id):
-        response = self.request.get(self.request_url['groups_id_participant'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('groups_id_participant', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def project_id_participant(self, _id):
-        response = self.request.get(self.request_url['project_id_participant'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('project_id_participant', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def project_id_groups(self, _id):
-        response = self.request.get(self.request_url['project_id_groups'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('project_id_groups', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def groups_id_participant_level(self, _id):
-        response = self.request.get(self.request_url['groups_id_participant_level'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('groups_id_participant_level', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def project_id_not_participant(self, _id):
-        response = self.request.get(self.request_url['project_id_not_participant'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('project_id_not_participant', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def participants(self):
-        response = self.request.get(self.request_url['participants']).__dict__
+        response = self.request.get(self.url_generator('participants')).__dict__
 
         return self.get_response(response)
 
     def groups_id_father(self, _id):
-        response = self.request.get(self.request_url['groups_id_father'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('groups_id_father', 'id', _id)).__dict__
 
         return self.get_response(response)
 
     def holiday_id(self, _id):
-        response = self.request.get(self.request_url['holiday_id'].replace(self.request_url['id'], _id)).__dict__
+        response = self.request.get(self.url_generator('holiday_id', 'id', _id)).__dict__
 
         return self.get_response(response)
 

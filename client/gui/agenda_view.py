@@ -115,9 +115,70 @@ class Agenda(Page):
         for key, value in self.info_agenda['projects'].items():
             self.cmb_project.addItem(value)
 
+
+
+
+
+
+
+
+
     def create_operation_list(self):
         self.scrl_operation = QtGui.QScrollArea(self.gdr_agenda)
         self.scrl_operation.setBackgroundRole(QtGui.QPalette.NoRole)
+
+        # Creazione del contenitore delle operazioni e del suo layout: vrt_opreations(lyt_opreations)
+        self.vrt_opreations = QtGui.QWidget(self.scrl_operation)
+
+        self.lyt_opreations = QtGui.QVBoxLayout()
+
+        # Creazione bottoni operazioni
+        self.cmd_create_holiday = QtGui.QPushButton("Inserisci le vacanze", self.vrt_opreations)
+        self.cmd_create_holiday.setFlat(True)
+        self.cmd_create_holiday.setStatusTip("Inserisci le vacanze")
+        # self.connect(self.cmd_create_holiday, QtCore.SIGNAL("clicked()"), self.create_holiday)
+        self.lyt_opreations.addWidget(self.cmd_create_holiday)
+
+        self.cmd_create_single_activity = QtGui.QPushButton("Inserisci un tua attivita'", self.vrt_opreations)
+        self.cmd_create_single_activity.setFlat(True)
+        self.cmd_create_single_activity.setStatusTip("Inserisci un tua attivita'")
+        # self.connect(self.cmd_create_single_activity, QtCore.SIGNAL("clicked()"), self.create_single_activity)
+        self.lyt_opreations.addWidget(self.cmd_create_single_activity)
+
+        if self.info_agenda['level'] == 'teamleader':
+            self.cmd_create_group_activity = QtGui.QPushButton("Inserisci un'attivita' di gruppo", self.vrt_opreations)
+            self.cmd_create_group_activity.setFlat(True)
+            self.cmd_create_group_activity.setStatusTip("Inserisci un'attivita' di gruppo")
+            # self.connect(self.cmd_create_group_activity, QtCore.SIGNAL("clicked()"), self.create_group_activity)
+            self.lyt_opreations.addWidget(self.cmd_create_group_activity)
+
+            self.cmd_create_group = QtGui.QPushButton("Crea un nuovo gruppo", self.vrt_opreations)
+            self.cmd_create_group.setFlat(True)
+            self.cmd_create_group.setStatusTip("Crea un nuovo gruppo")
+            # self.connect(self.cmd_create_group, QtCore.SIGNAL("clicked()"), self.create_group)
+            self.lyt_opreations.addWidget(self.cmd_create_group)
+
+            self.cmd_modify_group = QtGui.QPushButton("Crea un nuovo gruppo", self.vrt_opreations)
+            self.cmd_modify_group.setFlat(True)
+            self.cmd_modify_group.setStatusTip("Crea un nuovo gruppo")
+            # self.connect(self.cmd_modify_group, QtCore.SIGNAL("clicked()"), self.modify_group)
+            self.lyt_opreations.addWidget(self.cmd_modify_group)
+
+        # Set del layout della pagina
+        self.vrt_opreations.setLayout(self.lyt_opreations)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def create_lbl_status(self):
         if self.info_agenda['project']['status']:
@@ -132,8 +193,8 @@ class Agenda(Page):
         self.lbl_status.setAlignment(QtCore.Qt.AlignCenter)
 
     def create_date_show(self):
-        # Creazione del contenitore della data e del suo layout: vrt_page(lyt_page)
-        self.hrz_date = QtGui.QWidget(self)
+        # Creazione del contenitore della data e del suo layout: hrz_date(lyt_date)
+        self.hrz_date = QtGui.QWidget(self.gdr_agenda)
         self.hrz_date.setObjectName("hrz_date")
         self.hrz_date.setStyleSheet("""
             #hrz_date {
@@ -168,7 +229,7 @@ class Agenda(Page):
         self.scrl_activities = QtGui.QScrollArea(self.gdr_agenda)
         self.scrl_activities.setBackgroundRole(QtGui.QPalette.NoRole)
 
-        # Creazione del contenitore delle attivita' e del suo layout: gdr_agenda(lyt_agenda)
+        # Creazione del contenitore delle attivita' e del suo layout: vrt_activities(lyt_activities)
         self.vrt_activities = QtGui.QWidget(self.scrl_activities)
 
         self.lyt_activities = QtGui.QVBoxLayout()

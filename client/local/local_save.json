@@ -1,5 +1,5 @@
 {
-  "token": false,
+  "token": "1586b7f2a6ebe1ae0ecf19a87242ed266726561e2da8ff79ebf4b94e7273ea941ec02c863121c6d3d6409e58ca68425f94aa6ad7e9e91fe108b4d64751993a01",
   "server_url": "http://127.0.0.1:5000",
   "client_url": "127.0.0.1:5001"
 }

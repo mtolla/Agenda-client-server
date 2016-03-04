@@ -1,15 +1,17 @@
 from client.gui.agenda_view import *
 
 
-class AgendaManager(QtGui.QApplication):
-    def __init__(self, server_manager):
-        QtGui.QApplication.__init__(self, sys.argv)
+class AgendaManager:
+    def __init__(self):
+        pass
 
+    def show(self):
+        self.agenda.show()
+
+    def set_server_manager(self, server_manager):
         self.server_manager = server_manager
-
         self.info_agenda = server_manager.info_agenda()
 
         self.agenda = Agenda(self.info_agenda)
 
-        self.agenda.show()
 

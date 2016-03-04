@@ -38,10 +38,10 @@ class ServerManager:
         return self.login_gateway.do_login(token)
 
     def info_agenda(self):
-        projects = self.server_request_handler.projects()
+        projects = json.loads(self.server_request_handler.projects())
 
         if projects:
-            agenda = self.server_request_handler.project_id(projects[projects.keys()[0]])
+            agenda = json.loads(self.server_request_handler.project_id(projects.keys()[0]))
             if agenda:
                 agenda['projects'] = projects
                 return agenda
@@ -82,3 +82,4 @@ class ServerManager:
 
     def holiday_id(self, _id):
         return self.server_request_handler.holiday_id(_id)
+
