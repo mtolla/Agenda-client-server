@@ -36,12 +36,16 @@ class ServerManager:
         self.server_request_handler.set_token(token)
 
         return self.login_gateway.do_login(token)
-    
-    def projects(self):
-        return self.server_request_handler.projects()
 
-    def project_id(self, _id):
-        return self.server_request_handler.project_id(_id)
+    def info_agenda(self):
+        projects = self.server_request_handler.projects()
+
+        if projects:
+            agenda = self.server_request_handler.project_id(projects[projects.keys()[0]])
+            if agenda:
+                agenda['projects'] = projects
+                return agenda
+        return False
 
     def activities_day(self, day):
         return self.server_request_handler.activities_day(day)

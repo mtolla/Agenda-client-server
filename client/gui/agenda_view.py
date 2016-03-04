@@ -2,8 +2,21 @@ from page import *
 
 
 class Agenda(Page):
-    def __init__(self):
+    def __init__(self, info_agenda):
         Page.__init__(self)
+
+        self.info_agenda = info_agenda
+
+        self.bold = QtGui.QFont()
+        self.bold.setBold(True)
+
+        self.font_12 = QtGui.QFont()
+        self.font_12.setPointSize(12)
+
+        self.combobox_align_center = QtGui.QLineEdit()
+        self.combobox_align_center.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.background_transparent = "background-color: transparent;"
 
         # ------------------------------------- Pagina -------------------------------------
         # Creazione della pagina e del suo layout: gdr_agenda(lyt_agenda)
@@ -11,8 +24,232 @@ class Agenda(Page):
 
         self.lyt_agenda = QtGui.QGridLayout()
 
+        # Creazione lista dei progetti
+        self.create_projects_list()
+
+        # Creazione del contenitore delle operazioni
+        self.create_operation_list()
+
+        # Creazione calendario
+        self.calendar = QtGui.QCalendarWidget(self.gdr_agenda)
+        self.calendar.setFirstDayOfWeek(QtCore.Qt.Monday)
+        self.calendar.setSelectedDate(QtCore.QDate.currentDate())
+        self.calendar.setMinimumDate(QtCore.QDate(2016, 1, 1))
+        self.calendar.setVerticalHeaderFormat(QtGui.QCalendarWidget.NoVerticalHeader)
+
+        # Creazione informazioni progetto
+        self.lbl_date_begin = QtGui.QLabel("Data inizio:", self.gdr_agenda)
+        self.lbl_date_begin.setFont(self.bold)
+        self.lbl_date_begin.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+
+        self.dted_date_begin = QtGui.QDateEdit(self.gdr_agenda)
+        self.dted_date_begin.setReadOnly(True)
+        self.dted_date_begin.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
+        self.dted_date_begin.setFrame(False)
+        self.dted_date_begin.setStyleSheet(self.background_transparent)
+        self.dted_date_begin.setDate(QtCore.QDate(
+            self.info_agenda['project']['begin']['year'],
+            self.info_agenda['project']['begin']['month'],
+            self.info_agenda['project']['begin']['day']
+        ))
+
+        self.lbl_date_end = QtGui.QLabel("Data fine:", self.gdr_agenda)
+        self.lbl_date_end.setFont(self.bold)
+        self.lbl_date_end.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+
+        self.dted_date_end = QtGui.QDateEdit(self.gdr_agenda)
+        self.dted_date_end.setReadOnly(True)
+        self.dted_date_end.setButtonSymbols(QtGui.QAbstractSpinBox.NoButtons)
+        self.dted_date_end.setFrame(False)
+        self.dted_date_end.setStyleSheet(self.background_transparent)
+        self.dted_date_end.setDate(QtCore.QDate(
+            self.info_agenda['project']['end']['year'],
+            self.info_agenda['project']['end']['month'],
+            self.info_agenda['project']['end']['day']
+        ))
+
+        self.lbl_mail_lbl = QtGui.QLabel("Project manager mail:", self.gdr_agenda)
+        self.lbl_mail_lbl.setFont(self.bold)
+        self.lbl_mail_lbl.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+
+        self.lbl_mail = QtGui.QLabel(self.info_agenda['email'], self.gdr_agenda)
+        self.lbl_mail.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+
+        self.lbl_status_lbl = QtGui.QLabel("Stato:", self.gdr_agenda)
+        self.lbl_status_lbl.setFont(self.bold)
+        self.lbl_status_lbl.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+
+        self.create_lbl_status()
+
+        # Creazione data selezionata
+        self.create_date_show()
+
+        # Creazione lista delle attivita'
+        self.create_activities_list()
+
+        # Aggiunta degli oggeti nel lyt_agenda
+        self.lyt_agenda.addWidget(self.cmb_project, 0, 0, 2, 1)
+        self.lyt_agenda.addWidget(self.scrl_operation, 2, 0, 4, 1)
+        self.lyt_agenda.addWidget(self.calendar, 6, 0, 4, 1)
+        self.lyt_agenda.addWidget(self.lbl_date_begin, 0, 1, 1, 1)
+        self.lyt_agenda.addWidget(self.dted_date_begin, 0, 2, 1, 1)
+        self.lyt_agenda.addWidget(self.lbl_date_end, 0, 3, 1, 1)
+        self.lyt_agenda.addWidget(self.dted_date_end, 0, 4, 1, 1)
+        self.lyt_agenda.addWidget(self.lbl_mail_lbl, 1, 1, 1, 1)
+        self.lyt_agenda.addWidget(self.lbl_mail, 1, 2, 1, 1)
+        self.lyt_agenda.addWidget(self.lbl_status_lbl, 1, 3, 1, 1)
+        self.lyt_agenda.addWidget(self.lbl_status, 1, 4, 1, 1)
+        self.lyt_agenda.addWidget(self.hrz_date, 2, 1, 1, 1)
+        self.lyt_agenda.addWidget(self.scrl_activities, 3, 1, 7, 7)
+
         # Set del layout della pagina
         self.gdr_agenda.setLayout(self.lyt_agenda)
 
         # Set del widget della pagina
         self.setCentralWidget(self.gdr_agenda)
+
+    def create_projects_list(self):
+        self.cmb_project = QtGui.QComboBox(self.gdr_agenda)
+        self.cmb_project.setLineEdit(self.combobox_align_center)
+        self.cmb_project.setFont(self.font_12)
+        for key, value in self.info_agenda['projects'].items():
+            self.cmb_project.addItem(value)
+
+    def create_operation_list(self):
+        self.scrl_operation = QtGui.QScrollArea(self.gdr_agenda)
+        self.scrl_operation.setBackgroundRole(QtGui.QPalette.NoRole)
+
+    def create_lbl_status(self):
+        if self.info_agenda['project']['status']:
+            message = "Attivo"
+            style = "background-color: rgb(0, 255, 0);"
+        else:
+            message = "Terminato"
+            style = "background-color: rgb(255, 0, 0);"
+
+        self.lbl_status = QtGui.QLabel(message, self.gdr_agenda)
+        self.lbl_status.setStyleSheet(style)
+        self.lbl_status.setAlignment(QtCore.Qt.AlignCenter)
+
+    def create_date_show(self):
+        # Creazione del contenitore della data e del suo layout: vrt_page(lyt_page)
+        self.hrz_date = QtGui.QWidget(self)
+        self.hrz_date.setObjectName("hrz_date")
+        self.hrz_date.setStyleSheet("""
+            #hrz_date {
+                border-style: double;
+                border-width: 2px;
+                border-radius: 8px;
+                border-color: black;
+            }
+        """)
+
+        self.lyt_date = QtGui.QHBoxLayout()
+
+        # Creazione del giorno mese e anno
+        self.lbl_day = QtGui.QLabel(str(QtCore.QDate.currentDate().day()), self.hrz_date)
+        self.lbl_day.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.lbl_month = QtGui.QLabel(QtCore.QDate.longMonthName(QtCore.QDate.currentDate().month()), self.hrz_date)
+        self.lbl_month.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.lbl_year = QtGui.QLabel(str(QtCore.QDate.currentDate().year()), self.hrz_date)
+        self.lbl_year.setAlignment(QtCore.Qt.AlignCenter)
+
+        # Aggiunta del giorno mese anno nel hrz_date
+        self.lyt_date.addWidget(self.lbl_day)
+        self.lyt_date.addWidget(self.lbl_month)
+        self.lyt_date.addWidget(self.lbl_year)
+
+        # Set del layout della pagina
+        self.hrz_date.setLayout(self.lyt_date)
+
+    def create_activities_list(self):
+        self.scrl_activities = QtGui.QScrollArea(self.gdr_agenda)
+        self.scrl_activities.setBackgroundRole(QtGui.QPalette.NoRole)
+
+        # Creazione del contenitore delle attivita' e del suo layout: gdr_agenda(lyt_agenda)
+        self.vrt_activities = QtGui.QWidget(self.scrl_activities)
+
+        self.lyt_activities = QtGui.QVBoxLayout()
+
+        # Aggiunta delle attivita' nella lista
+        for activity in self.info_agenda['activities']:
+            self.lyt_activities.addWidget(self.create_activity(activity))
+
+        # Set del layout della lista
+        self.vrt_activities.setLayout(self.lyt_activities)
+
+        # Set layout dello scroll
+        self.scrl_activities.setWidget(self.vrt_activities)
+
+    def create_activity(self, activity):
+        # Creazione del contenitore dell'attivita' e del suo layout: gdr_activity(lyt_activity)
+        gdr_activity = QtGui.QWidget(self.vrt_activities)
+        gdr_activity.setFixedSize(QtCore.QSize(400, 120))
+        gdr_activity.setObjectName("gdr_activity")
+        gdr_activity.setStyleSheet("""
+            #gdr_activity {
+                border-style: double;
+                border-width: 2px;
+                border-radius: 8px;
+                border-color: black;
+            }
+        """)
+
+        lyt_activity = QtGui.QGridLayout()
+
+        # Creazione elementi dell'attivita'
+        lbl_color = QtGui.QLabel("", gdr_activity)
+        if activity['type'] == "project":
+            style = "background-color: rgb(255, 0, 0);"
+        elif activity['type'] == "group":
+            style = "background-color: rgb(255, 255, 0);"
+        else:
+            style = "background-color: rgb(0, 255, 255);"
+        lbl_color.setStyleSheet(style)
+        lbl_color.setFixedSize(QtCore.QSize(15, 100))
+
+        lbl_begin = QtGui.QLabel(
+            str(activity['begin']['hour']) + " : " + str(activity['begin']['minute']),
+            gdr_activity
+        )
+
+        lbl_end = QtGui.QLabel(
+            str(activity['end']['hour']) + " : " + str(activity['end']['minute']),
+            gdr_activity
+        )
+
+        # Creazione del contenitore del nome e del suo layout: hrz_name(lyt_name)
+        hrz_name = QtGui.QWidget(gdr_activity)
+
+        lyt_name = QtGui.QHBoxLayout()
+
+        # Creazione del nome e della stanza
+        lbl_room = QtGui.QLabel(activity['room'], hrz_name)
+
+        lbl_name = QtGui.QLabel(activity['name'], hrz_name)
+        lbl_name.setFont(self.font_12)
+
+        # Aggiunta del nome e della stanza nel hrz_name
+        lyt_name.addWidget(lbl_room)
+        lyt_name.addWidget(lbl_name)
+
+        # Set del layout della pagina
+        hrz_name.setLayout(lyt_name)
+
+        # Creazione icona info
+        icon = QtGui.QLabel(self)
+        icon.setPixmap(QtGui.QIcon(ALERT).pixmap(QtCore.QSize(24, 24)))
+
+        # Aggiunta degli oggeti nel lyt_agenda
+        lyt_activity.addWidget(lbl_color, 0, 0, 3, 1)
+        lyt_activity.addWidget(lbl_begin, 0, 1, 1, 1)
+        lyt_activity.addWidget(lbl_end, 2, 1, 1, 1)
+        lyt_activity.addWidget(hrz_name, 1, 1, 1, 2)
+        lyt_activity.addWidget(icon, 1, 3, 2, 1)
+
+        # Set del layout
+        gdr_activity.setLayout(lyt_activity)
+
+        return gdr_activity
