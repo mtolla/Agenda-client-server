@@ -108,6 +108,18 @@ class Agenda(Page):
         # Set del widget della pagina
         self.setCentralWidget(self.gdr_agenda)
 
+        # ------------------------------------- Menu bar -------------------------------------
+
+        self.logout = QtGui.QAction(QtGui.QIcon(LOGOUT), "Logout", self)
+        self.logout.setShortcut("Ctrl+L")
+        self.logout.setStatusTip("Logout")
+
+        sep = QtGui.QAction(self)
+        sep.setSeparator(True)
+
+        self.m_file.addAction(sep)
+        self.m_file.addAction(self.logout)
+
     def create_projects_list(self):
         self.cmb_project = QtGui.QComboBox(self.gdr_agenda)
         self.cmb_project.setLineEdit(self.combobox_align_center)
@@ -121,6 +133,7 @@ class Agenda(Page):
 
         # Creazione del contenitore delle operazioni e del suo layout: vrt_opreations(lyt_opreations)
         self.vrt_opreations = QtGui.QWidget(self.scrl_operation)
+        self.vrt_opreations.setStyleSheet("text-align: left;")
 
         self.lyt_opreations = QtGui.QVBoxLayout()
 
@@ -314,7 +327,7 @@ class Agenda(Page):
 
         # Creazione icona info
         icon = QtGui.QLabel(self)
-        icon.setPixmap(QtGui.QIcon(ALERT).pixmap(QtCore.QSize(24, 24)))
+        icon.setPixmap(QtGui.QIcon(INFO).pixmap(QtCore.QSize(24, 24)))
 
         # Aggiunta degli oggeti nel lyt_agenda
         lyt_activity.addWidget(lbl_color, 0, 0, 3, 1)
@@ -327,3 +340,8 @@ class Agenda(Page):
         gdr_activity.setLayout(lyt_activity)
 
         return gdr_activity
+
+    def set_list_activities(self, new_list):
+        self.info_agenda['activities'] = new_list
+
+        self.create_activities_list()

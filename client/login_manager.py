@@ -47,8 +47,12 @@ class LoginManager(LoginInterface):
         """
 
         if self.server_manager.do_login(self.variable['token']):
-            self.login.close()
+            self.login.setHidden(True)
             self.agenda_manager.set_server_manager(self.server_manager)
+            self.agenda_manager.agenda.connect(
+                self.agenda_manager.agenda.logout, QtCore.SIGNAL('triggered()'),
+                self.login_set_hidden
+            )
             self.agenda_manager.show()
         else:
             self.variable['token'] = False
@@ -87,6 +91,9 @@ class LoginManager(LoginInterface):
             self.user['password'] = ""
             Popup("Inserire user e password", ALERT).exec_()
             return False
+
+    def login_set_hidden(self):
+        self.login.setHidden(False)
 
 
 def __init__():

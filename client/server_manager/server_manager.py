@@ -25,7 +25,7 @@ class ServerManager:
         if not notifications:
             return
 
-        Popup("Ei hai delle notifiche!!!!", ALERT).exec_()
+        Popup("Ei hai delle notifiche!!!!", NOTIFICATION).exec_()
 
     def get_token(self, user):
         """
@@ -60,7 +60,7 @@ class ServerManager:
         return False
 
     def activities_day(self, day):
-        return self.server_request_handler.activities_day(day)
+        return json.loads(self.server_request_handler.activities_day(day))
 
     def activity_id(self, _id):
         return self.server_request_handler.activity_id(_id)
@@ -94,4 +94,3 @@ class ServerManager:
 
     def holiday_id(self, _id):
         return self.server_request_handler.holiday_id(_id)
-

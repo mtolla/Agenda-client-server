@@ -21,16 +21,15 @@ class Page(QtGui.QMainWindow):
         info = QtGui.QAction(QtGui.QIcon(INFO), "About", self)
         info.setShortcut("Ctrl+I")
         info.setStatusTip("Show information")
+        self.connect(info, QtCore.SIGNAL('triggered()'), self.about)
 
         self.statusBar().show()
 
         menu = self.menuBar()
-        m_file = menu.addMenu('&File')
-        m_file.addAction(close)
-        m_file.addAction(sep)
-        m_file.addAction(info)
-
-        self.connect(info, QtCore.SIGNAL('triggered()'), self.about)
+        self.m_file = menu.addMenu('&File')
+        self.m_file.addAction(close)
+        self.m_file.addAction(sep)
+        self.m_file.addAction(info)
 
     @staticmethod
     def about():
