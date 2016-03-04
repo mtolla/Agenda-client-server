@@ -360,9 +360,10 @@ class ClassDbManager:
                 dict_duration = self.calc_duration(activity['date'], activity['duration'])
                 dict_app['hour'] = activity['date']['hour'] + dict_duration['hour']
                 dict_app['minute'] = activity['date']['minute'] + dict_duration['minute']
+
                 list_return.append(
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_app,
-                     'type': activity['type'], ['room']: self.get_room_from_id(activity['location'])})
+                     'type': activity['type'], 'room': self.get_room_from_id(activity['location'])})
         return list_return
 
     def get_activity_info(self, id_act, id_user):
