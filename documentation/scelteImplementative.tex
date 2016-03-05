@@ -3,7 +3,9 @@
 \usepackage{epigraph}
 \usepackage{dirtree}
 
-\title{Scelte Implementative}
+
+
+\title{Ideazione progetto e Scelte Implementative}
 \subtitle{Ingegneria del Software}
 \author{Stefano Ravetta, Simone Renzo, Matteo Scarpone, Mattia Tollari}
 \date{29 Febbraio, 2016}
@@ -11,17 +13,17 @@
 \begin{document}
 \maketitle
 
+\section{Scelte Implementative}
+\subsection{Introduzione}	% Produces subsection heading.  Lower-level subsections
+			% are begun with similar \subsubsection and
+			% \subsubsubsection commands; numbering is automatic!
 
-\section{Introduzione}	% Produces section heading.  Lower-level sections
-			% are begun with similar \subsection and
-			% \subsubsection commands; numbering is automatic!
-
-\subsection{Informazioni su questo ducumento}
-In questo documento verranno trattate e discusse le scelte
+\subsubsection{Informazioni su questa sezione del ducumento}
+In questa parte di documento verranno trattate e discusse le scelte
 implementative che sono state prese per la realizzazione del progetto "Team Diary Management"
 e le motivazioni delle stesse .
 
-\subsection{Contenuti}
+\subsubsection{Contenuti}
 Si porr\`a l'attenzione in modo particolare su
 \begin{itemize}
     \item Linguaggio di programmazione
@@ -32,18 +34,18 @@ Si porr\`a l'attenzione in modo particolare su
     \item Software per la stesura della documentazione
 \end{itemize}
 
-\section{Linguaggio di Programmazione}
-\subsection{Introduzione}
+\subsection{Linguaggio di Programmazione}
+\subsubsection{Introduzione}
 \'E stato scelto il linguaggio di programmazione Python\footnote{https://www.python.org/} per alcune caratteristiche
 piuttosto interessanti che lo possono far risaltare nell'ecosistema dei linguaggi di programmazione odierno.
-\subsection{Alto livello}
+\subsubsection{Alto livello}
 Python consente di programmare ad un livello molto alto: con poche righe riesce a gestire
 in modo semplice e diretto operazioni complesse senza che il codice risulti troppo complesso da leggere e comprendere.
 \\ \\
 Questo ha permesso al team di sviluppo di concentrarsi maggiormente sulle parti pi\`u astratte
 e progettuali (come i design pattern e la rimozione di vari code smell) rispetto
 a questioni pi\`u vicine alla comprensione del funzionamento del linguaggio.
-\subsection{Filosofia}
+\subsubsection{Filosofia}
 Una parte di un famoso "easter egg"\footnote{Questo easter egg, "The Zen of Python"
 \`e stato inserito nell'interprete Python e che pu\`o apparire appena si prova ad 
 importare la libreria "this".
@@ -80,7 +82,7 @@ pratico, tutto ci\`o \`e risultato addirittura comodo perche` si \`e mostrata la
 necessit\`a di lavorare con uno stile di stesura del codice unico (ogni membro
 del gruppo ne presentava uno diverso).
 
-\subsection{Portabilit\`a}
+\subsubsection{Portabilit\`a}
 Python \`e un linguaggio precompilato e il suo interprete \`e disponibile per
 numerose\footnote{L'elenco delle piattaforme supportate \`e reperibile a https://www.python.org/download/other/} piattaforme. 
 La presenza di questa caratteristica non \`e stata sicuramente
@@ -89,17 +91,17 @@ diversi. Anche la distribuzione dell'applicazione e di pacchetti contenenti le
 varie dipendenze risulta estremamente semplificata grazie alla portabilit\`a di Python.
 
 
-\subsection{Dizionari}
+\subsubsection{Dizionari}
 Una delle funzionalit\`a che sono state pi\`u apprezzate per la stesura del codice
 relativa al progetto \`e senza dubbio la gestione dei dizionari che Python offre
 e la loro semplice e diretta interazione con classi e anche dati Json.
 
 
-\section{Librerie per la creazione dell'interfaccia utente}
-\subsection{Introduzione}
+\subsection{Librerie per la creazione dell'interfaccia utente}
+\subsubsection{Introduzione}
 Sono state scelte le librerie Qt\footnote{http://www.qt.io/} che fanno parte di uno storico
 framework open source. 
-\subsection{Potenzialit\`a}
+\subsubsection{Potenzialit\`a}
 Le librerie Qt sono in grado di gestire interfacce grafiche, basi di dati, 
 attivit\`a multimediali, flussi di rete, gestione di file e notifiche di sistema.
 Una caratteristica piuttosto interessante di queste librerie \`e che possono essere usate
@@ -109,12 +111,12 @@ linguaggi di programmazione e non sono legate a nessuna piattaforma specifica.
 Permettono anche lo sviluppo di applicazioni mobile\footnote{
 il progetto SailfishOs pu\`o dare un'idea delle potenzialit\`a delle librerie Qt:
 http://sailfishos.org/develop/sdk-overview/}
-\subsection{Ambienti di sviluppo}
+\subsubsection{Ambienti di sviluppo}
 Per lo sviluppo dell'interfaccia grafica \`e stato comodo usare lo strumento
 QtDesigner\footnote{http://doc.qt.io/qt-4.8/designer-manual.html} (che segue il paradigma WYSIWYG) 
 che permette di disegnare GUI, modificare le propriet\`a dei vari
 oggetti e generare codice XML dell'interfaccia realizzata.
-\subsection{interazione con Python}
+\subsubsection{interazione con Python}
 Per far interagire il file XML generato da QtDesigner con Python
 \`e stato usato lo strumento Pyuic4\footnote{http://pyqt.sourceforge.net/Docs/PyQt4/designer.html}
 che svolge il lavoro meccanico di conversione da file che descrive un'interfaccia
@@ -123,8 +125,8 @@ gli oggetti usati ed i metodi  per accedervi. \\ \\
 Le librerie Qt sono inoltre state usate sulla parte server per implementare una
 gestione dei thread.
 
-\section{Base di dati}
-\subsection{Introduzione}
+\subsection{Base di dati}
+\subsubsection{Introduzione}
     Dato che la base di dati usata ha una struttura molto semplice \`e stato scelto
     di non usare uno strumento complesso come un database relazionale. 
     \`E stata creata una base di dati in formato Json che \`e risultata semplice da
@@ -136,7 +138,7 @@ gestione dei thread.
     i file ottenuti dal dump del database ed importarli in locale ad ogni modifica.
     L'ideazione e la gestione del database relazionale avrebbero occupato pi\'u tempo
     della soluzione adottata.
-\subsection{Struttura}
+\subsubsection{Struttura}
     La struttura della base di dati \`e cos\`i definita:
     
     \dirtree{%
@@ -148,37 +150,37 @@ gestione dei thread.
     .2 project.json.
     }
     
-    \subsubsection{User.json}
+        \underline{User.json}\\
         Contiene i dati relativi all'utente: id, username, password, nome, cognome, gruppi (una lista che
         contiene l'id del gruppo e il ruolo ("partecipante" o "team leader"), vacanze (una listas che
-        contiene un id, un nome, data di inizio e data di fine).
+        contiene un id, un nome, data di inizio e data di fine).\\
     
-    \subsubsection{Location.json}
-        Contiene i dati relativi ai luoghi: un id ed un nome.
+    \underline{Location.json}\\
+        Contiene i dati relativi ai luoghi: un id ed un nome.\\
     
-    \subsubsection{Activity.json}
+    \underline{Activity.json}\\
         Contiene i dati relativi alle attivit\`a: id, nome, id del progetto di riferimento, 
         id dell'utente che ha creato l'attivit\`a, tipo di attivit\`a (se di gruppo, di progetto
-        o singola), l'id del luogo, id del grupppo, lista di id dei partecipanti.
+        o singola), l'id del luogo, id del grupppo, lista di id dei partecipanti.\\
     
-    \subsubsection{Group.json}
+    \underline{Group.json}\\
         Contiene i dati relativi ai grupi: id, nome, father (False se il gruppo non \`e un sottogruppo,
-        id del sottogruppo altrimenti), lista degli id dei sottogruppi.
+        id del sottogruppo altrimenti), lista degli id dei sottogruppi.\\
         
-\subsection{Interazione con Python}
+\subsubsection{Interazione con Python}
     Per importare e gestire la base di dati dal programma sono stati usati i dizionari costruiti,
     come Json, con [chiave: valore]. Questo tipo di dato ha reso molto agile
     l'accesso e la generazione di codice Json.
 
-\subsection{Librerie usate per la gestione del flusso di dati}
+\subsubsection{Librerie usate per la gestione del flusso di dati}
 \`E stato scelto di usare la libreria Flask\footnote{http://flask.pocoo.org/} che permette
 una semplice implementazione delle REST Api. \`E stato scelto questo strumento in quanto
 risulta avere una curva d'apprendimento leggera. Ha meno funzionalit\`a di altre soluzioni,
 ma per le il progetto implementato era pi\`u che sufficiente. Questo ha comunque reso
 il pacchetto software finale pi\`u leggero e pi\`u reattivo.
 
-\section{Struttura dei sistemi di sicurezza adottati}
-\subsection{Codifica delle password}
+\subsection{Struttura dei sistemi di sicurezza adottati}
+\subsubsection{Codifica delle password}
     Per evitare di salvare le password degli utenti in chiaro
     \`e stato fatto ricorso ad un algoritmo di hashing one-way:
     esiste una funzione semplice da calcolare che associa ad ogni stringa un hash
@@ -187,7 +189,7 @@ il pacchetto software finale pi\`u leggero e pi\`u reattivo.
     \`E stato scelto SHA512 in quanto oggi risulta quello pi\`u robusto a 
     livello di problemi di collisione e preimmagine. Per l'implementazione in Python
     \`e stata usata la libreria Hashlib.
-\subsection{Token, autenticazione e gestione delle sessioni}
+\subsubsection{Token, autenticazione e gestione delle sessioni}
     Per gestire autenticazione e sessioni \`e stato implementato un sistema di
     token. Un token \`e un hash SHA512 di utente, password e timestamp. Con un controllo
     su questi tre campi si impedisce ad un utente malintenzionato (che non dispone dei una
@@ -196,21 +198,88 @@ il pacchetto software finale pi\`u leggero e pi\`u reattivo.
     uguale ad un giorno). Cos\`i facendo risulter\`a difficile anche provare un
     attacco che mira a scoprire il token dato che in poco tempo i tentativi precedenti
     risulteranno inutili.
-\subsection{Password dimenticate}
+\subsubsection{Password dimenticate}
     Nel caso venisse smarrita la password di un utente verr\`a visualizzato
     un messaggio che indicher\`a di contattare gli amministratori di 
     sistema. \`E stata presa questa scelta perch\`e non erano presenti
     le risorse necessarie per implementare e testare a fondo un sistema
     di recupero password che usi email o SMS.
 
-\section{Software per la stesura della documentazione}
-\subsection{Testi}
+\subsection{Software per la stesura della documentazione}
+\subsubsection{Testi}
     \`E stato scelto di usare \LaTeX perch\`e lavorare su file di testo \`e molto
     comodo (anche per quanto riguarda l'uso di Git). Inoltre offre numerose
     funzionalit\`a utili e semplici da gestire per impinazione, gestione paragrafi
     e adattabilit\`a dello stile.
-\subsection{Diagrammi}
+\subsubsection{Diagrammi}
     Per il disegno dei diagrammi \`e stato usato il software "Visual Paradigm";
     \`e in grado di strutturare diagrammi di classi, sequenza, attivit\`a e
     stato in modo piuttosto elegante.
+
+\section{Ideazione del progetto}
+\subsection{Obiettivi del progetto}
+Il cliente richiede un sistema di gestione e controllo del flusso
+di lavoro con relative agende per i progetti di sviluppo software.
+
+Il sistema permette di mantenere aggiornate le attivit\`a per ogni
+singolo progetto, ogni gruppo di lavoro gestito da un Team Leader
+e ogni sviluppatore che intende pianificare attivit\`a individuali.
+
+La gerarchia delle utenze che possono utilizzare il sistema parte
+dal Project Manager, figura con la responsabilit\`a completa di uno
+o pi\`u progetti, passando per il Team Leader a capo di uno o pi\`u
+gruppi di lavoro all'interno di un progetto fino al singolo
+sviluppatore, denominato partecipante, con il set pi\`u ristretto
+di operazioni.
+
+\subsection{Introduzione a Manageit}
+La soluzione sviluppata, denominata ManageIT, permette di integrare
+al meglio le richieste del cliente mantenendo una scalabilit\`a costante
+ed un alto livello di estensibilit\`a.
+
+Il software si presenta in versione multipiattaforma, 
+utilizzante tecnologie open source
+e a basso impatto sul sistema.
+
+Le funzionalit\`a implementate comprendono:
+\begin{itemize}
+\item Sistema di login sicuro con crittografia SHA-512
+\item Gestione integrata dell'agenda di progetto
+\item Sistema di gerarchia utenza con permessi dedicati
+\item Notifiche alla modifica di dati in modo distribuito
+\item Controllo dei vincoli e delle collisioni dei dati
+\end{itemize}
+
+L'usabilit\`a \`e garantita da un'interfaccia
+grafica semplice, che presenta tutte informazioni di interesse, dotata di
+sistemi che evitano operazioni non consentite. Il tutto usa particolari
+librerie grafiche multipiattaforma dal design piacevole ed
+uniforme.
+
+Le visualizzazioni principali includono il login iniziale,
+la presentazione d'agenda generale con varie operazioni
+effettuabili e le sotto-sezioni dove aggiungere, modificare o
+cancellare dati. Vegono gestite sia attivit\`a individuali, di gruppo o progettuali.
+Il sistema non integra
+un automatismo per recuperare le credenziali in modo da prevenire
+attacchi alla base di dati che dovr\`a essere direttamente gestita
+dal Database Manager dell'azienda in questione.
+
+\subsection{Analisi dell'Architettura Software}
+ManageIT \`e un sistema basato su interazione Client - Server, strutturato
+in modo da poter lavorare anche in modalit\`a offline.
+
+La parte server \`e ampliamente configurabile ed estendibile e non \`e dipendente
+da base di dati e sistema di login.
+L'interfaccia \`e resa inoltre indipendente dal sottosistema di controllo,
+permettendo cos\`i un mantenimento pi\`u veloce e una migliore adattabilit\`a
+alle possibili esigenze future.
+
+\subsection{Design Pattern}
+\subsubsection{Observer}
+Nella progettazione dell'interfaccia grafica sono stati sfruttati
+componenti ad eventi: il sottosistema inizializza la GUI e si registra
+come ascoltatore di alcuni eventi della stessa attivando quindi 
+determinati metodi solo all'utilizzo di tali componenti.
+
 \end{document}
