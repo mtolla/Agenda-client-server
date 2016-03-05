@@ -174,6 +174,7 @@ class ClassDbManager:
                 list_return.append(holiday)
         return list_return
 
+
     def get_holidays_day(self, day):
         # Da un giorno restituisco una lista con dentro le vacanze di quel giorno
         list_app = self.open_file('holiday')
@@ -181,7 +182,7 @@ class ClassDbManager:
         for holiday in list_app:
             if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
                 'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end']['day']:
-                list_return.append({self.from_holiday_get_user(holiday['ID']): holiday})
+                list_return.append(holiday)
         return list_return
 
     def from_holiday_get_user(self, id_hol):
@@ -715,21 +716,7 @@ class ClassDbManager:
                 list_return.append(activity['room'])
         return list_return
 
-    @staticmethod
-    def home():
-        return 'Welcome to TollaServer! V:0.1'
 
-    @staticmethod
-    def omg_tolla():
-        return open(sys.path[1] + '/server/app.html', "r").read()
-
-    def open_file(self, filename, method="r"):
-        try:
-            f = open(self.db_file[filename], method)
-        except IOError:
-            return False
-        else:
-            return json.load(f)
 
     def error(self, app):
         if app:
@@ -930,20 +917,83 @@ class ClassDbManager:
     def modify_proj(self):
         pass
 
-    def delete_act(self):
-        pass
+    def delete_act(self, id_act):
+        # Ricevo id_act e la elimino
+        list_act = self.open_file('activity')
+        for activity in list_act:
+            if activity['ID'] == id_act:
+                list_act.remove(activity)
+        return self.write_file(list_act, 'activity')
 
-    def delete_hol(self):
-        pass
 
-    def delete_group(self):
-        pass
+    def delete_hol(self, id_hol):
+        # Ricevo id_hol e la elimino, sia da user che da holiday
+        list_usr = self.open_file('user')
+        list_hol = self.open_file('holiday')
+        for user in list_usr:
+            if id_hol in user['holiday']:
+                user['holiday'].remove(id_hol)
+                break
+        for holiday in list_hol:
+            if holiday['ID'] == id_hol:
+                id_hol.remove(holiday)
+        if self.write_file(list_usr, 'user') and self.write_file(list_hol, 'holiday'):
+            return True
+        return False
 
-    def delete_level(self):
-        pass
+    def delete_group(self, id_group):
+        list_group = self.open_file('group')
+        for group in list_group:
+            if group['ID'] == id_group:
+                if group['father']:
+                    self.delete_subgroup(group['subgroup'])
+                    self.delete_act_group(id_group)
+                    self.delete_user_group(id_group)
+                break
+        return self.write_file(list_group, 'group')
 
-    def delete_proj(self):
-        pass
+    def delete_subgroup(self, list_sub):
+        for sub in list_sub:
+            self.delete_group(sub)
+
+    def delete_act_group(self, id_group):
+        list_act = self.open_file('activity')
+        for activity in list_act:
+            if activity['group'] == id_group:
+                self.delete_act(activity['ID'])
+        return True
+
+    def delete_user_group(self, id_group):
+        # Elimino solo il gruppo dall'utente
+        list_usr = self.open_file('user')
+        for user in list_usr:
+            if id_group in user['holiday']:
+                user['holiday'].remove(id_group)
+        return self.write_file(list_usr, 'user')
+
+    def delete_proj(self, id_proj):
+        # Elimino il progetto e chiamo per eliminare il gruppo padre
+        list_proj = self.open_file('proj')
+        if len(list_proj) == 1:
+            return False, 401
+        for proj in list_proj:
+            if proj['ID'] == id_proj:
+                self.delete_group_father(proj['group'])
+                list_proj.remove(proj)
+                break
+        return self.write_file(list_proj, 'project')
+
+    def delete_group_father(self, id_group):
+        list_group = self.open_file('group')
+        for group in list_group:
+            if group['ID'] == id_group:
+                if not group['father']:
+                    self.delete_subgroup(group['subgroup'])
+                    self.delete_act_group(id_group)
+                    self.delete_user_group(id_group)
+                break
+        return self.write_file(list_group, 'group')
+
 
     @staticmethod
     def time_now():
@@ -999,6 +1049,34 @@ class ClassDbManager:
             if group['level'] == level:
                 list_return.append(group['ID'])
         return list_return
+
+    @staticmethod
+    def home():
+        return 'Welcome to TollaServer! V:0.1'
+
+    @staticmethod
+    def omg_tolla():
+        return open(sys.path[1] + '/server/app.html', "r").read()
+
+    def open_file(self, filename, method="r"):
+        try:
+            f = open(self.db_file[filename], method)
+        except IOError:
+            return False
+        else:
+            return json.load(f)
+
+    def write_file(self, obj, filename, method="w"):
+        try:
+            f = open(self.db_file[filename], method)
+            json.dump(obj, f)
+            f.close()
+        except IOError:
+            return False
+        else:
+            return json.load(f)
+
+
 
 
 """
