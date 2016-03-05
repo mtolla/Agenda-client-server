@@ -1,7 +1,10 @@
 import os
 
 project_path = os.path.dirname(os.path.abspath(__file__))
-path = "\\".join(project_path.split("\\")[:-1])
+print "Il tuo file si trova qui: " + project_path
+path = "/".join(project_path.split("\\")[:-1])
+print "Il nuovo path e' in: " + path
+print "Local save si trova qui: " + path + "/local/local_save.json"
 
 # Icone
 ALERT = path + "/gui/icon/alert.png"
