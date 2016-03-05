@@ -122,9 +122,7 @@ class ClassDbManager:
                 list_act.append(row)
         # Controllo che siano di oggi
         list_today = self.check_act_is_today(list_act)
-        dict_app = dict()
         list_return = []
-
         for row in list_today:
             dict_app = {}
             if row['project'] == id_proj:
@@ -165,12 +163,12 @@ class ClassDbManager:
                     dict_return[row['ID']] = self.get_holiday_from_id(row['holiday'])
         return dict_return
 
-    def get_holiday_from_id(self, list_hol):
+    def get_holiday_from_id(self, hol):
         list_hol = self.open_file('holiday')
         list_return = []
-        for hol in list_hol:
-            if hol['ID'] in list_hol:
-                list_return.append(hol)
+        for holiday in list_hol:
+            if holiday['ID'] in hol:
+                list_return.append(holiday)
         return list_return
 
     def get_group_name_from_group(self, id_group):
@@ -362,7 +360,6 @@ class ClassDbManager:
         # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end)
         list_app = self.open_file('activity')
         list_return = []
-        dict_app = dict()
         for activity in list_app:
             dict_app = {}
             if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
@@ -372,7 +369,18 @@ class ClassDbManager:
                 dict_duration = self.calc_duration(dict_app, activity['duration'])
                 list_return.append(
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
-                     'type': activity['type'], 'room': self.get_room_from_id(activity['location'])})
+                     'type': activity['type'], 'room': self.get_room_from_id(activity['location']),
+                     'participants': activity['participants']})
+        return list_return
+
+    def get_holiday_day(self, day):
+        # Da un giorno restituisco una lista con dentro le vacanze di quel giorno
+        list_app = self.open_file('holiday')
+        list_return = []
+        for holiday in list_app:
+            if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
+                'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end']['day']:
+                list_return.append(holiday)
         return list_return
 
     def get_activity_info(self, id_act, id_user):
@@ -423,13 +431,13 @@ class ClassDbManager:
         id_group = self.get_group_from_activity(id_act)
         if id_group:
             level = self.get_level_user_group(id_user, id_group)
-            type = self.get_type_activity_from_activity(id_act)  # 'group' o 'project'
+            type_act = self.get_type_activity_from_activity(id_act)  # 'group' o 'project'
             # Controllo che il gruppo dell'attività sia tra i gruppi di chi sta visualizzando dove è teamleader
             list_team_group = self.get_group_where_lvl(id_user, 'teamleader')
-            if level == 'teamleader' and type == 'group' and id_group in list_team_group:
+            if level == 'teamleader' and type_act == 'group' and id_group in list_team_group:
                 return True
             # Project manager
-            if not level and type == 'project':
+            if not level and type_act == 'project':
                 return True
             return False
         return self.can_modify_app(id_act, id_user)
@@ -638,6 +646,62 @@ class ClassDbManager:
                 return self.get_holiday_from_id(user['holiday'])
         return False
 
+    def from_user_get_groups(self, id_usr):
+        list_usr = self.open_file('user')
+        list_return = []
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                for group in user['groups']:
+                    list_return.append(group['ID'])
+        return list_return
+
+    def from_group_get_users(self, id_group):
+        list_usr = self.open_file('user')
+        list_return = []
+        for user in list_usr:
+            for group in user['groups']:
+                if group['ID'] == id_group:
+                    list_return.append(user['ID'])
+                    break
+        return list_return
+
+    def from_user_get_acts(self, id_usr):
+        list_act = self.open_file('activity')
+        list_return = []
+        for activity in list_act:
+            for participant in activity['participants']:
+                if participant['ID'] == id_usr:
+                    list_return.append(activity['ID'])
+                    break
+        return list_return
+
+    def from_user_hol(self, id_usr):
+        list_usr = self.open_file('user')
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                return user['holiday']
+        return []
+
+    def room_occupied(self, day_act, begin, dur):
+        # Da una lista di attività della giornata, l'ora di inizio e la durata
+        # rispondo con le stanze occupate in quel lasso di tempo
+        end = self.calc_duration(begin, dur)
+        list_return = []
+        for activity in day_act:
+            if (activity['begin']['hour'] >= begin['hour'] and activity['begin']['hour'] > end['hour']) or (
+                            activity['begin']['hour'] <= begin['hour'] and activity['end']['hour'] >= end['hour']) or (
+                            begin['hour'] < activity['end']['hour'] <= end['hour']) or (
+                            activity['begin']['hour'] == begin['hour'] and (
+                                    (activity['begin']['minute'] >= begin['minute'] and
+                                             activity['begin']['minute'] > end[
+                                             'minute']) or (
+                                                activity['begin']['minute'] <= begin['minute'] and activity['end'][
+                                            'minute'] >=
+                                            end['minute']) or (
+                                            begin['minute'] < activity['begin']['minute'] <= end['minute']))):
+                list_return.append(activity['room'])
+        return list_return
+
     @staticmethod
     def home():
         return 'Welcome to TollaServer! V:0.1'
@@ -666,38 +730,68 @@ class ClassDbManager:
 
     def insert_activity(self, act):
         # act ha dentro {"name": "","project":, "type": "", "creator":,"location":,"group":,"description": "",
-        # "participants": [],"date": {"day", "month", "year", "hour", "minute"}, "duration": 2
+        # "participants": [],"date": {"day", "month", "year", "hour", "minute"}, "duration": 2}
         #  Ricevo una attività, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
-        ids_act = self.get_activites_rel()
-        pass
 
+        # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
+        day_act = self.get_activity_day(act['date'])
+        day_hol = self.get_holiday_day(act['date'])
+        # Controllo subito se la stanza non è già occupata
+        list_occ_room = self.room_occupied(day_act, act['date'], act['duration'])
+        for acttivity in day_act:
+            if acttivity['room'] in list_occ_room:
+                return "Error: Stanza occupata"
+        # Controllo se è un attività singola
+        if act['type'] == 'single':
+            ids_act = self.get_activites_rel_alone_activity(act['creator'])
+            ids_hol = self.get_holidays_rel_alone_activity(act['creator'])
+        else:
+            ids_act = self.get_activites_rel_activity(act['group'])
+            ids_hol = self.get_holidays_rel_activity(act['group'])
+        # Faccio un intersezione tra tutte le attività di gruppo e quelle del giorno
+        for acttivity in day_act:
+            if not acttivity['ID'] in ids_act:
+                day_act.remove(act)  ## Controllare
+        # Faccio una intersezione tra le festività e quelle del giorno
+        for hol in day_hol:
+            if not hol['ID'] in ids_hol:
+                day_hol.remove(hol)  ## Controllare
+        # Ci sono delle vacanze in quel giorno
+        if day_hol:
+            return "Error: Esistono delle vacanze"
+        data_end = self.calc_duration(act['date'], act['duration'])
+        list_error = self.is_there_something_activity(act['date'], data_end, day_act)
+        if list_error:
+            return list_error
+            # Implementazione programma teo
 
-def insert_holiday(self):
-    pass
+    def insert_holiday(self, hol, id_usr):
+        # hol ha dentro {"begin": {"day", "month", "year"}, "end": {"day", "month","year"}, "name"}
+        # id_usr mi serve per capire di chi è la vacanza
+        #  Ricevo una vacanza, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
+        ids_act = self.get_activites_rel_holiday(id_usr)
+        # Trovo tutte le attività in quel periodo
+        days_act = []
+        for year in range(hol['begin']['year'], hol['end']['year'], 1):
+            for month in range(hol['begin']['month'], hol['end']['month'], 1):
+                for day in range(hol['begin']['day'], hol['end']['day'], 1):
+                    days_act.append(self.get_activity_day({'day': day, 'month': month, 'year': year}))
+        list_error = self.is_there_something_holiday(id_usr, days_act)
+        if list_error:
+            return list_error
+        # Implementazione programma teo
 
-
-def is_there_something_activity(self, date_star, date_end, ids_hol, ids_act):
-    # Activity edition
-    # Controllo che non ci sia nulla in quella data
-    # Mi arrivano:
-    #   - due date date_start = {hour, minute, day, month, year} e date_end = {hour, minute}.
-    #   - ids_hol e ids_act, due liste contenenti le holiday e le activity interessate
-    # Rispondo se c'è già qualcosa
-    # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
-    # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
-    list_act = self.open_file('activity')
-    list_hol = self.open_file('holiday')
-    list_return = []
-    for holiday in list_hol:
-        if holiday['ID'] in ids_hol:
-            if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and \
-                            holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star[
-                'day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star[
-                'year']:
-                list_return.append({'holiday': holiday})
-    for activity in list_act:
-        if activity['ID'] in ids_act and activity['date']['day'] == date_star['day'] and activity['date'][
-            'month'] == date_star['month'] and activity['date']['year'] == date_star['year']:
+    def is_there_something_activity(self, date_star, date_end, day_act):
+        # Activity edition
+        # Controllo che non ci sia nulla in quella data
+        # Mi arrivano:
+        #   - due date date_start = {hour, minute, day, month, year} e date_end = {hour, minute}.
+        #   - day_act e day_hol, due liste contenenti le attività e vacanze di quel giorno
+        # Rispondo se c'è già qualcosa
+        # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
+        # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
+        list_return = []
+        for activity in day_act:
             date_end_anct = self.calc_duration(activity['date'], activity['duration'])
             """
             if activity['date']['hour'] >= date_star['hour'] and activity['date']['hour'] > date_end['hour']:
@@ -722,109 +816,137 @@ def is_there_something_activity(self, date_star, date_end, ids_hol, ids_act):
                             activity['date']['hour'] == date_star['hour'] and ((activity['date']['minute'] >= date_star[
                         'minute'] and activity['date']['minute'] > date_end['minute']) or (
                                     activity['date']['minute'] <= date_star['minute'] and date_end_anct['date'][
-                                'minute'] >=
-                                date_end['minute']) or (
+                                'minute'] >= date_end['minute']) or (
                                     date_star['minute'] < activity['date']['minute'] <= date_end['minute']))):
                 list_return.append({'activity': activity})
-    return list_return
+        return list_return
 
+    def is_there_something_holiday(self, id_usr, ids_act):
+        # Holiday edition
+        # Controllo che non ci sia nulla in quella data e nelle successive
+        # Mi arriva una data {day, month, year} e rispondo se c'è già qualcosa
+        # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
+        # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
+        list_return = []
+        for activity in ids_act:
+            if id_usr in activity['participant']:
+                list_return.append(activity)
+        return list_return
 
-def is_there_something_holiday(self, date_star, date_end, ids_hol, ids_act):
-    # Holiday edition
-    # Controllo che non ci sia nulla in quella data e nelle successive
-    # Mi arriva una data {day, month, year} e rispondo se c'è già qualcosa
-    # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
-    # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
-    list_act = self.open_file('activity')
-    list_hol = self.open_file('holiday')
-    list_app_act = []
-    list_return = []
-    for holiday in list_hol:
-        if holiday['ID'] in ids_hol:
-            if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and \
-                            holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star[
-                'day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star[
-                'year']:
-                list_return.append({'holiday': holiday})
-    for year in range(date_star['year'], date_end['year'], 1):
-        for month in range(date_star['month'], date_end['month'], 1):
-            for day in range(date_star['day'], date_end['day'], 1):
-                list_act.append(self.get_activity_day({'day': day, 'month': month, 'year': year}))
-    for act in list_app_act:
-        if act['ID'] in ids_act:
-            list_return.append(act)
-    return list_return
+    def get_activites_rel_alone_activity(self, id_usr):
+        # Parto da un utente e trovo tutte le attività dei suoi gruppi
+        list_group = self.from_user_get_groups(id_usr)
+        list_app_usr = []
+        list_act = []
+        for group in list_group:
+            set(list_app_usr).union(self.from_group_get_users(group))
+        for user in list_app_usr:
+            set(list_act).union(self.from_user_get_acts(user))
+        return list_act
 
-    def get_activites_rel()
+    def get_activites_rel_activity(self, id_group):
+        # Parto da un gruppo e trovo tutti i gruppi degli utenti con quel gruppo
+        # Trovo tutte le attività con quei gruppi
+        list_usr = self.open_file('user')
+        list_group = []
+        list_app_usr = []
+        list_act = []
+        for user in list_usr:
+            for group in list_usr['groups']:
+                if group['ID'] == id_group:
+                    list_group.append(self.from_user_get_groups(user['ID']))
+                    break
+        for group in list_group:
+            set(list_app_usr).union(self.from_group_get_users(group))
+        for user in list_app_usr:
+            set(list_act).union(self.from_user_get_acts(user))
+        return list_act
 
+    def get_holidays_rel_alone_activity(self, id_usr):
+        # Parto dall'utente e trovo tutte le sue vacanze
+        return self.from_user_hol(id_usr)
 
+    def get_holidays_rel_activity(self, id_group):
+        # Parto da un gruppo e trovo tutti gli utenti
+        # Trovo tutte le vacanze degli utenti
+        list_usr = self.open_file('user')
+        list_app_usr = []
+        list_hol = []
+        for user in list_usr:
+            for group in list_usr['groups']:
+                if group['ID'] == id_group:
+                    list_app_usr.append(user['ID'])
+                    break
+        for user in list_app_usr:
+            set(list_hol).union(self.from_user_hol(user))
+        return list_hol
 
+    def get_activites_rel_holiday(self, id_usr):
+        # Parto da un utente e trovo tutti i gruppi degli utenti correlati
+        # Trovo tutte le attività con gli utenti
+        list_group = self.from_user_get_groups(id_usr)
+        list_app_usr = []
+        list_act = []
+        for group in list_group:
+            set(list_app_usr).union(self.from_group_get_users(group))
+        for user in list_app_usr:
+            set(list_act).union(self.from_user_get_acts(user))
+        return list_act
 
+    @staticmethod
+    def time_now():
+        # Ricevo la data di oggi
+        app = datetime.datetime.today()
+        # Assegno i valori alla lista actual_time
+        actual_time = dict()
+        actual_time['day'] = int(app.strftime("%d"))
+        actual_time['month'] = int(app.strftime("%m"))
+        actual_time['year'] = int(app.strftime("%Y"))
+        actual_time['hour'] = int(app.strftime("%H"))
+        actual_time['minute'] = int(app.strftime("%M"))
+        actual_time['seconds'] = int(app.strftime("%S"))
+        return actual_time
 
+    @staticmethod
+    def calc_duration(dict_hour, duration):
+        # Funzione che data una data calcola la durata
+        # Calcolo della durata in ore con resto
+        rest = duration % 60
+        n_hour = duration / 60
+        dict_hour['hour'] += n_hour
+        dict_hour['minute'] += rest
+        return dict_hour
 
+    @staticmethod
+    def is_teamleader_check(row):
+        # Funzione di supporto per non far piangere sonarqube
+        for group in row['groups']:
+            if group['level'] == 'teamleader':
+                return True
+        return False
 
+    @staticmethod
+    def get_teamleader_groups_app(groups):
+        list_return = []
+        for group in groups:
+            if group['level'] == 'teamleader':
+                list_return.append(group['ID'])
+        return list_return
 
+    @staticmethod
+    def get_level_user_group_app(groups, id_group):
+        for group in groups:
+            if group['ID'] == id_group:
+                return group['level']
+        return False
 
-
-@staticmethod
-def time_now():
-    # Ricevo la data di oggi
-    app = datetime.datetime.today()
-    # Assegno i valori alla lista actual_time
-    actual_time = dict()
-    actual_time['day'] = int(app.strftime("%d"))
-    actual_time['month'] = int(app.strftime("%m"))
-    actual_time['year'] = int(app.strftime("%Y"))
-    actual_time['hour'] = int(app.strftime("%H"))
-    actual_time['minute'] = int(app.strftime("%M"))
-    actual_time['seconds'] = int(app.strftime("%S"))
-    return actual_time
-
-
-@staticmethod
-def calc_duration(dict_hour, duration):
-    # Funzione che data una data calcola la durata
-    # Calcolo della durata in ore con resto
-    rest = duration % 60
-    n_hour = duration / 60
-    dict_hour['hour'] += n_hour
-    dict_hour['minute'] += rest
-    return dict_hour
-
-
-@staticmethod
-def is_teamleader_check(row):
-    # Funzione di supporto per non far piangere sonarqube
-    for group in row['groups']:
-        if group['level'] == 'teamleader':
-            return True
-    return False
-
-
-@staticmethod
-def get_teamleader_groups_app(groups):
-    list_return = []
-    for group in groups:
-        if group['level'] == 'teamleader':
-            list_return.append(group['ID'])
-    return list_return
-
-
-@staticmethod
-def get_level_user_group_app(groups, id_group):
-    for group in groups:
-        if group['ID'] == id_group:
-            return group['level']
-    return False
-
-
-@staticmethod
-def get_group_where_lvl_app(groups, level):
-    list_return = []
-    for group in groups:
-        if group['level'] == level:
-            list_return.append(group['ID'])
-    return list_return
+    @staticmethod
+    def get_group_where_lvl_app(groups, level):
+        list_return = []
+        for group in groups:
+            if group['level'] == level:
+                list_return.append(group['ID'])
+        return list_return
 
 
 """
