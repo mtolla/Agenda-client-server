@@ -115,10 +115,10 @@ def get_holidays_proj(id_proj, token, ip):
     return False, 401
 
 
-@index.route('/holidays/<int:day>/<int:month>/<int:year>/<token>/<ip>', methods=['GET'])
-def get_holidays_day(day, month, year, token, ip):
+@index.route('/project/<int:id_proj>/holidays/<int:day>/<int:month>/<int:year>/<token>/<ip>', methods=['GET'])
+def get_holidays_day(id_proj, day, month, year, token, ip):
     if api.check_token(token, ip):
-        return api.get_holidays_day(day, month, year)
+        return api.get_holidays_day(id_proj, day, month, year)
     return False, 401
 
 
