@@ -465,7 +465,6 @@ class ClassDbManager:
             return True
         return False
 
-
     def get_creator_act(self, id_act):
         list_act = self.open_file('activity')
         for activity in list_act:
@@ -511,7 +510,7 @@ class ClassDbManager:
         list_act = self.open_file('activity')
         for activity in list_act:
             if activity['ID'] == id_act:
-                    return activity['group']
+                return activity['group']
         return False
 
     def get_level_user_group(self, id_user, id_group):
@@ -665,115 +664,167 @@ class ClassDbManager:
     # Parte di gestione controllo e inserimento nel db
     ####################################################################################################################
 
-    def is_there_something_event(self, date_star, date_end, ids_hol, ids_act):
-        # Activity edition
-        # Controllo che non ci sia nulla in quella data
-        # Mi arrivano:
-        #   - due date date_start = {hour, minute, day, month, year} e date_end = {hour, minute}.
-        #   - ids_hol e ids_act, due liste contenenti le holiday e le activity interessate
-        # Rispondo se c'è già qualcosa
-        # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
-        # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
-        list_act = self.open_file('activity')
-        list_hol = self.open_file('holiday')
-        list_return = []
-        for holiday in list_hol:
-            if holiday['ID'] in ids_hol:
-                if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and \
-                                holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star[
-                    'day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star[
-                    'year']:
-                    list_return.append({'holiday': holiday})
-        for activity in list_act:
-            if activity['ID'] in ids_act and activity['date']['day'] == date_star['day'] and activity['date'][
-                'month'] == date_star['month'] and activity['date']['year'] == date_star['year']:
-                date_end_anct = self.calc_duration(activity['date'], activity['duration'])
-                if activity['date']['hour'] >= date_star['hour'] and activity['date']['hour'] > date_end['hour']:
-                    list_return.append({'activity': activity})
-                if activity['date']['hour'] <= date_star['hour'] and date_end_anct['hour'] >= date_end['hour']:
-                    list_return.append({'activity': activity})
-                if date_star['hour'] < date_end_anct['hour'] <= date_end['hour']:
-                    list_return.append({'activity': activity})
-                if activity['date']['hour'] == date_star['hour']:
-                    if activity['date']['minute'] >= date_star['minute'] and activity['date']['minute'] > date_end[
-                        'minute']:
-                        list_return.append({'activity': activity})
-                    if activity['date']['minute'] <= date_star['minute'] and date_end_anct['date']['minute'] >= \
-                            date_end['minute']:
-                        list_return.append({'activity': activity})
-                    if date_star['minute'] < activity['date']['minute'] <= date_end['minute']:
-                        list_return.append({'activity': activity})
-
-        return list_return
-
-    def is_there_something_holiday(self, date_star, date_end):
-        # Holiday edition
-        # Controllo che non ci sia nulla in quella data e nelle successive
-        # Mi arriva una data {day, month, year} e rispondo se c'è già qualcosa
-        # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
-        # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
-
-
+    def insert_activity(self, act):
+        # act ha dentro {"name": "","project":, "type": "", "creator":,"location":,"group":,"description": "",
+        # "participants": [],"date": {"day", "month", "year", "hour", "minute"}, "duration": 2
+        #  Ricevo una attività, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
+        ids_act = self.get_activites_rel()
         pass
 
 
+def insert_holiday(self):
+    pass
+
+
+def is_there_something_activity(self, date_star, date_end, ids_hol, ids_act):
+    # Activity edition
+    # Controllo che non ci sia nulla in quella data
+    # Mi arrivano:
+    #   - due date date_start = {hour, minute, day, month, year} e date_end = {hour, minute}.
+    #   - ids_hol e ids_act, due liste contenenti le holiday e le activity interessate
+    # Rispondo se c'è già qualcosa
+    # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
+    # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
+    list_act = self.open_file('activity')
+    list_hol = self.open_file('holiday')
+    list_return = []
+    for holiday in list_hol:
+        if holiday['ID'] in ids_hol:
+            if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and \
+                            holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star[
+                'day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star[
+                'year']:
+                list_return.append({'holiday': holiday})
+    for activity in list_act:
+        if activity['ID'] in ids_act and activity['date']['day'] == date_star['day'] and activity['date'][
+            'month'] == date_star['month'] and activity['date']['year'] == date_star['year']:
+            date_end_anct = self.calc_duration(activity['date'], activity['duration'])
+            """
+            if activity['date']['hour'] >= date_star['hour'] and activity['date']['hour'] > date_end['hour']:
+                list_return.append({'activity': activity})
+            if activity['date']['hour'] <= date_star['hour'] and date_end_anct['hour'] >= date_end['hour']:
+                list_return.append({'activity': activity})
+            if date_star['hour'] < date_end_anct['hour'] <= date_end['hour']:
+                list_return.append({'activity': activity})
+            if activity['date']['hour'] == date_star['hour']:
+                if activity['date']['minute'] >= date_star['minute'] and activity['date']['minute'] > date_end[
+                    'minute']:
+                    list_return.append({'activity': activity})
+                if activity['date']['minute'] <= date_star['minute'] and date_end_anct['date']['minute'] >= \
+                        date_end['minute']:
+                    list_return.append({'activity': activity})
+                if date_star['minute'] < activity['date']['minute'] <= date_end['minute']:
+                    list_return.append({'activity': activity})
+            """
+            if (activity['date']['hour'] >= date_star['hour'] and activity['date']['hour'] > date_end['hour']) or (
+                            activity['date']['hour'] <= date_star['hour'] and date_end_anct['hour'] >= date_end[
+                        'hour']) or (date_star['hour'] < date_end_anct['hour'] <= date_end['hour']) or (
+                            activity['date']['hour'] == date_star['hour'] and ((activity['date']['minute'] >= date_star[
+                        'minute'] and activity['date']['minute'] > date_end['minute']) or (
+                                    activity['date']['minute'] <= date_star['minute'] and date_end_anct['date'][
+                                'minute'] >=
+                                date_end['minute']) or (
+                                    date_star['minute'] < activity['date']['minute'] <= date_end['minute']))):
+                list_return.append({'activity': activity})
+    return list_return
+
+
+def is_there_something_holiday(self, date_star, date_end, ids_hol, ids_act):
+    # Holiday edition
+    # Controllo che non ci sia nulla in quella data e nelle successive
+    # Mi arriva una data {day, month, year} e rispondo se c'è già qualcosa
+    # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
+    # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
+    list_act = self.open_file('activity')
+    list_hol = self.open_file('holiday')
+    list_app_act = []
+    list_return = []
+    for holiday in list_hol:
+        if holiday['ID'] in ids_hol:
+            if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and \
+                            holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star[
+                'day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star[
+                'year']:
+                list_return.append({'holiday': holiday})
+    for year in range(date_star['year'], date_end['year'], 1):
+        for month in range(date_star['month'], date_end['month'], 1):
+            for day in range(date_star['day'], date_end['day'], 1):
+                list_act.append(self.get_activity_day({'day': day, 'month': month, 'year': year}))
+    for act in list_app_act:
+        if act['ID'] in ids_act:
+            list_return.append(act)
+    return list_return
+
+    def get_activites_rel()
 
 
 
-    @staticmethod
-    def time_now():
-        # Ricevo la data di oggi
-        app = datetime.datetime.today()
-        # Assegno i valori alla lista actual_time
-        actual_time = dict()
-        actual_time['day'] = int(app.strftime("%d"))
-        actual_time['month'] = int(app.strftime("%m"))
-        actual_time['year'] = int(app.strftime("%Y"))
-        actual_time['hour'] = int(app.strftime("%H"))
-        actual_time['minute'] = int(app.strftime("%M"))
-        actual_time['seconds'] = int(app.strftime("%S"))
-        return actual_time
 
-    @staticmethod
-    def calc_duration(dict_hour, duration):
-        # Funzione che data una data calcola la durata
-        # Calcolo della durata in ore con resto
-        rest = duration % 60
-        n_hour = duration / 60
-        dict_hour['hour'] += n_hour
-        dict_hour['minute'] += rest
-        return dict_hour
 
-    @staticmethod
-    def is_teamleader_check(row):
-        # Funzione di supporto per non far piangere sonarqube
-        for group in row['groups']:
-            if group['level'] == 'teamleader':
-                return True
-        return False
 
-    @staticmethod
-    def get_teamleader_groups_app(groups):
-        list_return = []
-        for group in groups:
-            if group['level'] == 'teamleader':
-                list_return.append(group['ID'])
-        return list_return
 
-    @staticmethod
-    def get_level_user_group_app(groups, id_group):
-        for group in groups:
-            if group['ID'] == id_group:
-                return group['level']
-        return False
 
-    @staticmethod
-    def get_group_where_lvl_app(groups, level):
-        list_return = []
-        for group in groups:
-            if group['level'] == level:
-                list_return.append(group['ID'])
-        return list_return
+
+
+@staticmethod
+def time_now():
+    # Ricevo la data di oggi
+    app = datetime.datetime.today()
+    # Assegno i valori alla lista actual_time
+    actual_time = dict()
+    actual_time['day'] = int(app.strftime("%d"))
+    actual_time['month'] = int(app.strftime("%m"))
+    actual_time['year'] = int(app.strftime("%Y"))
+    actual_time['hour'] = int(app.strftime("%H"))
+    actual_time['minute'] = int(app.strftime("%M"))
+    actual_time['seconds'] = int(app.strftime("%S"))
+    return actual_time
+
+
+@staticmethod
+def calc_duration(dict_hour, duration):
+    # Funzione che data una data calcola la durata
+    # Calcolo della durata in ore con resto
+    rest = duration % 60
+    n_hour = duration / 60
+    dict_hour['hour'] += n_hour
+    dict_hour['minute'] += rest
+    return dict_hour
+
+
+@staticmethod
+def is_teamleader_check(row):
+    # Funzione di supporto per non far piangere sonarqube
+    for group in row['groups']:
+        if group['level'] == 'teamleader':
+            return True
+    return False
+
+
+@staticmethod
+def get_teamleader_groups_app(groups):
+    list_return = []
+    for group in groups:
+        if group['level'] == 'teamleader':
+            list_return.append(group['ID'])
+    return list_return
+
+
+@staticmethod
+def get_level_user_group_app(groups, id_group):
+    for group in groups:
+        if group['ID'] == id_group:
+            return group['level']
+    return False
+
+
+@staticmethod
+def get_group_where_lvl_app(groups, level):
+    list_return = []
+    for group in groups:
+        if group['level'] == level:
+            list_return.append(group['ID'])
+    return list_return
 
 
 """
