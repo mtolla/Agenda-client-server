@@ -266,7 +266,8 @@ class Agenda(Page):
 
         self.lyt_activities = QtGui.QVBoxLayout()
 
-        self.sort_activity()
+        if self.info_agenda['activities']:
+            self.sort_activity()
 
         # Aggiunta delle attivita' nella lista
         for activity in self.info_agenda['activities']:
@@ -276,7 +277,6 @@ class Agenda(Page):
 
         # Aggiunta delle vacanze nella lista
         for holiday in self.info_agenda['holidays']:
-            print self.info_agenda['holidays']
             self.lyt_activities.addWidget(self.create_activity(holiday))
 
         # Set del layout della lista
@@ -393,6 +393,7 @@ class Agenda(Page):
 
     def holiday_to_activity(self):
         list_app = []
+
         for _id, holidays in self.info_agenda['holidays'].items():
             for holiday in holidays:
                 activity = dict()
@@ -406,7 +407,5 @@ class Agenda(Page):
                 activity['room'] = str(_id) + "/" + str(holiday['ID'])
                 activity['name'] = holiday['name']
                 list_app.append(activity)
-        print self.info_agenda['holidays']
-        print list_app
 
         self.info_agenda['holidays'] = list_app

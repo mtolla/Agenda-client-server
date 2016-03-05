@@ -26,15 +26,11 @@ class AgendaManager:
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
 
-        new_list_holiday = []
-
         # ------------ Holidays -------------
-        z = self.server_manager.holidays_day(
+        new_list_holiday = self.server_manager.holidays_day(
             str(self.info_agenda['project']['ID']),
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
-        print z
-
 
         self.agenda.set_list_activities(new_list_activity, new_list_holiday)
 
