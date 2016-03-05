@@ -128,7 +128,8 @@ class ServerManager:
     def logout(self):
         return self.server_request_handler.logout()
 
-    def holidays_day(self, day):
+    def holidays_day(self, prj, day):
         return self.server_request_handler.holidays_day({
+            'prj': prj,
             'day': day
         })

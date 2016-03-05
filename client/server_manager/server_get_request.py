@@ -45,9 +45,9 @@ class ServerGetRequest(ServerRequestInterface):
             for key, value in replace.items():
                 print key
                 print value
-                print request_url
-                print""
                 request_url = request_url.replace(self.request_url[key], value)
+                print request_url
+                print ""
             return request_url + self.request_url['token_ip']
         else:
             return self.request_url[url] + self.request_url['token_ip']
