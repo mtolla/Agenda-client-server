@@ -25,6 +25,11 @@ class AgendaManager:
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
 
+        z = self.server_manager.holidays_day(
+            str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
+        )
+        print z
+
         self.agenda.set_list_activities(new_list)
 
     def logout(self):
@@ -41,10 +46,41 @@ class AgendaManager:
 
             self.agenda.setHidden(True)
 
-    def exec_activity_view(self, _id=False, informations=False):
+    def exec_activity_view(self, _id=False, _type="single"):
+        data = dict()
         if _id:
-
-            print self.server_manager.activity_id(_id)
-            self.activity_manager.exec_(informations)
+            data['modality'] = "view"
+            informations = self.server_manager.activity_id(_id)
         else:
-            self.activity_manager.exec_()
+            data['modality'] = "create"
+            data['type'] = _type
+            data['information'] = None
+
+        self.activity_manager.exec_(data)
+
+    def create_holiday(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+
+    def create_single_activity(self):
+        self.exec_activity_view()
+
+    def create_group_activity(self):
+        self.exec_activity_view()
+
+    def create_group(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+
+    def modify_group(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+
+    def create_project(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+
+    def modify_role(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+
+    def modify_project(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+
+    def create_activity_project(self):
+        self.exec_activity_view()

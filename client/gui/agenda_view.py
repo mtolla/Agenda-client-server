@@ -146,58 +146,60 @@ class Agenda(Page):
         self.cmd_create_holiday = QtGui.QPushButton("Inserisci le vacanze", self.vrt_opreations)
         self.cmd_create_holiday.setFlat(True)
         self.cmd_create_holiday.setStatusTip("Inserisci le vacanze")
-        # self.connect(self.cmd_create_holiday, QtCore.SIGNAL("clicked()"), self.create_holiday)
+        self.connect(self.cmd_create_holiday, QtCore.SIGNAL("clicked()"), self.function.create_holiday)
         list_operations.append(self.cmd_create_holiday)
 
         self.cmd_create_single_activity = QtGui.QPushButton("Inserisci una tua attivita'", self.vrt_opreations)
         self.cmd_create_single_activity.setFlat(True)
         self.cmd_create_single_activity.setStatusTip("Inserisci un tua attivita'")
-        # self.connect(self.cmd_create_single_activity, QtCore.SIGNAL("clicked()"), self.create_single_activity)
+        self.connect(self.cmd_create_single_activity, QtCore.SIGNAL("clicked()"), self.function.create_single_activity)
         list_operations.append(self.cmd_create_single_activity)
 
         if self.info_agenda['level'] == 'teamleader':
             self.cmd_create_group_activity = QtGui.QPushButton("Inserisci un'attivita' di gruppo", self.vrt_opreations)
             self.cmd_create_group_activity.setFlat(True)
             self.cmd_create_group_activity.setStatusTip("Inserisci un'attivita' di gruppo")
-            # self.connect(self.cmd_create_group_activity, QtCore.SIGNAL("clicked()"), self.create_group_activity)
+            self.connect(self.cmd_create_group_activity, QtCore.SIGNAL("clicked()"),
+                         self.function.create_group_activity)
             list_operations.append(self.cmd_create_group_activity)
 
             self.cmd_create_group = QtGui.QPushButton("Crea un nuovo gruppo", self.vrt_opreations)
             self.cmd_create_group.setFlat(True)
             self.cmd_create_group.setStatusTip("Crea un nuovo gruppo")
-            # self.connect(self.cmd_create_group, QtCore.SIGNAL("clicked()"), self.create_group)
+            self.connect(self.cmd_create_group, QtCore.SIGNAL("clicked()"), self.function.create_group)
             list_operations.append(self.cmd_create_group)
 
             self.cmd_modify_group = QtGui.QPushButton("Modifica un gruppo", self.vrt_opreations)
             self.cmd_modify_group.setFlat(True)
             self.cmd_modify_group.setStatusTip("Modifica un gruppo")
-            # self.connect(self.cmd_modify_group, QtCore.SIGNAL("clicked()"), self.modify_group)
+            self.connect(self.cmd_modify_group, QtCore.SIGNAL("clicked()"), self.function.modify_group)
             list_operations.append(self.cmd_modify_group)
 
         elif self.info_agenda['level'] == 'projectmanager':
             self.cmd_create_project = QtGui.QPushButton("Crea un nuovo progetto", self.vrt_opreations)
             self.cmd_create_project.setFlat(True)
             self.cmd_create_project.setStatusTip("Crea un nuovo progetto")
-            # self.connect(self.cmd_create_project, QtCore.SIGNAL("clicked()"), self.create_project)
+            self.connect(self.cmd_create_project, QtCore.SIGNAL("clicked()"), self.function.create_project)
             list_operations.append(self.cmd_create_project)
 
             self.cmd_modify_role = QtGui.QPushButton("Modifica ruolo ad un partecipante", self.vrt_opreations)
             self.cmd_modify_role.setFlat(True)
             self.cmd_modify_role.setStatusTip("Modifica ruolo ad un partecipante")
-            # self.connect(self.cmd_modify_role, QtCore.SIGNAL("clicked()"), self.modify_role)
+            self.connect(self.cmd_modify_role, QtCore.SIGNAL("clicked()"), self.function.modify_role)
             list_operations.append(self.cmd_modify_role)
 
             self.cmd_modify_project = QtGui.QPushButton("Modifica progetto", self.vrt_opreations)
             self.cmd_modify_project.setFlat(True)
             self.cmd_modify_project.setStatusTip("Modifica progetto")
-            # self.connect(self.cmd_modify_project, QtCore.SIGNAL("clicked()"), self.modify_project)
+            self.connect(self.cmd_modify_project, QtCore.SIGNAL("clicked()"), self.function.modify_project)
             list_operations.append(self.cmd_modify_project)
 
             self.cmd_create_activity_project = QtGui.QPushButton("Crea nuova attivita' di progetto",
                                                                  self.vrt_opreations)
             self.cmd_create_activity_project.setFlat(True)
             self.cmd_create_activity_project.setStatusTip("Crea nuova attivita' di progetto")
-            # self.connect(self.cmd_create_activity_project, QtCore.SIGNAL("clicked()"), self.create_activity_project)
+            self.connect(self.cmd_create_activity_project, QtCore.SIGNAL("clicked()"),
+                         self.function.create_activity_project)
             list_operations.append(self.cmd_create_activity_project)
 
         # Aggiunta bottoni al layout
@@ -334,7 +336,7 @@ class Agenda(Page):
         # Creazione icona info
         icon = QtGui.QLabel(self)
         icon.setPixmap(QtGui.QIcon(INFO).pixmap(QtCore.QSize(24, 24)))
-        icon.mouseReleaseEvent = lambda(event): self.icon_clicked(str(activity['ID']))
+        icon.mouseReleaseEvent = lambda (event): self.icon_clicked(str(activity['ID']))
         icon.setStatusTip("Ottieni piu informazioni o modifica")
 
         # Aggiunta degli oggeti nel lyt_agenda

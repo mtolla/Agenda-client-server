@@ -58,3 +58,6 @@ class ServerRequestHandler:
 
     def logout(self):
         return self.server_get_request.logout()
+
+    def holidays_day(self, day):
+        return self.server_get_request.holidays_day(day)

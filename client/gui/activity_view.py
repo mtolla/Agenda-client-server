@@ -3,10 +3,12 @@ from client.local.file_location import *
 
 
 class Activity(QtGui.QDialog):
-    def __init__(self):
+    def __init__(self, data):
         QtGui.QDialog.__init__(self)
         self.setWindowTitle('ManageIT')
         self.setWindowIcon(QtGui.QIcon(MANAGE_IT))
+
+        self.data = data
 
         self.height_extend = 10 + 24 + 10 + 180 + 10
         self.width_extend = 50

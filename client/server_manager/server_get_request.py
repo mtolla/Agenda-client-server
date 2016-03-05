@@ -25,6 +25,7 @@ class ServerGetRequest(ServerRequestInterface):
             'groups_id_father': server_url + "/groups/<int:id>/father",
             'holiday_id': server_url + "/holiday/<int:id>",
             'logout': server_url + "/logout",
+            'holidays_day': server_url + "/holidays/<int:day>",
             'token_ip': "/" + token + "/" + client_url,
             'id': "<int:id>",
             'day': "<int:day>"
@@ -115,6 +116,11 @@ class ServerGetRequest(ServerRequestInterface):
 
     def logout(self):
         response = self.request.get(self.url_generator('logout')).__dict__
+
+        return self.get_response(response)
+
+    def holidays_day(self, day):
+        response = self.request.get(self.url_generator('holidays_day', 'day', day)).__dict__
 
         return self.get_response(response)
 

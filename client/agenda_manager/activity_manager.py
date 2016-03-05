@@ -5,8 +5,8 @@ class ActivityManager:
     def __init__(self):
         pass
 
-    def exec_(self, informations=False):
-        if informations:
+    def exec_(self, type=False, informations=False):
+        if type:
             pass
         else:
             self.activity = Activity()

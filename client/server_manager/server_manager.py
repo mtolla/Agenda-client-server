@@ -63,7 +63,7 @@ class ServerManager:
         return json.loads(self.server_request_handler.activities_day(day))
 
     def activity_id(self, _id):
-        return self.server_request_handler.activity_id(_id)
+        return json.loads(self.server_request_handler.activity_id(_id))
 
     def locations(self):
         return self.server_request_handler.locations()
@@ -97,3 +97,6 @@ class ServerManager:
 
     def logout(self):
         return self.server_request_handler.logout()
+
+    def holidays_day(self, day):
+        return self.server_request_handler.holidays_day(day)
