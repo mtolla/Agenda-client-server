@@ -15,4 +15,4 @@ LOGOUT = path + "/gui/icon/logout.png"
 NOTIFICATION = path + "/gui/icon/notifications.png"
 
 # Altro
-LOCAL_SAVE = path + "/local/local_save.json"
+LOCAL_SAVE = project_path + "/local_save.json"
