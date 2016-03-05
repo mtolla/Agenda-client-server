@@ -743,7 +743,7 @@ class ClassDbManager:
                 return "Error: Stanza occupata"
         # Controllo se è un attività singola
         if act['type'] == 'single':
-            ids_act = self.get_activites_rel_alone_activity(act['creator'])
+            ids_act = self.get_activites_rel_al_activity(act['creator'])
             ids_hol = self.get_holidays_rel_alone_activity(act['creator'])
         else:
             ids_act = self.get_activites_rel_activity(act['group'])
@@ -833,7 +833,7 @@ class ClassDbManager:
                 list_return.append(activity)
         return list_return
 
-    def get_activites_rel_alone_activity(self, id_usr):
+    def get_activites_rel_al_activity(self, id_usr):
         # Parto da un utente e trovo tutte le attività dei suoi gruppi
         list_group = self.from_user_get_groups(id_usr)
         list_app_usr = []

@@ -82,7 +82,7 @@ def piero(id_proj, token):
 @index.route('/project/<int:id_proj>/<token>/<ip>', methods=['GET'])
 def project(id_proj, token, ip):
     api.check_token(token, ip)
-    return api.badass_function(token, id_proj)
+    return api.project(token, id_proj)
 
 
 @index.route('/activity/<int:id_att>', methods=['GET'])

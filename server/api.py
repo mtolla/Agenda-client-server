@@ -54,7 +54,7 @@ class Api:
 
     ####################################################################################################################
     # Query
-    def badass_function(self, token, id_proj):
+    def project(self, token, id_proj):
         # Dato token e id progetto restituire:
         #   - L'oggetto del progetto
         #   - eMail project manager
@@ -63,10 +63,10 @@ class Api:
         #   - Vacanze del progetto
         # Dizionario di ritorno
         dict_return = dict()
-        dict_return['project'] = self.get_project(id_proj)
-        dict_return['email'] = self.get_pjmanager_mail(id_proj)
-        dict_return['activities'] = self.get_activities_project_today(id_proj)
-        dict_return['holidays'] = self.get_holidays_proj(id_proj)
+        dict_return['project'] = self.db_manager.get_proj_from_id_proj(id_proj)
+        dict_return['email'] = self.db_manager.get_pjmanager_email(id_proj)
+        dict_return['activities'] = self.db_manager.get_today_activities_from_proj(id_proj)
+        dict_return['holidays'] = self.db_manager.get_holidays_from_proj(id_proj)
         dict_return['level'] = self.get_level_usr(token)
         return json.dumps(dict_return)
 
@@ -107,7 +107,7 @@ class Api:
         return self.db_manager.get_today_activities_from_proj(id_proj)
 
     def get_holidays_proj(self, id_proj):
-        return self.db_manager.get_holidays_from_proj(id_proj)
+        return json.dumps(self.db_manager.get_holidays_from_proj(id_proj))
 
     def get_group_name(self, id_group):
         return self.db_manager.get_group_name_from_group(id_group)
