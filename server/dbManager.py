@@ -404,7 +404,7 @@ class ClassDbManager:
         for activity in list_app:
             dict_app = {}
             if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
-                'year'] == day['year'] and activity['proj'] == id_proj:
+                'year'] == day['year'] and activity['project'] == id_proj:
                 dict_app['hour'] = activity['date']['hour']
                 dict_app['minute'] = activity['date']['minute']
                 dict_duration = self.calc_duration(dict_app, activity['duration'])
@@ -855,7 +855,8 @@ class ClassDbManager:
                 list_return.append({'activity': activity})
         return list_return
 
-    def is_there_something_holiday(self, id_usr, ids_act):
+    @staticmethod
+    def is_there_something_holiday(id_usr, ids_act):
         # Holiday edition
         # Controllo che non ci sia nulla in quella data e nelle successive
         # Mi arriva una data {day, month, year} e rispondo se c'è già qualcosa
@@ -946,7 +947,7 @@ class ClassDbManager:
         if insert == "OK":
             return True
         self.insert_activity(old_hol)
-        pass
+
 
     def modify_group(self, new_group):
         list_group = self.open_file('group')
