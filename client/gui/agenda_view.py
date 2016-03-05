@@ -260,6 +260,8 @@ class Agenda(Page):
 
         self.lyt_activities = QtGui.QVBoxLayout()
 
+        self.sort_activity()
+
         # Aggiunta delle attivita' nella lista
         for activity in self.info_agenda['activities']:
             self.lyt_activities.addWidget(self.create_activity(activity))
@@ -298,12 +300,12 @@ class Agenda(Page):
         lbl_color.setFixedSize(QtCore.QSize(15, 100))
 
         lbl_begin = QtGui.QLabel(
-            str(activity['begin']['hour']) + " : " + str(activity['begin']['minute']),
+            self.set_time(activity['begin']['hour']) + " : " + self.set_time(activity['begin']['minute']),
             gdr_activity
         )
 
         lbl_end = QtGui.QLabel(
-            str(activity['end']['hour']) + " : " + str(activity['end']['minute']),
+            self.set_time(activity['end']['hour']) + " : " + self.set_time(activity['end']['minute']),
             gdr_activity
         )
 
@@ -352,5 +354,17 @@ class Agenda(Page):
 
         self.lyt_agenda.addWidget(self.scrl_activities, 3, 1, 7, 7)
 
-        # Set del layout della pagina
-        self.gdr_agenda.setLayout(self.lyt_agenda)
+    @staticmethod
+    def set_time(time):
+        if time < 10:
+            time = "0" + str(time)
+        else:
+            time = str(time)
+
+        return time
+
+    def sort_activity(self):
+        self.info_agenda['activities'] = sorted(
+            self.info_agenda['activities'],
+            key=lambda k: (k['begin']['hour'], k['begin']['minute'], k['name'])
+        )

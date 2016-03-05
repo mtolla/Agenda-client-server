@@ -76,7 +76,7 @@
       2,
       1
     ],
-    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 17, "minute": 0},
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 16, "minute": 49},
     "duration": 90
   },
   {
@@ -92,7 +92,7 @@
       3
     ],
     "date": {"day" : 4, "month": 3, "year": 2016, "hour": 14, "minute": 22},
-    "duration": 2260
+    "duration": 120
   },
   {
     "ID": 6,
@@ -106,7 +106,7 @@
     "participants": [
       3
     ],
-    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 5, "minute": 50},
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 5, "minute": 35},
     "duration": 2
   },
   {
