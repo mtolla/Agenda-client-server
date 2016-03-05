@@ -21,16 +21,22 @@ class AgendaManager:
         self.agenda.lbl_month.setText(QtCore.QDate.longMonthName(data.month()))
         self.agenda.lbl_year.setText(str(data.year()))
 
-        new_list = self.server_manager.activities_day(
+        new_list_activity = self.server_manager.activities_day(
+            self.info_agenda['project']['ID'],
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
 
+        new_list_holiday = []
+
+        # ------------ Holidays -------------
         z = self.server_manager.holidays_day(
+            self.info_agenda['project']['ID'],
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
         print z
 
-        self.agenda.set_list_activities(new_list)
+
+        self.agenda.set_list_activities(new_list_activity, new_list_holiday)
 
     def logout(self):
         if self.server_manager.logout() == "True":
@@ -50,7 +56,11 @@ class AgendaManager:
         data = dict()
         if _id:
             data['modality'] = "view"
-            informations = self.server_manager.activity_id(_id)
+            data['type'] = self.info_agenda
+            informations = self.server_manager.activity_id(
+                self.info_agenda['project']['ID'],
+                _id
+            )
         else:
             data['modality'] = "create"
             data['type'] = _type
@@ -62,10 +72,10 @@ class AgendaManager:
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def create_single_activity(self):
-        self.exec_activity_view()
+        self.exec_activity_view(_type="single")
 
     def create_group_activity(self):
-        self.exec_activity_view()
+        self.exec_activity_view(_type="group")
 
     def create_group(self):
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
@@ -83,4 +93,4 @@ class AgendaManager:
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def create_activity_project(self):
-        self.exec_activity_view()
+        self.exec_activity_view(_type="project")
