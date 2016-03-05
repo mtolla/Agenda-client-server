@@ -11,7 +11,8 @@ class ClassDbManager:
                         'project': sys.path[1] + '/database/project.json',
                         'location': sys.path[1] + '/database/location.json',
                         'group': sys.path[1] + '/database/group.json',
-                        'activity': sys.path[1] + '/database/activity.json'}
+                        'activity': sys.path[1] + '/database/activity.json',
+                        'holiday': sys.path[1] + '/database/holiday.json'}
         self.er = '<img src="https://goo.gl/'
         # Liste di dizionari ordinate con le attività di oggi e domani
         self.today_act = []
@@ -161,8 +162,16 @@ class ClassDbManager:
         for row in list_app_user:
             for group in row['groups']:
                 if group['ID'] == app:
-                    dict_return[row['ID']] = row['holiday']
+                    dict_return[row['ID']] = self.get_holiday_from_id(row['hol'])
         return dict_return
+
+    def get_holiday_from_id(self, list_hol):
+        list_hol = self.open_file('holiday')
+        list_return = []
+        for hol in list_hol:
+            if hol['ID'] in list_hol:
+                list_return.append(hol)
+        return list_return
 
     def get_group_name_from_group(self, id_group):
         # Da un id di un gruppo restituice il nome
@@ -364,7 +373,7 @@ class ClassDbManager:
                 list_return.append(
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
                      'type': activity['type'], 'room': self.get_room_from_id(activity['location'])})
-            print dict_app
+        print list_return
         return list_return
 
     def get_activity_info(self, id_act, id_user):
@@ -619,12 +628,12 @@ class ClassDbManager:
         list_usr = self.open_file('user')
         for user in list_usr:
             if user['ID'] == id_usr:
-                return user['holiday']
+                return self.get_holiday_from_id(user['holiday'])
         return False
 
     @staticmethod
     def home():
-        return 'Welcome to TollaServer! V:0.9'
+        return 'Welcome to TollaServer! V:0.1'
 
     @staticmethod
     def omg_tolla():
