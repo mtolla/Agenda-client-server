@@ -152,6 +152,7 @@ def get_user_project(token, ip):
 @index.route('/project/<int:id_proj>/activities/<int:day>/<int:month>/<int:year>/<token>/<ip>', methods=['GET'])
 def get_activity_day(id_proj, day, month, year, token, ip):
     if api.check_token(token, ip):
+        print api.get_activity_day(id_proj, day, month, year)
         return api.get_activity_day(id_proj, day, month, year)
     return False, 401
 

@@ -164,6 +164,8 @@ class ClassDbManager:
         # Cerco l'id del gruppo dal progetto, lo confronto nella tabella user
         if not day:
             day = self.time_now()
+        print "Day"
+        print day
         list_app_proj = self.open_file('project')
         list_app_user = self.open_file('user')
         dict_return = dict()
