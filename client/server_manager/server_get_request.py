@@ -13,7 +13,7 @@ class ServerGetRequest(ServerRequestInterface):
             'projects': server_url + "/projects",
             'project_id': server_url + "/project/<int:prj>",
             'activities_day': server_url + "/project/<int:prj>/activities/<int:day>",
-            'activity_id': server_url + "/project/<int:prj>/activity/<int:id>",
+            'activity_id': server_url + "/activity/<int:id>",
             'locations': server_url + "/locations",
             'groups_teamleader': server_url + "/project/<int:prj>/groups/teamleader",
             'group_id_participants': server_url + "/project/<int:prj>/group/<int:id>/participants",
@@ -43,6 +43,10 @@ class ServerGetRequest(ServerRequestInterface):
         if replace:
             request_url = self.request_url[url]
             for key, value in replace.items():
+                print key
+                print value
+                print request_url
+                print""
                 request_url = request_url.replace(self.request_url[key], value)
             return request_url + self.request_url['token_ip']
         else:

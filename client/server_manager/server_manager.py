@@ -53,7 +53,9 @@ class ServerManager:
         projects = json.loads(self.server_request_handler.projects())
 
         if projects:
-            agenda = json.loads(self.server_request_handler.project_id(projects.keys()[0]))
+            agenda = json.loads(self.server_request_handler.project_id({
+                'prj': projects.keys()[0]
+            }))
             if agenda:
                 agenda['projects'] = projects
                 return agenda

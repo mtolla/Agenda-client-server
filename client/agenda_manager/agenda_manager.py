@@ -22,7 +22,7 @@ class AgendaManager:
         self.agenda.lbl_year.setText(str(data.year()))
 
         new_list_activity = self.server_manager.activities_day(
-            self.info_agenda['project']['ID'],
+            str(self.info_agenda['project']['ID']),
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
 
@@ -30,7 +30,7 @@ class AgendaManager:
 
         # ------------ Holidays -------------
         z = self.server_manager.holidays_day(
-            self.info_agenda['project']['ID'],
+            str(self.info_agenda['project']['ID']),
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
         print z
