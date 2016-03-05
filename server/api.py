@@ -110,7 +110,7 @@ class Api:
         return json.dumps(self.db_manager.get_holidays_from_proj(id_proj))
 
     def get_holidays_day(self, id_proj, day, month, year):
-        dict_app = {'day' : day, 'month': month, 'year': year}
+        dict_app = {'day': day, 'month': month, 'year': year}
         return json.dumps(self.db_manager.get_holidays_from_proj(id_proj, dict_app))
 
     def get_group_name(self, id_group):
@@ -133,7 +133,7 @@ class Api:
 
     def get_activity_day(self, id_proj, day, month, year):
         dict_app = {'day': day, 'month': month, 'year': year}
-        return json.dumps(self.db_manager.get_holidays_from_proj(id_proj, dict_app))
+        return json.dumps(self.db_manager.get_activity_day(id_proj, dict_app))
 
     def get_activity_info(self, id_act, token):
         return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))

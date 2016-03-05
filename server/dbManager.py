@@ -418,6 +418,8 @@ class ClassDbManager:
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
                      'type': activity['type'], 'room': self.get_room_from_id(activity['location']),
                      'participants': activity['participants']})
+        print "return"
+        print list_return
         return list_return
 
     def get_activity_info(self, id_act, id_user):
