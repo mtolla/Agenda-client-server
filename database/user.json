@@ -40,7 +40,7 @@
     "email": "stefano@myprovider.net",
     "groups": [
       {
-        "ID": 0,
+        "ID": 7,
         "level": "teamleader"
       },
       {
@@ -62,7 +62,7 @@
     "name": "Matteo",
     "groups": [
       {
-        "ID": 0,
+        "ID": 7,
         "level": "participant"
       },
       {
@@ -85,7 +85,7 @@
     "name": "Mattia",
     "groups": [
       {
-        "ID": 0,
+        "ID": 7,
         "level": "participant"
       },
       {
@@ -104,7 +104,7 @@
     "name": "Simone",
     "groups": [
       {
-        "ID": 0,
+        "ID": 7,
         "level": "participant"
       },
       {

@@ -421,16 +421,17 @@ class ClassDbManager:
         # - L'utente é lo stesso dell'attività singola
         # Attività di gruppo
         id_group = self.get_group_from_activity(id_act)
-        print id_group
-        level = self.get_level_user_group(id_user, id_group)
-        type = self.get_type_activity_from_activity(id_act)  # 'group' o 'project'
-        print level
-        print type
-        if level == 'teamleader' and type == 'group':
-            return True
-        # Project manager
-        if not level and type == 'project':
-            return True
+        if id_group:
+            level = self.get_level_user_group(id_user, id_group)
+            type = self.get_type_activity_from_activity(id_act)  # 'group' o 'project'
+            # Controllo che il gruppo dell'attività sia tra i gruppi di chi sta visualizzando dove è teamleader
+            list_team_group = self.get_group_where_lvl(id_user, 'teamleader')
+            if level == 'teamleader' and type == 'group' and id_group in list_team_group:
+                return True
+            # Project manager
+            if not level and type == 'project':
+                return True
+            return False
         return self.can_modify_app(id_act, id_user)
 
     def can_modify_app(self, id_act, id_user):
@@ -450,22 +451,20 @@ class ClassDbManager:
     def mega_merge(self, id_act, id_user):
         id_proj = self.get_id_proj_from_activity(id_act)
         # Lista di gruppi del progetto
-        list_proj_group = self.from_group_return_sub(self.get_group_from_proj(id_proj))
-        print list_proj_group
+        list_proj_group = [self.get_group_from_proj(id_proj)]
+        list_proj_group += self.from_group_return_sub(self.get_group_from_proj(id_proj))
         # Lista di gruppi del tipello che guarda ed è teamleader
         list_team_group = self.get_group_where_lvl(id_user, 'teamleader')
-        print list_team_group
         # Lista di gruppi dove quello che ha creato è partecipante o teamleader, potrebbe aver creato lui l'evento
         list_part_group = self.get_group_where_lvl(self.get_creator_act(id_act), 'participant')
         list_part_group += self.get_group_where_lvl(self.get_creator_act(id_act), 'teamleader')
-        print list_part_group
         # Tiro fuori il risultato
         # set(a).intersection(b)
         merge = set(list_part_group).intersection(set(list_team_group).intersection(list_proj_group))
-        print merge
         if merge:
             return True
         return False
+
 
     def get_creator_act(self, id_act):
         list_act = self.open_file('activity')
@@ -512,9 +511,7 @@ class ClassDbManager:
         list_act = self.open_file('activity')
         for activity in list_act:
             if activity['ID'] == id_act:
-                if activity['type'] != 'single':
                     return activity['group']
-                return False
         return False
 
     def get_level_user_group(self, id_user, id_group):
@@ -717,9 +714,11 @@ class ClassDbManager:
         # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
 
 
-
-
         pass
+
+
+
+
 
     @staticmethod
     def time_now():

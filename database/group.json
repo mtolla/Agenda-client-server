@@ -1,6 +1,6 @@
 [
   {
-    "ID": 0,
+    "ID": 7,
     "name": "AgendaGroup",
     "father": false,
     "subgroup": [
@@ -11,13 +11,13 @@
   {
     "ID": 1,
     "name": "TestAgenda",
-    "father": 0,
+    "father": 7,
     "subgroup": []
   },
   {
     "ID": 2,
     "name": "CodingAgenda",
-    "father": 0,
+    "father": 7,
     "subgroup": [
       3
     ]
