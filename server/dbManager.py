@@ -373,7 +373,7 @@ class ClassDbManager:
                      'participants': activity['participants']})
         return list_return
 
-    def get_holiday_day(self, day):
+    def get_holidays_day(self, day):
         # Da un giorno restituisco una lista con dentro le vacanze di quel giorno
         list_app = self.open_file('holiday')
         list_return = []
@@ -735,7 +735,7 @@ class ClassDbManager:
 
         # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
         day_act = self.get_activity_day(act['date'])
-        day_hol = self.get_holiday_day(act['date'])
+        day_hol = self.get_holidays_day(act['date'])
         # Controllo subito se la stanza non è già occupata
         list_occ_room = self.room_occupied(day_act, act['date'], act['duration'])
         for acttivity in day_act:

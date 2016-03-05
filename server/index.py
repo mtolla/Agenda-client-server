@@ -19,6 +19,7 @@ def hello():
 def tolla():
     return api.error(False)
 
+
 @index.route("/OMGTOLLA")
 def omg_tolla():
     return api.omg_tolla()
@@ -73,11 +74,6 @@ def asd(user, passw, ip):
         return 0
 
 
-@index.route('/testbaf/<int:id_proj>/<token>', methods=['GET'])
-def piero(id_proj, token):
-    return api.badass_function(token, id_proj)
-
-
 # Modificata, da testare
 @index.route('/project/<int:id_proj>/<token>/<ip>', methods=['GET'])
 def project(id_proj, token, ip):
@@ -113,9 +109,18 @@ def get_is_teamleader(token):
         return "False", 404
 
 
-@index.route('/holidays_proj/<int:id_proj>', methods=['GET'])
-def get_holidays_proj(id_proj):
-    return api.get_holidays_proj(id_proj)
+@index.route('/holidays_proj/<int:id_proj>/<token>/<ip>', methods=['GET'])
+def get_holidays_proj(id_proj, token, ip):
+    if api.check_token(token, ip):
+        return api.get_holidays_proj(id_proj)
+    return False, 401
+
+
+@index.route('/holidays/<int:day>/<int:month>/<int:year>/token/ip', methods=['GET'])
+def get_holidays_day(day, month, year, token, ip):
+    if api.check_token(token, ip):
+        return api.get_holidays_day(day, month, year)
+    return False, 401
 
 
 @index.route('/group_name/<int:id_group>', methods=['GET'])
