@@ -193,6 +193,7 @@ class ClassDbManager:
         list_app = self.open_file('holiday')
         list_return = []
         proj_group = self.get_group_from_proj(id_proj)
+        print proj_group
         list_usr = self.open_file('user')
         list_id_hol = []
         for user in list_usr:

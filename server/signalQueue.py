@@ -37,14 +37,18 @@ class ClassSignalQueue:
     # Effettua 5 tentativi, al sesto mette la richiesta nella coda di errore
     def send(self):
         for user in self.modified_queue:
-            if not requests.post(self.login_manager.from_user_get_ip(user['user']), data={user['act']}):
+            try:
+                requests.post(self.login_manager.from_user_get_ip(user['user']), data={user['act']})
+            except Exception:
                 if user['attempt'] < 5:
                     user['attempt'] += 1
                 else:
                     self.mod_error_queue.append(user)
 
         for user in self.activity_queue:
-            if not requests.post(self.login_manager.from_user_get_ip(user['user']), data={user['act']}):
+            try:
+                requests.post(self.login_manager.from_user_get_ip(user['user']), data={user['act']})
+            except Exception:
                 if user['attempt'] < 5:
                     user['attempt'] += 1
                 else:
