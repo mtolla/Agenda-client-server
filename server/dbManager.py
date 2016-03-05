@@ -384,6 +384,7 @@ class ClassDbManager:
         dict_return['group'] = self.get_group_name_from_activity(id_act)
         dict_return['location'] = self.get_room_from_activity(id_act)
         dict_return['modify'] = self.can_modify(id_act, id_user)
+        return dict_return
 
     def get_participants_from_activity(self, id_act):
         list_act = self.open_file('activity')
@@ -430,7 +431,7 @@ class ClassDbManager:
             if not level and type == 'project':
                 return True
             return False
-        self.can_modify_app(id_act, id_user)
+        return self.can_modify_app(id_act, id_user)
 
     def can_modify_app(self, id_act, id_user):
         # Attività singola
@@ -466,7 +467,7 @@ class ClassDbManager:
         list_return = []
         for user in list_user:
             if user['ID'] == id_user:
-                list_return += self.get_group_where_lvl_app(user['group'], level)
+                list_return += self.get_group_where_lvl_app(user['groups'], level)
         return list_return
 
     def get_group_from_proj(self, id_proj):
@@ -652,6 +653,56 @@ class ClassDbManager:
             return self.er + '5UL9yj">'
         else:
             return self.er + 'dmr6pW">'
+
+
+
+    ####################################################################################################################
+    # Parte di gestione controllo e inserimento nel db
+    ####################################################################################################################
+
+    def is_there_something_event(self, date_star, date_end, ids_hol, ids_act):
+        # Activity edition
+        # Controllo che non ci sia nulla in quella data
+        # Mi arrivano:
+        #   - due date date_start = {hour, minute, day, month, year} e date_end = {hour, minute}.
+        #   - ids_hol e ids_act, due liste contenenti le holiday e le activity interessate
+        # Rispondo se c'è già qualcosa
+        # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
+        # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
+        list_act = self.open_file('activity')
+        list_hol = self.open_file('holiday')
+        list_return = []
+        for holiday in list_hol:
+            if holiday['ID'] in ids_hol:
+                if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star['day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star['year']:
+                    list_return.append({'holiday': holiday})
+        for activity in list_act:
+            if activity['ID'] in ids_act:
+                if activity['date']['day'] == date_star['day'] and activity['date']['month'] == date_star['month'] and activity['date']['year'] == date_star['year']:
+                    if activity['date']['hour'] <= date_star['hour'] and  True:
+                        pass
+
+
+
+
+        pass
+
+    def is_there_something_holiday(self, date_star, date_end):
+        # Holiday edition
+        # Controllo che non ci sia nulla in quella data e nelle successive
+        # Mi arriva una data {day, month, year} e rispondo se c'è già qualcosa
+        # Se è una vacanza devo controllare tutte quelle che iniziano prima e finiscono dopo
+        # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
+
+
+
+
+        pass
+
+
+
+
+
 
     @staticmethod
     def time_now():
