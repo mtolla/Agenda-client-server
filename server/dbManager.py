@@ -162,7 +162,7 @@ class ClassDbManager:
         for row in list_app_user:
             for group in row['groups']:
                 if group['ID'] == app:
-                    dict_return[row['ID']] = self.get_holiday_from_id(row['hol'])
+                    dict_return[row['ID']] = self.get_holiday_from_id(row['holiday'])
         return dict_return
 
     def get_holiday_from_id(self, list_hol):
