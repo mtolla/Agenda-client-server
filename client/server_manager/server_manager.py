@@ -59,44 +59,74 @@ class ServerManager:
                 return agenda
         return False
 
-    def activities_day(self, day):
-        return json.loads(self.server_request_handler.activities_day(day))
+    def activities_day(self, prj, day):
+        return json.loads(self.server_request_handler.activities_day({
+            'prj': prj,
+            'day': day
+        }))
 
-    def activity_id(self, _id):
-        return json.loads(self.server_request_handler.activity_id(_id))
+    def activity_id(self, prj, _id):
+        return json.loads(self.server_request_handler.activity_id({
+            'prj': prj,
+            'id': _id
+        }))
 
     def locations(self):
         return self.server_request_handler.locations()
 
-    def groups_teamleader(self):
-        return self.server_request_handler.groups_teamleader()
+    def groups_teamleader(self, prj):
+        return self.server_request_handler.groups_teamleader({
+            'prj': prj
+        })
 
-    def group_id_participants(self, _id):
-        return self.server_request_handler.group_id_participants(_id)
+    def group_id_participants(self, prj, _id):
+        return self.server_request_handler.group_id_participants({
+            'prj': prj,
+            'id': _id
+        })
 
     def project_id_participant(self, _id):
-        return self.server_request_handler.project_id_participant(_id)
+        return self.server_request_handler.project_id_participant({
+            'id': _id
+        })
 
     def project_id_groups(self, _id):
-        return self.server_request_handler.project_id_groups(_id)
+        return self.server_request_handler.project_id_groups({
+            'id': _id
+        })
 
-    def groups_id_participant_level(self, _id):
-        return self.server_request_handler.groups_id_participant_level(_id)
+    def groups_id_participant_level(self, prj, _id):
+        return self.server_request_handler.groups_id_participant_level({
+            'prj': prj,
+            'id': _id
+        })
 
     def project_id_not_participant(self, _id):
-        return self.server_request_handler.project_id_not_participant(_id)
+        return self.server_request_handler.project_id_not_participant({
+            'id': _id
+        })
 
-    def participants(self):
-        return self.server_request_handler.participants()
+    def participants(self, prj):
+        return self.server_request_handler.participants({
+            'prj': prj
+        })
 
-    def groups_id_father(self, _id):
-        return self.server_request_handler.groups_id_father(_id)
+    def groups_id_father(self, prj, _id):
+        return self.server_request_handler.groups_id_father({
+            'prj': prj,
+            'id': _id
+        })
 
-    def holiday_id(self, _id):
-        return self.server_request_handler.holiday_id(_id)
+    def holiday_id(self, prj, _id):
+        return self.server_request_handler.holiday_id({
+            'prj': prj,
+            'id': _id
+        })
 
     def logout(self):
         return self.server_request_handler.logout()
 
     def holidays_day(self, day):
-        return self.server_request_handler.holidays_day(day)
+        return self.server_request_handler.holidays_day({
+            'day': day
+        })

@@ -29,8 +29,8 @@ class ServerRequestHandler:
     def locations(self):
         return self.server_get_request.locations()
 
-    def groups_teamleader(self):
-        return self.server_get_request.groups_teamleader()
+    def groups_teamleader(self, prj):
+        return self.server_get_request.groups_teamleader(prj)
 
     def group_id_participants(self, _id):
         return self.server_get_request.group_id_participants(_id)
@@ -47,8 +47,8 @@ class ServerRequestHandler:
     def project_id_not_participant(self, _id):
         return self.server_get_request.project_id_not_participant(_id)
 
-    def participants(self):
-        return self.server_get_request.participants()
+    def participants(self, prj):
+        return self.server_get_request.participants(prj)
 
     def groups_id_father(self, _id):
         return self.server_get_request.groups_id_father(_id)

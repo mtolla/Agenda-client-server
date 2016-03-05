@@ -272,6 +272,13 @@ class Agenda(Page):
         for activity in self.info_agenda['activities']:
             self.lyt_activities.addWidget(self.create_activity(activity))
 
+        self.holiday_to_activity()
+
+        # Aggiunta delle vacanze nella lista
+        for holiday in self.info_agenda['holidays']:
+            print self.info_agenda['holidays']
+            self.lyt_activities.addWidget(self.create_activity(holiday))
+
         # Set del layout della lista
         self.vrt_activities.setLayout(self.lyt_activities)
 
@@ -300,8 +307,10 @@ class Agenda(Page):
             style = "background-color: rgb(255, 0, 0);"
         elif activity['type'] == "group":
             style = "background-color: rgb(255, 255, 0);"
-        else:
+        elif activity['type'] == "single":
             style = "background-color: rgb(0, 255, 255);"
+        else:
+            style = "background-color: rgb(0, 255, 0);"
         lbl_color.setStyleSheet(style)
         lbl_color.setFixedSize(QtCore.QSize(15, 100))
 
@@ -351,8 +360,10 @@ class Agenda(Page):
 
         return gdr_activity
 
-    def set_list_activities(self, new_list):
-        self.info_agenda['activities'] = new_list
+    def set_list_activities(self, new_list_activity, new_list_holiday):
+        self.info_agenda['activities'] = new_list_activity
+
+        self.info_agenda['holidays'] = new_list_holiday
 
         self.lyt_agenda.removeWidget(self.scrl_activities)
 
@@ -379,3 +390,23 @@ class Agenda(Page):
 
     def icon_clicked(self, _id):
         self.function.exec_activity_view(_id)
+
+    def holiday_to_activity(self):
+        list_app = []
+        for _id, holidays in self.info_agenda['holidays'].items():
+            for holiday in holidays:
+                activity = dict()
+                activity['type'] = "holidays"
+                activity['begin'] = dict()
+                activity['begin']['hour'] = str(holiday['begin']['day']) + "/" + str(holiday['begin']['month'])
+                activity['begin']['minute'] = holiday['begin']['year']
+                activity['end'] = dict()
+                activity['end']['hour'] = str(holiday['end']['day']) + "/" + str(holiday['end']['month'])
+                activity['end']['minute'] = holiday['end']['year']
+                activity['room'] = str(_id) + "/" + str(holiday['ID'])
+                activity['name'] = holiday['name']
+                list_app.append(activity)
+        print self.info_agenda['holidays']
+        print list_app
+
+        self.info_agenda['holidays'] = list_app
