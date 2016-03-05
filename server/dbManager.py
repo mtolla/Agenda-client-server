@@ -373,7 +373,6 @@ class ClassDbManager:
                 list_return.append(
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
                      'type': activity['type'], 'room': self.get_room_from_id(activity['location'])})
-        print list_return
         return list_return
 
     def get_activity_info(self, id_act, id_user):
@@ -654,8 +653,6 @@ class ClassDbManager:
         else:
             return self.er + 'dmr6pW">'
 
-
-
     ####################################################################################################################
     # Parte di gestione controllo e inserimento nel db
     ####################################################################################################################
@@ -674,18 +671,32 @@ class ClassDbManager:
         list_return = []
         for holiday in list_hol:
             if holiday['ID'] in ids_hol:
-                if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star['day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star['year']:
+                if holiday['begin']['day'] <= date_star['day'] and holiday['begin']['month'] <= date_star['month'] and \
+                                holiday['begin']['year'] <= date_star['year'] and holiday['end']['day'] >= date_star[
+                    'day'] and holiday['end']['month'] >= date_star['month'] and holiday['end']['year'] >= date_star[
+                    'year']:
                     list_return.append({'holiday': holiday})
         for activity in list_act:
-            if activity['ID'] in ids_act:
-                if activity['date']['day'] == date_star['day'] and activity['date']['month'] == date_star['month'] and activity['date']['year'] == date_star['year']:
-                    if activity['date']['hour'] <= date_star['hour'] and  True:
-                        pass
+            if activity['ID'] in ids_act and activity['date']['day'] == date_star['day'] and activity['date'][
+                'month'] == date_star['month'] and activity['date']['year'] == date_star['year']:
+                date_end_anct = self.calc_duration(activity['date'], activity['duration'])
+                if activity['date']['hour'] >= date_star['hour'] and activity['date']['hour'] > date_end['hour']:
+                    list_return.append({'activity': activity})
+                if activity['date']['hour'] <= date_star['hour'] and date_end_anct['hour'] >= date_end['hour']:
+                    list_return.append({'activity': activity})
+                if date_star['hour'] < date_end_anct['hour'] <= date_end['hour']:
+                    list_return.append({'activity': activity})
+                if activity['date']['hour'] == date_star['hour']:
+                    if activity['date']['minute'] >= date_star['minute'] and activity['date']['minute'] > date_end[
+                        'minute']:
+                        list_return.append({'activity': activity})
+                    if activity['date']['minute'] <= date_star['minute'] and date_end_anct['date']['minute'] >= \
+                            date_end['minute']:
+                        list_return.append({'activity': activity})
+                    if date_star['minute'] < activity['date']['minute'] <= date_end['minute']:
+                        list_return.append({'activity': activity})
 
-
-
-
-        pass
+        return list_return
 
     def is_there_something_holiday(self, date_star, date_end):
         # Holiday edition
@@ -698,11 +709,6 @@ class ClassDbManager:
 
 
         pass
-
-
-
-
-
 
     @staticmethod
     def time_now():
@@ -758,3 +764,8 @@ class ClassDbManager:
             if group['level'] == level:
                 list_return.append(group['ID'])
         return list_return
+
+
+"""
+                if (activity['date']['hour'] >= date_star['hour'] and  activity['date']['hour'] > date_end['hour']) or (activity['date']['hour'] <= date_star['hour'] and  date_end_anct['hour'] >= date_end['hour']) or (date_star['hour'] < date_end_anct['hour'] <= date_end['hour']) or (activity['date']['hour'] == date_star['hour'] and ((activity['date']['minute'] >= date_star['minute'] and activity['date']['minute'] > date_end['minute']) or (activity['date']['minute'] <= date_star['minute'] and date_end_anct['date']['minute'] >= date_end['minute']) or (date_star['minute'] < activity['date']['minute'] <= date_end['minute']))):
+"""
