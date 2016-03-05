@@ -159,9 +159,11 @@ class ClassDbManager:
                 list_return.append(act)
         return list_return
 
-    def get_holidays_from_proj(self, id_proj):
+    def get_holidays_from_proj(self, id_proj, day=False):
         # Da un id di un progetto restituisco tutte le vacanze degli utenti
         # Cerco l'id del gruppo dal progetto, lo confronto nella tabella user
+        if not day:
+            day = self.time_now()
         list_app_proj = self.open_file('project')
         list_app_user = self.open_file('user')
         dict_return = dict()
@@ -173,12 +175,13 @@ class ClassDbManager:
         for row in list_app_user:
             for group in row['groups']:
                 if group['ID'] == app:
-                    dict_return[row['ID']] = self.get_holiday_from_id(row['holiday'])
+                    dict_return[row['ID']] = self.get_holiday_from_id(row['holiday'], day)
         return dict_return
 
-    def get_holiday_from_id(self, hol):
+    def get_holiday_from_id(self, hol, day=False):
+        if not day:
+            day = self.time_now()
         list_hol = self.open_file('holiday')
-        day = self.time_now()
         list_return = []
         for holiday in list_hol:
             if holiday['ID'] in hol and holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and \
@@ -192,12 +195,12 @@ class ClassDbManager:
         # Da un giorno restituisco una lista con dentro le vacanze di quel giorno
         list_app = self.open_file('holiday')
         list_return = []
-        proj_group = self.get_group_from_proj(id_proj)
+        proj_group = self.from_group_sub_all(id_proj)
         print proj_group
         list_usr = self.open_file('user')
         list_id_hol = []
         for user in list_usr:
-            if proj_group not in user['group']:
+            if proj_group not in user['groups']:
                 list_id_hol.append(user['holiday'])
         for holiday in list_app:
             if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
