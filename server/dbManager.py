@@ -52,7 +52,6 @@ class ClassDbManager:
             return False
         return set(list_group).union(self.from_group_sub_all(list_group[0]))
 
-
     def get_participants_from_group(self, id_group):
         # Da una id di un gruppo restituire id partecipanti
         # Seleziono da utenti tutti quelli che tra i gruppi hanno quello passato
@@ -182,19 +181,27 @@ class ClassDbManager:
         day = self.time_now()
         list_return = []
         for holiday in list_hol:
-            if holiday['ID'] in hol and holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
-                'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end']['day']:
+            if holiday['ID'] in hol and holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and \
+                                    holiday['begin']['month'] <= day[
+                                'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= \
+                    holiday['end']['day']:
                 list_return.append(holiday)
         return list_return
 
-
-    def get_holidays_day(self, day):
+    def get_holidays_day(self, id_proj, day):
         # Da un giorno restituisco una lista con dentro le vacanze di quel giorno
         list_app = self.open_file('holiday')
         list_return = []
+        proj_group = self.get_group_from_proj(id_proj)
+        list_usr = self.open_file('user')
+        list_id_hol = []
+        for user in list_usr:
+            if proj_group not in user['group']:
+                list_id_hol.append(user['holiday'])
         for holiday in list_app:
             if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
-                'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end']['day']:
+                'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end'][
+                'day'] and holiday['ID'] in list_id_hol:
                 list_return.append(holiday)
         return list_return
 
@@ -204,7 +211,6 @@ class ClassDbManager:
             if id_hol in user['holiday']:
                 return user['ID']
         return False
-
 
     def get_group_name_from_group(self, id_group):
         # Da un id di un gruppo restituice il nome
@@ -408,7 +414,6 @@ class ClassDbManager:
                      'participants': activity['participants']})
         return list_return
 
-
     def get_activity_info(self, id_act, id_user):
         # Da un id di un attività un dizionario con le info:
         dict_return = dict()
@@ -590,11 +595,11 @@ class ClassDbManager:
             list_return.append({location['ID']: location['building'] + "-" + location['room']})
         return list_return
 
-    def get_teamleader_groups(self,id_proj, id_usr):
+    def get_teamleader_groups(self, id_proj, id_usr):
         # Ritorno tutti i gruppi di cui è teamleader
         list_user = self.open_file('user')
         list_return = []
-        iist_group  = self.from_group_sub_all(self.get_group_from_proj(id_proj))
+        iist_group = self.from_group_sub_all(self.get_group_from_proj(id_proj))
         for user in list_user:
             if user['ID'] == id_usr:
                 list_return += self.get_teamleader_groups_app(user['groups'])
@@ -744,8 +749,6 @@ class ClassDbManager:
                                             begin['minute'] < activity['begin']['minute'] <= end['minute']))):
                 list_return.append(activity['room'])
         return list_return
-
-
 
     def error(self, app):
         if app:
@@ -928,23 +931,48 @@ class ClassDbManager:
     # Parte di gestione controllo e modifica/eliminazione nel db
     ####################################################################################################################
 
-    def modify_act(self, id_user, n_act):
+    def modify_act(self, old_act, new_act):
         # Ricevo l'attività nuova da modificare e quella vecchia
-        level = self.get_level_user_group(id_user)
-        self.is_teamleader()
+        self.delete_act(old_act['ID'])
+        insert = self.insert_activity(new_act)
+        if insert == "OK":
+            return True
+        self.insert_activity(old_act)
+
+    def modify_hol(self, old_hol, new_hol):
+        # Ricevo la vacanza nuova da modificare e quella vecchia
+        self.delete_act(old_hol['ID'])
+        insert = self.insert_activity(new_hol)
+        if insert == "OK":
+            return True
+        self.insert_activity(old_hol)
         pass
 
-    def modify_hol(self):
-        pass
+    def modify_group(self, new_group):
+        list_group = self.open_file('group')
+        for group in list_group:
+            if group['ID'] == new_group['ID']:
+                list_group.remove(group)
+                list_group.append(new_group)
+                return self.write_file(list_group, 'group')
+        return False
 
-    def modify_group(self):
-        pass
+    def modify_level(self, id_usr, id_group, level):
+        list_user = self.open_file('user')
+        for user in list_user:
+            if user['ID'] == id_usr:
+                user['groups'] = self.modify_level_app(id_group, level, user['groups'])
+                return self.write_file(list_user, 'user')
+        return False
 
-    def modify_level(self):
-        pass
-
-    def modify_proj(self):
-        pass
+    def modify_proj(self, new_proj):
+        list_proj = self.open_file('project')
+        for proj in list_proj:
+            if proj['ID'] == new_proj['ID']:
+                list_proj.remove(proj)
+                list_proj.append(new_proj)
+                return self.write_file(list_proj, 'proj')
+        return False
 
     def delete_act(self, id_act):
         # Ricevo id_act e la elimino
@@ -953,7 +981,6 @@ class ClassDbManager:
             if activity['ID'] == id_act:
                 list_act.remove(activity)
         return self.write_file(list_act, 'activity')
-
 
     def delete_hol(self, id_hol):
         # Ricevo id_hol e la elimino, sia da user che da holiday
@@ -1023,7 +1050,6 @@ class ClassDbManager:
                 break
         return self.write_file(list_group, 'group')
 
-
     @staticmethod
     def time_now():
         # Ricevo la data di oggi
@@ -1087,6 +1113,14 @@ class ClassDbManager:
     def omg_tolla():
         return open(sys.path[1] + '/server/app.html', "r").read()
 
+    @staticmethod
+    def modify_level_app(id_group, level, groups):
+        for group in groups:
+            if group['ID'] == id_group:
+                group['level'] = level
+                break
+        return groups
+
     def open_file(self, filename, method="r"):
         try:
             f = open(self.db_file[filename], method)
@@ -1104,8 +1138,6 @@ class ClassDbManager:
             return False
         else:
             return json.load(f)
-
-
 
 
 """
