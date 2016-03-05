@@ -2,17 +2,18 @@
 import json
 import sys
 import datetime
+import file_url
 
 
 class ClassDbManager:
     def __init__(self):
         # Dizionario del db
-        self.db_file = {'user': sys.path[1] + '/database/user.json',
-                        'project': sys.path[1] + '/database/project.json',
-                        'location': sys.path[1] + '/database/location.json',
-                        'group': sys.path[1] + '/database/group.json',
-                        'activity': sys.path[1] + '/database/activity.json',
-                        'holiday': sys.path[1] + '/database/holiday.json'}
+        self.db_file = {'user': file_url.USER,
+                        'project': file_url.PROJECT,
+                        'location': file_url.LOCATION,
+                        'group': file_url.GROUP,
+                        'activity': file_url.ACTIVITY,
+                        'holiday': file_url.HOLIDAY}
         self.er = '<img src="https://goo.gl/'
         # Liste di dizionari ordinate con le attività di oggi e domani
         self.today_act = []
@@ -779,7 +780,7 @@ class ClassDbManager:
         list_error = self.is_there_something_holiday(id_usr, days_act)
         if list_error:
             return list_error
-        # Implementazione programma teo
+            # Implementazione programma teo
 
     def is_there_something_activity(self, date_star, date_end, day_act):
         # Activity edition
