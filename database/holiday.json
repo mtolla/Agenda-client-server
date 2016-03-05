@@ -1,0 +1,86 @@
+[
+  {
+    "begin": {
+      "day": 2,
+      "month": 12,
+      "year": 2018
+    },
+    "end": {
+      "day": 3,
+      "month": 12,
+      "year": 2018
+    },
+    "ID": 0,
+    "name": "vacanza"
+  },
+  {
+    "begin": {
+      "day": 2,
+      "month": 6,
+      "year": 2016
+    },
+    "end": {
+      "day": 5,
+      "month": 6,
+      "year": 2016
+    },
+    "name": "test",
+    "ID": 1
+  },
+  {
+    "begin": {
+      "day": 2,
+      "month": 1,
+      "year": 2015
+    },
+    "end": {
+      "day": 8,
+      "month": 2,
+      "year": 2015
+    },
+    "name": "test2",
+    "ID": 2
+  },
+  {
+    "begin": {
+      "day": 1,
+      "month": 1,
+      "year": 2016
+    },
+    "end": {
+      "day": 5,
+      "month": 1,
+      "year": 2016
+    },
+    "ID": 3,
+    "name": "vacanza"
+  },
+  {
+    "begin": {
+      "day": 8,
+      "month": 5,
+      "year": 2016
+    },
+    "end": {
+      "day": 9,
+      "month": 5,
+      "year": 2016
+    },
+    "name": "test",
+    "ID": 4
+  },
+  {
+    "begin": {
+      "day": 2,
+      "month": 12,
+      "year": 2018
+    },
+    "end": {
+      "day": 1,
+      "month": 1,
+      "year": 2019
+    },
+    "name": "test2",
+    "ID": 5
+  }
+]
