@@ -127,6 +127,17 @@ def get_holidays_day(day, month, year, token, ip):
 def get_group_name(id_group):
     return api.get_group_name(id_group)
 
+@index.route('/insert/activity/<activity>/<token>/<ip>', methods=['GET'])
+def insert_activity(activity, token, ip):
+    if api.check_token(token, ip):
+        return api.insert_activity(activity)
+    return False, 401
+
+@index.route('/insert/holiday/<holiday>/<token>/<ip>', methods=['GET'])
+def insert_holiday(holiday, token, ip):
+    if api.check_token(token, ip):
+        return api.insert_holiday(holiday, token)
+    return False, 401
 
 ###########################################################################
 # ASSOLUTAMENTE DA TESTARE

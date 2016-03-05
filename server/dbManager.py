@@ -764,7 +764,8 @@ class ClassDbManager:
         list_error = self.is_there_something_activity(act['date'], data_end, day_act)
         if list_error:
             return list_error
-            # Implementazione programma teo
+        # Implementazione programma teo
+        return "OK"
 
     def insert_holiday(self, hol, id_usr):
         # hol ha dentro {"begin": {"day", "month", "year"}, "end": {"day", "month","year"}, "name"}
@@ -780,7 +781,8 @@ class ClassDbManager:
         list_error = self.is_there_something_holiday(id_usr, days_act)
         if list_error:
             return list_error
-            # Implementazione programma teo
+        # Implementazione programma teo
+        return "OK"
 
     def is_there_something_activity(self, date_star, date_end, day_act):
         # Activity edition
@@ -893,6 +895,14 @@ class ClassDbManager:
         for user in list_app_usr:
             set(list_act).union(self.from_user_get_acts(user))
         return list_act
+
+    ####################################################################################################################
+    # Parte di gestione controllo e modifica/eliminazione nel db
+    ####################################################################################################################
+
+
+
+
 
     @staticmethod
     def time_now():

@@ -162,6 +162,21 @@ class Api:
     def user_holiday(self, id_usr):
         return json.dumps(self.db_manager.user_holiday(id_usr))
 
+    def insert_activity(self, activity):
+        return self.db_manager.insert_activity(json.loads(activity))
+
+    def insert_holiday(self, holiday, token):
+        return self.db_manager.insert_holiday(json.loads(holiday, self.from_token_get_iduser(token)))
+
+
+
+
+
+
+
+
+
+
     # Implementazioni per test, se non serviranno più eliminare pure
 
     def delete_token(self, app, login_app):
