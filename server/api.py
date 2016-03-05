@@ -131,9 +131,9 @@ class Api:
     def check_token(self, token, ip):
         return self.login_manager.check_token(token, ip)
 
-    def get_activity_day(self, day, month, year):
+    def get_activity_day(self, id_proj, day, month, year):
         dict_app = {'day': day, 'month': month, 'year': year}
-        return json.dumps(self.db_manager.get_activity_day(dict_app))
+        return json.dumps(self.db_manager.get_activity_day(id_proj, dict_app))
 
     def get_activity_info(self, id_act, token):
         return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
@@ -141,8 +141,8 @@ class Api:
     def get_locations(self):
         return json.dumps(self.db_manager.get_locations())
 
-    def get_teamleader_groups(self, token):
-        return json.dumps(self.db_manager.get_teamleader_groups(self.from_token_get_iduser(token)))
+    def get_teamleader_groups(self,id_proj, token):
+        return json.dumps(self.db_manager.get_teamleader_groups(id_proj,self.from_token_get_iduser(token)))
 
     def get_participants_from_proj(self, id_proj):
         return json.dumps(self.db_manager.get_participants_from_proj(id_proj))
@@ -153,8 +153,8 @@ class Api:
     def get_participants_name_lvl_group(self, id_group):
         return json.dumps(self.db_manager.get_participants_name_lvl_group(id_group))
 
-    def everybody(self):
-        return json.dumps(self.db_manager.everybody())
+    def everybody(self,id_proj):
+        return json.dumps(self.db_manager.everybody(id_proj))
 
     def user_father_group(self, id_group):
         return json.dumps(self.db_manager.user_father_group(id_group))

@@ -40,6 +40,19 @@ class ClassDbManager:
                 return row
         return False
 
+    def get_groups_from_proj(self, id_proj):
+        # Da un id_proj cerco tutti i gruppi e sottogruppi
+        list_proj = self.open_file('project')
+        list_group = []
+        for project in list_proj:
+            if project['ID'] == id_proj:
+                list_group.append(project['group'])
+                break
+        if not list_group:
+            return False
+        return set(list_group).union(self.from_group_sub_all(list_group[0]))
+
+
     def get_participants_from_group(self, id_group):
         # Da una id di un gruppo restituire id partecipanti
         # Seleziono da utenti tutti quelli che tra i gruppi hanno quello passato
@@ -378,14 +391,14 @@ class ClassDbManager:
                 return app_return
         return False
 
-    def get_activity_day(self, day):
-        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end)
+    def get_activity_day(self, id_proj, day):
+        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end) i quel progetto
         list_app = self.open_file('activity')
         list_return = []
         for activity in list_app:
             dict_app = {}
             if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
-                'year'] == day['year']:
+                'year'] == day['year'] and activity['proj'] == id_proj:
                 dict_app['hour'] = activity['date']['hour']
                 dict_app['minute'] = activity['date']['minute']
                 dict_duration = self.calc_duration(dict_app, activity['duration'])
@@ -558,6 +571,17 @@ class ClassDbManager:
                 return group['subgroup']
         return []
 
+    def from_group_sub_all(self, id_group):
+        # Da un gruppo ritorno tutti i sottogruppi
+        list_group = self.open_file('group')
+        list_sub = []
+        for group in list_group:
+            if group['ID'] == id_group:
+                list_sub.append(group['subgroup'])
+        for sub in list_sub:
+            set(list_sub).union(self.from_group_sub_all(sub))
+        return list_sub
+
     def get_locations(self):
         # Ritorno tutti gli edifici
         list_location = self.open_file('location')
@@ -566,17 +590,19 @@ class ClassDbManager:
             list_return.append({location['ID']: location['building'] + "-" + location['room']})
         return list_return
 
-    def get_teamleader_groups(self, id_usr):
+    def get_teamleader_groups(self,id_proj, id_usr):
         # Ritorno tutti i gruppi di cui è teamleader
         list_user = self.open_file('user')
         list_return = []
+        iist_group  = self.from_group_sub_all(self.get_group_from_proj(id_proj))
         for user in list_user:
             if user['ID'] == id_usr:
                 list_return += self.get_teamleader_groups_app(user['groups'])
                 break
         # Avendo assegnano l'id sia alla chiave che al valore posso usarli per ricavare il nome del gruppo
         for group in list_return:
-            group['ID'] = self.get_group_name_from_group(group['ID'])
+            if group['ID'] in iist_group:
+                group['ID'] = self.get_group_name_from_group(group['ID'])
         return list_return
 
     def get_participants_from_proj(self, id_proj):
@@ -629,12 +655,15 @@ class ClassDbManager:
                     break
         return list_return
 
-    def everybody(self):
-        # Restituisco tutti gli utenti
+    def everybody(self, id_proj):
+        # Restituisco tutti gli utenti del progetto
         list_usr = self.open_file('user')
+        list_groups = self.from_group_sub_all(id_proj)
         list_return = []
         for user in list_usr:
-            list_return.append({user['ID']: user['username']})
+            for group in user['group']:
+                if group in list_groups:
+                    list_return.append({user['ID']: user['username']})
         return list_return
 
     def user_father_group(self, id_group):

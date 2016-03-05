@@ -62,7 +62,6 @@ def do_logut(token, ip):
         return api.do_logout(token)
     return False, 401
 
-
 ###########################################################################
 # DA ELIMINARE SERVE PER TEST
 @index.route('/login/<user>/<passw>/<ip>', methods=['GET'])
@@ -150,10 +149,10 @@ def get_user_project(token, ip):
     return False, 401
 
 
-@index.route('/activities/<int:day>/<int:month>/<int:year>/<token>/<ip>', methods=['GET'])
-def get_activity_day(day, month, year, token, ip):
+@index.route('/project/<int:id_proj>/activities/<int:day>/<int:month>/<int:year>/<token>/<ip>', methods=['GET'])
+def get_activity_day(id_proj, day, month, year, token, ip):
     if api.check_token(token, ip):
-        return api.get_activity_day(day, month, year)
+        return api.get_activity_day(id_proj, day, month, year)
     return False, 401
 
 
@@ -171,10 +170,10 @@ def get_locations(token, ip):
     return False, 401
 
 
-@index.route('/groups/teamleader/<token>/<ip>', methods=['GET'])
-def get_teamleader_groups(token, ip):
+@index.route('/project/<int:id_proj>/groups/teamleader/<token>/<ip>', methods=['GET'])
+def get_teamleader_groups(id_proj, token, ip):
     if api.check_token(token, ip):
-        return api.get_teamleader_groups(token)
+        return api.get_teamleader_groups(id_proj, token)
     return False, 401
 
 
@@ -206,10 +205,10 @@ def get_not_participants_from_proj(id_proj, token, ip):
     return False, 401
 
 
-@index.route('/participants/<token>/<ip>', methods=['GET'])
-def everybody(token, ip):
+@index.route('/project/<int:id_proj>/participants/<token>/<ip>', methods=['GET'])
+def everybody(id_proj, token, ip):
     if api.check_token(token, ip):
-        return api.everybody()
+        return api.everybody(id_proj)
     return False, 401
 
 
