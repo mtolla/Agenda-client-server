@@ -1,10 +1,11 @@
 from client.gui.agenda_view import *
+from activity_manager import ActivityManager
 import json
 
 
 class AgendaManager:
     def __init__(self):
-        pass
+        self.activity_manager = ActivityManager()
 
     def show(self):
         self.agenda.show()
@@ -13,10 +14,7 @@ class AgendaManager:
         self.server_manager = server_manager
         self.info_agenda = server_manager.info_agenda()
 
-        self.agenda = Agenda(self.info_agenda)
-
-        self.agenda.connect(self.agenda.calendar, QtCore.SIGNAL("clicked(QDate)"), self.change_day)
-        self.agenda.connect(self.agenda.logout, QtCore.SIGNAL('triggered()'), self.logout)
+        self.agenda = Agenda(self.info_agenda, self)
 
     def change_day(self, data):
         self.agenda.lbl_day.setText(str(data.day()))
@@ -42,3 +40,11 @@ class AgendaManager:
             local_save.close()
 
             self.agenda.setHidden(True)
+
+    def exec_activity_view(self, _id=False, informations=False):
+        if _id:
+
+            print self.server_manager.activity_id(_id)
+            self.activity_manager.exec_(informations)
+        else:
+            self.activity_manager.exec_()

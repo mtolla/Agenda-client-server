@@ -2,10 +2,12 @@ from page import *
 
 
 class Agenda(Page):
-    def __init__(self, info_agenda):
+    def __init__(self, info_agenda, function):
         Page.__init__(self)
 
         self.info_agenda = info_agenda
+
+        self.function = function
 
         self.bold = QtGui.QFont()
         self.bold.setBold(True)
@@ -36,6 +38,7 @@ class Agenda(Page):
         self.calendar.setSelectedDate(QtCore.QDate.currentDate())
         self.calendar.setMinimumDate(QtCore.QDate(2016, 1, 1))
         self.calendar.setVerticalHeaderFormat(QtGui.QCalendarWidget.NoVerticalHeader)
+        self.connect(self.calendar, QtCore.SIGNAL("clicked(QDate)"), self.function.change_day)
 
         # Creazione informazioni progetto
         self.lbl_date_begin = QtGui.QLabel("Data inizio:", self.gdr_agenda)
@@ -111,6 +114,7 @@ class Agenda(Page):
         # ------------------------------------- Menu bar -------------------------------------
 
         self.logout = QtGui.QAction(QtGui.QIcon(LOGOUT), "Logout", self)
+        self.connect(self.logout, QtCore.SIGNAL('triggered()'), self.function.logout)
         self.logout.setShortcut("Ctrl+L")
         self.logout.setStatusTip("Logout")
 
@@ -330,6 +334,8 @@ class Agenda(Page):
         # Creazione icona info
         icon = QtGui.QLabel(self)
         icon.setPixmap(QtGui.QIcon(INFO).pixmap(QtCore.QSize(24, 24)))
+        icon.mouseReleaseEvent = lambda(event): self.icon_clicked(str(activity['ID']))
+        icon.setStatusTip("Ottieni piu informazioni o modifica")
 
         # Aggiunta degli oggeti nel lyt_agenda
         lyt_activity.addWidget(lbl_color, 0, 0, 3, 1)
@@ -368,3 +374,6 @@ class Agenda(Page):
             self.info_agenda['activities'],
             key=lambda k: (k['begin']['hour'], k['begin']['minute'], k['name'])
         )
+
+    def icon_clicked(self, _id):
+        self.function.exec_activity_view(_id)

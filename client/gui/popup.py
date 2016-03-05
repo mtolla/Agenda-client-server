@@ -16,9 +16,7 @@ class Popup(QtGui.QDialog):
             '''
         )
 
-        # Creazione della pagina e del suo layout: hrz_page(lyt_page)
-        self.hrz_page = QtGui.QWidget(self)
-
+        # Creazione del layout della pagina: lyt_page
         self.lyt_page = QtGui.QHBoxLayout()
 
         # Definizione dell'oggetto ico
