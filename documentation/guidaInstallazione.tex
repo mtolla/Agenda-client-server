@@ -147,4 +147,59 @@ yum install python-flask
 pip install flask
         \end{verbatim}
         \`E possibile usare pip anche tramite Windows o Mac OS X.
+\section{Scaricamento ed uso del software}
+Clonare tramite git il repository.
+\begin{verbatim}
+git@github.com:UnimibSoftEngCourse1516/progetto-gruppo4.git
+\end{verbatim}
+Eseguire il file che avvier\`a il server:
+\begin{verbatim}
+python2 progetto-gruppo4/startServer.py &
+\end{verbatim}
+Ora \`e possibile
+    \begin{itemize}
+        \item Avviare l'applicazione per la creazione dei nuovi utenti:
+        \begin{verbatim}
+python2 progetto-gruppo4/administration.py
+        \end{verbatim}
+        \item Avviare il Client
+        \begin{verbatim}
+python2 progetto-gruppo4/startClient.py
+        \end{verbatim}
+    \end{itemize}
+subsection{Analisi con sonarqube}
+Per eseguire l'analisi del software con Sonarqube \`e necessario:
+scaricare ed installare sonar-runner
+\begin{verbatim}
+http://www.sonarqube.org/downloads/
+\end{verbatim}
+Accedere alla directory di sonarqube, accedere alla
+directory "bin" ed accedere alla directory corrispondente al sistema operativo usato e lanciare
+l'eseguibile contenuto. Cos\`i facendo si avvier\`a il server. Creare un file nella directory
+del progetto col nome "sonar-project.properties" ed inserirvi le seguenti righe.
+
+\begin{verbatim}
+
+# Required metadata
+sonar.projectKey=org.sonarqube:python-simple-sonar-scanner
+sonar.projectName=NOME PROGETTO
+sonar.projectVersion=1.0
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=CARTELLA PROGETTO
+
+# Language
+sonar.language=py
+
+# Encoding of the source files
+sonar.sourceEncoding=UTF-8
+
+\end{verbatim}
+Accedere con un web-browser all'indirizzo 127.0.0.1:9000.
+Se necessario, effettuare il login con le credenziali:\\
+username: admin\\
+password: admin\\
+Aprire la sezione "System/Update Center" e ricercare il plugin Python installato.
+
+
 \end{document}
