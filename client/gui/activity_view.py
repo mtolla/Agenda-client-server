@@ -11,6 +11,9 @@ class Activity(QtGui.QDialog):
 
         self.data = data
 
+        self.index_group = 0
+        self.index_location = 0
+
         # self.height_extend = 10 + 24 + 10 + 180 + 10
         # self.width_extend = 50
         # self.height = 26 + 10 + 190 + 10 + 7 + 50 + 10 + 25 + 10
@@ -111,6 +114,7 @@ class Activity(QtGui.QDialog):
         self.cmb_location = QtGui.QComboBox(self.gdr_data)
         for location in self.data['locations']:
             self.cmb_location.addItem(location.values()[0])
+        self.connect(self.cmb_location, QtCore.SIGNAL("currentIndexChanged(int)"), self.change_location)
 
         # Aggiunta degli oggeti nel lyt_data
         self.lyt_data.addWidget(self.lbl_creator_lbl, 0, 0)
@@ -288,6 +292,9 @@ class Activity(QtGui.QDialog):
         for _id, name in participants.items():
             self.chk_participants[_id] = QtGui.QCheckBox(name, self.vrt_participants)
             self.chk_participants[_id].setObjectName(str(_id))
+            if self.data['creator'].has_key(_id):
+                self.chk_participants[_id].setEnabled(False)
+                self.chk_participants[_id].setChecked(True)
             self.lyt_participants.addWidget(self.chk_participants[_id])
 
         # Settiamo il layout del vrtComandi
@@ -297,6 +304,8 @@ class Activity(QtGui.QDialog):
         self.scrl_participants.setWidget(self.vrt_participants)
 
     def change_group(self, index):
+        self.index_group = index
+
         self.data['informations']['participants'] = self.data['functions'].get_remain_participants(
             self.data['groups'][index].keys()[0],
             {}
@@ -306,21 +315,94 @@ class Activity(QtGui.QDialog):
 
         self.add_participants(self.data['informations']['participants'])
 
+    def change_location(self, index):
+        self.index_location = index
+
+    @staticmethod
+    def get_date(dtm):
+        return {
+            'year': QtCore.QDate(dtm.date()).year(),
+            'month': QtCore.QDate(dtm.date()).month(),
+            'day': QtCore.QDate(dtm.date()).day(),
+            'hour': QtCore.QTime(dtm.time()).hour(),
+            'minute': QtCore.QTime(dtm.time()).minute()
+        }
+
+    @staticmethod
+    def is_same_day(start, end):
+        return start['year'] == end['year'] and \
+               start['month'] == end['month'] and \
+               start['day'] == end['day']
+
+    @staticmethod
+    def is_before(start, end):
+        return start['hour'] <= end['hour'] and \
+               start['minute'] <= end['minute']
+
+    @staticmethod
+    def get_duration(start, end):
+        return (end['hour'] - start['hour']) * 60 + (end['minute'] - start['minute'])
+
+    def set_time(self, start, end):
+        if self.is_same_day(start, end):
+            if self.is_before(start, end):
+                duration = self.get_duration(start, end)
+                if duration >= 30:
+                    self.activity['date'] = start
+                    self.activity['duration'] = self.get_duration(start, end)
+                    return True
+                else:
+                    Popup("Durata di almeno 30 minuti!", ALERT).exec_()
+            else:
+                Popup("Attenzione agli orari!", ALERT).exec_()
+        else:
+            Popup("Deve iniziare e finire nello stesso giorno!", ALERT).exec_()
+        return False
+
+    def set_name(self):
+        name = str(self.txt_name.text())
+        if name != "":
+            self.activity['name'] = name
+            return True
+        else:
+            Popup("Inserire nome!", ALERT).exec_()
+            return False
+
+    def set_description(self):
+        description = str(self.txt_description.toPlainText()).strip()
+        if description != "":
+            self.activity['description'] = description
+            return True
+        else:
+            Popup("Inserire descrizione!", ALERT).exec_()
+            return False
+
+    def get_checked(self):
+        participants = []
+        for _id, chk in self.chk_participants.items():
+            if chk.isChecked():
+                participants.append(_id)
+        return participants
+
+    def set_goup_project(self):
+        if self.data['type'] == "group":
+            self.activity['group'] = self.data['groups'][self.index_group].keys()[0]
+
+        participants = self.get_checked()
+        if len(participants) < 2:
+            Popup("Almeno 2 partecipanti!", ALERT).exec_()
+            return False
+        self.activity['participants'] = participants
+
+        return True
+
     def delete(self):
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def insert(self):
+        '''
         self.data['functions'].insert_activity({
-            "group": 7,
-            "name": "caccamolle",
-            "creator": 2,
             "project": 7,
-            "duration": 60,
-            "participants": [
-                2,
-                3
-            ],
-            "location": 1,
             "date": {
                 "year": 2016,
                 "minute": 50,
@@ -328,7 +410,43 @@ class Activity(QtGui.QDialog):
                 "hour": 12,
                 "month": 3
             },
+            "participants": [
+                2,
+                3
+            ],
+            "name": "nome",
+            "duration": 60,
+            "description": "descriz",
             "type": "group",
             "ID": 0,
-            "description": "descriz"
+            "location": 1,
+            "group": 7,
+            "creator": 2,
         })
+        '''
+        self.activity = dict()
+
+        if not self.set_name():
+            return False
+
+        if not self.set_time(self.get_date(self.dtm_start), self.get_date(self.dtm_end)):
+            return False
+
+        if not self.set_description():
+            return False
+
+        self.activity['location'] = self.data['locations'][self.index_location].keys()[0]
+
+        self.activity['group'] = False
+
+        self.activity['creator'] = self.data['creator'].keys()[0]
+
+        self.activity['type'] = self.data['type']
+
+        self.activity['project'] = self.data['informations']['activity']['project']
+
+        if self.data['type'] != "single":
+            if not self.set_goup_project():
+                return False
+
+        self.data['functions'].insert_activity(self.activity)
