@@ -3,6 +3,7 @@ import json
 import sys
 import datetime
 import file_url
+from utils import populate
 
 
 class ClassDbManager:
@@ -510,12 +511,7 @@ class ClassDbManager:
             type_act = self.get_type_activity_from_activity(id_act)  # 'group' o 'project'
             # Controllo che il gruppo dell'attività sia tra i gruppi di chi sta visualizzando dove è teamleader
             list_team_group = self.get_group_where_lvl(id_user, 'teamleader')
-            if level == 'teamleader' and type_act == 'group' and id_group in list_team_group:
-                return True
-            # Project manager
-            if not level and type_act == 'project':
-                return True
-            return False
+            return self.can_modify_app_app(id_group, level, list_team_group, type_act)
         return self.can_modify_app(id_act, id_user)
 
     def can_modify_app(self, id_act, id_user):
@@ -531,6 +527,16 @@ class ClassDbManager:
         if self.mega_merge(id_act, id_user):
             return True
         return False
+
+    @staticmethod
+    def can_modify_app_app(id_group, level, list_team_group, type_act):
+        if level == 'teamleader' and type_act == 'group' and id_group in list_team_group:
+            return True
+            # Project manager
+        if not level and type_act == 'project':
+            return True
+        return False
+
 
     def mega_merge(self, id_act, id_user):
         id_proj = self.get_id_proj_from_activity(id_act)
@@ -813,7 +819,6 @@ class ClassDbManager:
         # act ha dentro {"name": "","project":, "type": "", "creator":,"location":,"group":,"description": "",
         # "participants": [],"date": {"day", "month", "year", "hour", "minute"}, "duration": 2}
         #  Ricevo una attività, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
-
         # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
         day_act = self.get_activity_day_all(act['date'])
         day_hol = self.get_holidays_day_all(act['date'])
@@ -845,7 +850,10 @@ class ClassDbManager:
         if list_error:
             return list_error
         # Implementazione programma teo
-        return "OK"
+        list_act = self.open_file('activity')
+        act['ID'] = populate.next_index(list_act)
+        list_act.append(act)
+        return self.write_file(act, 'activity')
 
     def insert_holiday(self, hol, id_usr):
         # hol ha dentro {"begin": {"day", "month", "year"}, "end": {"day", "month","year"}, "name"}
@@ -862,7 +870,7 @@ class ClassDbManager:
         if list_error:
             return list_error
         # Implementazione programma teo
-        return "OK"
+        return populate.setholidays(id_usr, hol)
 
     def is_there_something_activity(self, date_star, date_end, day_act):
         # Activity edition
