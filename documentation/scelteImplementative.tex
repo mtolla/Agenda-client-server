@@ -12,7 +12,7 @@
 
 \begin{document}
 \maketitle
-
+\tableofcontents
 \section{Scelte Implementative}
 \subsection{Introduzione}	% Produces subsection heading.  Lower-level subsections
 			% are begun with similar \subsubsection and
@@ -275,11 +275,90 @@ L'interfaccia \`e resa inoltre indipendente dal sottosistema di controllo,
 permettendo cos\`i un mantenimento pi\`u veloce e una migliore adattabilit\`a
 alle possibili esigenze future.
 
-\subsection{Design Pattern}
+\subsection{Design Patterns}
 \subsubsection{Observer}
-Nella progettazione dell'interfaccia grafica sono stati sfruttati
-componenti ad eventi: il sottosistema inizializza la GUI e si registra
-come ascoltatore di alcuni eventi della stessa attivando quindi 
-determinati metodi solo all'utilizzo di tali componenti.\\
-\includegraphics[scale=0.40]{0.png}
+    Nella progettazione dell'interfaccia grafica sono stati sfruttati
+    componenti ad eventi: il sottosistema inizializza la GUI e si registra
+    come ascoltatore di alcuni eventi della stessa attivando quindi 
+    determinati metodi solo all'utilizzo di tali componenti.\\
+    \includegraphics[scale=0.40]{0.png}
+Il vantaggio di questo Design Pattern risiede nell'evitare eventi
+periodici di controllo della interfaccia grafica mediante polling,
+risparmiando quindi grandi quantit\`a di risorse di calcolo e mantenendo
+pi\`u leggero e reattivo il software sviluppato.
+
+A livello di accoppiamento inoltre il gestore sottostante conosce
+la parte di GUI a cui \`e collegato ma non avviene il contrario, 
+permettendo cos\`i la sostituzione veloce di parti di interfaccia
+in base alle esigenze. Inoltre se necessario pi\`u classi possono
+ascoltare eventi dalla stessa sezione di GUI senza dover modificare
+la stessa che diffonde i suoi eventi a tutti gli ascoltatori.
+\subsubsection{Facade}
+Il Design Pattern denominato Facade \`e stato utile per dividere
+in modo efficace i singoli sottosistemi dei package individuati
+permettendo una facile comunicazione tra di loro senza aumentare
+il numero di accoppiamenti tra classi diverse.\\
+    \includegraphics[scale=0.40]{1.png}
+Nel progetto in questione il pattern \`e stato sfruttato in modo
+semplificato in tutti i package ad esclusione della GUI dove
+non \`e previsto. In particolare le chiamate ai package destinati
+al networking o allo storage dei dati vengono interamente filtrate
+e smistate da classi dedicate che sono appunto le Facade individuate.
+
+Tra i vantaggi di questo pattern troviamo sicuramente una riduzione
+dell'accoppiamento tra classi, un maggiore riutilizzo di un sottosistema
+o package del sistema che pu\`o quindi essere interfacciato facilmente
+con altri sistemi senza reimplementare intere classi ed inoltre non
+esclude la possibilit\`a all'utente di accedere direttamente al
+sistema "nascosto" che rimane a tutti gli effetti visibile ed
+usabile nel modo che si ritiene opportuno.
+\subsection{Architectural Patterns}
+\subsubsection{Remote Facade}
+Il pattern in questione rientra nella categoria architetturale e pu\`o
+essere visto come una estensione del precedente Facade applicato per\`o
+in ambito di networking. In questo caso la classe che funge da Remote
+Facade permette di aggregare pi\`u operazioni che necessitano di connessione
+di rete per essere eseguite riducendo cos\`i l'overhead, il traffico,
+la congestione e la latenza della richiesta stessa.\\
+    \includegraphics[scale=0.40]{2.png}
+Il funzionamento del Remote Facade comprende il ricevere dati da diverse
+classi o da diversi attributi/metodi di una classe, raggrupparli in un unico
+metodo che creer\`a la richiesta web unificata senza inviarli singolarmente.
+Nel progetto \`e stato utilizzato in diverse casistiche tra cui il sistema
+di login oppure le operazioni che comprendono creazione di contenuti.
+Il pattern inoltre viene comunemente utilizzato, seppur in modo diverso,
+nella progettazione di API RESTful che permettono di far risaltare al meglio
+questo tipo di pattern.
+
+\subsubsection{Gateway}
+Durante la creazione di classi Facade ci si pu\`o confondere con un pattern
+architetturale denominato Gateway che sostazialmente fornisce un sistema
+simile ma risolve un problema affine. Infatti il pattern Gateway permette
+di semplificare l'accesso ad una determinata interfaccia impacchettando le operazioni
+necessarie ad effettuare quella di interesse. \\\\\\
+Un altro vantaggio da non sottovalutare risiede nella semplicit\`a di testing
+di una classe Gateway rispetto ad utilizzare una interfaccia complessa o pi\`u
+classi correlate, rendendo quindi il controllo del software pi\`u veloce ed efficace.
+Il sistema sfrutta questo pattern nell'interfacciamento con il sistema di Database
+sottostante, essendo sviluppato in modo da semplificare le query ed aggregarle in
+semplici operazioni richiamabili dalle classi che ne necessitano l'accesso.
+
+\subsubsection{Separated Interface}
+Durante la progettazione del sistema software ci si \`e concentrato sullo sviluppare
+una architettura che potesse supportare al meglio qualsiasi tecnologia utilizzata
+riguardo i sistemi di Login o di storage di dati in Database.
+Per separare l'implementazione dalla interfaccia per utilizzarla viene in aiuto
+il pattern Separated Interface che prevede la definizione di una interfaccia
+comune e separata in un altro package (non nel nostro caso, per la natura di Python)
+implementata poi nel modo pi\`u conveniente.\\
+    \includegraphics[scale=0.45]{4.png}
+
+In particolare il sistema di Login dell'applicativo pu\`o essere personalizzato a
+piacimento in base alle richieste di sicurezza o per semplificare l'accesso.
+Lo stesso vale per i sistemi di Database che possono variare molto in base al tipo
+di dati da salvare, alla mole di dati o alle preferenze dell'utente, generalizzando
+una interfaccia d'accesso alle operazioni possiamo quindi suddividere il sistema
+di storage dal suo utilizzo che rimane invariato dall'esterno.
+
+
 \end{document}
