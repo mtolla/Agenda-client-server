@@ -147,34 +147,54 @@ class Api:
         return "ERROR", 401
 
     def insert_holiday(self, holiday, token):
-        return self.db_helper.insert_holiday(holiday, self.from_token_get_iduser(token))
+        if self.db_helper.insert_holiday(holiday, self.from_token_get_iduser(token)):
+            return "OK", 200
+        return "ERROR", 401
 
     def modify_activity(self, old, new):
-        return self.db_helper.modify_act(old, new)
+        if self.db_helper.modify_act(old, new):
+            return "OK", 200
+        return "ERROR", 401
     
     def modify_holiday(self, old, new):
-        return self.db_helper.modify_hol(old, new)
+        if self.db_helper.modify_hol(old, new):
+            return "OK", 200
+        return "ERROR", 401
     
     def modify_group(self, new):
-        return self.db_helper.modify_group(new)
+        if self.db_helper.modify_group(new):
+            return "OK", 200
+        return "ERROR", 401
     
     def modify_level(self, id_usr, id_group, level):
-        return self.db_helper.modify_level(id_usr, id_group, level)
+        if self.db_helper.modify_level(id_usr, id_group, level):
+            return "OK", 200
+        return "ERROR", 401
     
     def modify_project(self, new):
-        return self.db_helper.modify_proj(new)
+        if self.db_helper.modify_proj(new):
+            return "OK", 200
+        return "ERROR", 401
     
     def delete_activity(self, id):
-        return self.db_helper.delete_act(id)
+        if self.db_helper.delete_act(id):
+            return "OK", 200
+        return "ERROR", 401
 
     def delete_holiday(self, id):
-        return self.db_helper.delete_hol(id)
+        if self.db_helper.delete_hol(id):
+            return "OK", 200
+        return "ERROR", 401
 
     def delete_group(self, id):
-        return self.db_helper.delete_group(id)
+        if self.db_helper.delete_group(id):
+            return "OK", 200
+        return "ERROR", 401
 
     def delete_project(self, id):
-        return self.db_helper.delete_proj(id)
+        if self.db_helper.delete_proj(id):
+            return "OK", 200
+        return "ERROR", 401
 
     def create_group(self, group, token, list_id_usr):
         id_usr = self.from_token_get_iduser(token)
