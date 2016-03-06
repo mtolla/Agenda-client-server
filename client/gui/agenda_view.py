@@ -394,7 +394,8 @@ class Agenda(Page):
     def view_activity(self, _id):
         self.function.exec_activity_view(_id)
 
-    def view_holiday(self, _id):
+    @staticmethod
+    def view_holiday(_id):
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def holiday_to_activity(self):

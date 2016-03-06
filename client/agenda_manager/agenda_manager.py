@@ -111,7 +111,8 @@ class AgendaManager:
 
         self.activity_manager.exec_(data)
 
-    def create_holiday(self):
+    @staticmethod
+    def create_holiday():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def create_single_activity(self):
@@ -120,19 +121,24 @@ class AgendaManager:
     def create_group_activity(self):
         self.exec_activity_view(_type="group")
 
-    def create_group(self):
+    @staticmethod
+    def create_group():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
-    def modify_group(self):
+    @staticmethod
+    def modify_group():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
-    def create_project(self):
+    @staticmethod
+    def create_project():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
-    def modify_role(self):
+    @staticmethod
+    def modify_role():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
-    def modify_project(self):
+    @staticmethod
+    def modify_project():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def create_activity_project(self):

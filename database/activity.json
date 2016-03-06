@@ -1,33 +1,26 @@
 [
   {
-    "group": 7,
-    "name": "AgAct0",
-    "creator": 2,
-    "project": 7,
-    "duration": 60,
-    "participants": [
-      1,
-      2,
-      3
-    ],
-    "location": 14,
-    "date": {
-      "year": 2016,
-      "minute": 50,
-      "day": 4,
-      "hour": 12,
-      "month": 3
-    },
-    "type": "group",
     "ID": 14,
-    "description": "scrum"
+    "name": "AgAct0",
+    "project": 7,
+    "creator": 2,
+    "location": 14,
+    "type": "group",
+    "group": 7,
+    "description": "scrum",
+    "participants": [1,2,3],
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 12, "minute": 50},
+    "duration": 60
   },
   {
-    "group": 7,
+    "ID": 1,
     "name": "AgAct1",
-    "creator": 2,
     "project": 7,
-    "duration": 50,
+    "creator": 2,
+    "type": "group",
+    "location": 14,
+    "group": 7,
+    "description": "scrum",
     "participants": [
       1,
       2,
@@ -35,167 +28,100 @@
       4,
       5
     ],
-    "location": 14,
-    "date": {
-      "year": 2016,
-      "minute": 0,
-      "day": 4,
-      "hour": 9,
-      "month": 3
-    },
-    "type": "group",
-    "ID": 1,
-    "description": "scrum"
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 9, "minute": 0},
+    "duration": 50
   },
   {
-    "group": 1,
+    "ID": 2,
     "name": "AgAct2",
-    "creator": 1,
     "project": 7,
-    "duration": 120,
+    "type": "group",
+    "creator": 1,
+    "location": 1,
+    "group": 1,
+    "description": "scrum",
     "participants": [
       1,
       5
     ],
-    "location": 1,
-    "date": {
-      "year": 2016,
-      "minute": 33,
-      "day": 4,
-      "hour": 14,
-      "month": 3
-    },
-    "type": "group",
-    "ID": 2,
-    "description": "scrum"
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 14, "minute": 33},
+    "duration": 120
   },
   {
-    "group": 1,
+    "ID": 3,
     "name": "AgAct3",
-    "creator": 1,
     "project": 7,
-    "duration": 150,
+    "type": "group",
+    "creator": 1,
+    "location": 2,
+    "group": 1,
+    "description": "scrum",
     "participants": [
       1,
       4
     ],
-    "location": 2,
-    "date": {
-      "year": 2016,
-      "minute": 0,
-      "day": 4,
-      "hour": 11,
-      "month": 3
-    },
-    "type": "group",
-    "ID": 3,
-    "description": "scrum"
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 11, "minute": 0},
+    "duration": 150
   },
   {
-    "group": 2,
+    "ID": 4,
     "name": "AgAct4",
-    "creator": 2,
     "project": 7,
-    "duration": 90,
+    "type": "group",
+    "creator": 2,
+    "location": 3,
+    "group": 2,
+    "description": "scrum",
     "participants": [
       2,
       1
     ],
-    "location": 3,
-    "date": {
-      "year": 2016,
-      "minute": 49,
-      "day": 4,
-      "hour": 16,
-      "month": 3
-    },
-    "type": "group",
-    "ID": 4,
-    "description": "scrum"
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 16, "minute": 49},
+    "duration": 90
   },
   {
-    "group": false,
-    "name": "Act5",
-    "creator": 3,
-    "project": 7,
-    "duration": 120,
-    "participants": [
-      3
-    ],
-    "location": 3,
-    "date": {
-      "year": 2016,
-      "minute": 22,
-      "day": 4,
-      "hour": 14,
-      "month": 3
-    },
-    "type": "single",
     "ID": 5,
-    "description": "scrum"
-  },
-  {
-    "group": false,
-    "name": "Act6",
-    "creator": 3,
+    "name": "Act5",
     "project": 7,
-    "duration": 2,
+    "type": "single",
+    "creator": 3,
+    "location": 3,
+    "group": false,
+    "description": "scrum",
     "participants": [
       3
     ],
-    "location": 2,
-    "date": {
-      "year": 2016,
-      "minute": 35,
-      "day": 4,
-      "hour": 5,
-      "month": 3
-    },
-    "type": "single",
-    "ID": 6,
-    "description": "scrum"
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 14, "minute": 22},
+    "duration": 120
   },
   {
-    "group": false,
-    "name": "Act7",
-    "creator": 5,
+    "ID": 6,
+    "name": "Act6",
     "project": 7,
-    "duration": 12,
+    "type": "single",
+    "creator": 3,
+    "location": 2,
+    "group": false,
+    "description": "scrum",
+    "participants": [
+      3
+    ],
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 5, "minute": 35},
+    "duration": 2
+  },
+  {
+    "ID": 7,
+    "name": "Act7",
+    "project": 7,
+    "type": "single",
+    "creator": 5,
+    "location": 1,
+    "group": false,
+    "description": "scrum",
     "participants": [
       5
     ],
-    "location": 1,
-    "date": {
-      "year": 2016,
-      "minute": 50,
-      "day": 4,
-      "hour": 16,
-      "month": 3
-    },
-    "type": "single",
-    "ID": 7,
-    "description": "scrum"
-  },
-  {
-    "group": 7,
-    "description": "descriz",
-    "creator": 2,
-    "project": 7,
-    "date": {
-      "year": 2016,
-      "minute": 50,
-      "day": 6,
-      "hour": 14,
-      "month": 3
-    },
-    "participants": [
-      2,
-      3
-    ],
-    "location": 1,
-    "duration": 60,
-    "type": "group",
-    "ID": 8,
-    "name": "caccamolle"
+    "date": {"day" : 4, "month": 3, "year": 2016, "hour": 16, "minute": 50},
+    "duration": 12
   }
 ]

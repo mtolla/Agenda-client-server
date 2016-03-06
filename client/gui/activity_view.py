@@ -13,12 +13,6 @@ class Activity(QtGui.QDialog):
 
         self.index_group = 0
         self.index_location = 0
-
-        # self.height_extend = 10 + 24 + 10 + 180 + 10
-        # self.width_extend = 50
-        # self.height = 26 + 10 + 190 + 10 + 7 + 50 + 10 + 25 + 10
-        # self.width = 363
-        # self.setFixedSize(QtCore.QSize(self.width, self.height))
         self.setStyleSheet(
             '''
                 * {
@@ -384,7 +378,7 @@ class Activity(QtGui.QDialog):
                 participants.append(int(_id))
         return participants
 
-    def set_goup_project(self):
+    def set_group_project(self):
         if self.data['type'] == "group":
             self.activity['group'] = int(self.data['groups'][self.index_group].keys()[0])
 
@@ -396,7 +390,8 @@ class Activity(QtGui.QDialog):
 
         return True
 
-    def delete(self):
+    @staticmethod
+    def delete():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def insert(self):
@@ -422,7 +417,7 @@ class Activity(QtGui.QDialog):
         self.activity['project'] = self.data['informations']['activity']['project']
 
         if self.data['type'] != "single":
-            if not self.set_goup_project():
+            if not self.set_group_project():
                 return False
 
             self.data['functions'].insert_activity(self.activity)
