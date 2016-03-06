@@ -51,6 +51,8 @@ class AgendaManager:
     def exec_activity_view(self, _id=False, _type="single"):
         data = dict()
 
+        data['locations'] = self.server_manager.locations()
+
         if _id:
             data['modality'] = "view"
             data['informations'] = self.server_manager.activity_id(_id)
@@ -58,14 +60,18 @@ class AgendaManager:
             data['informations']['participants'] = self.sort_participants(data['informations']['participants'])
             data['creator'] = {
                 str(data['informations']['activity']['creator']):
-                data['informations']['participants'][str(data['informations']['activity']['creator'])]
+                    data['informations']['participants'][str(data['informations']['activity']['creator'])]
             }
+            data['groups'] = [{
+                str(data['informations']['activity']['group']):
+                    data['informations']['group']
+            }]
         else:
             group = False
             groups = False
             participants = {}
             if self.info_agenda['level'] == "teamleader" and _type == "group":
-                groups = self.server_manager.groups_teamleader(self.info_agenda['project']['ID'])
+                groups = self.groups_teamleader(self.info_agenda['project']['ID'])
 
                 group = groups[0].values()[0]
 
@@ -77,15 +83,13 @@ class AgendaManager:
                 group = self.info_agenda['project']['group']
                 participants = self.get_participants(self.info_agenda['project']['group'])
 
-            location = self.server_manager.locations()
-
             data['creator'] = self.info_agenda['user']
             data['modality'] = "create"
             data['type'] = _type
             data['informations'] = {
                 'group': group,
                 'participants': participants,
-                'location': location[0].values()[0],
+                'location': data['locations'][0].values()[0],
                 'activity': {
                     'name': "",
                     'project': self.info_agenda['project']['ID'],
@@ -157,3 +161,6 @@ class AgendaManager:
         participants = self.server_manager.group_id_participants(_id)
         participants = self.sort_participants(self.reformat_participants(participants))
         return participants
+
+    def groups_teamleader(self, prj):
+        return self.server_manager.groups_teamleader(prj)

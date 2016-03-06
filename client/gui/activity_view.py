@@ -1,5 +1,6 @@
 from PyQt4 import QtGui, QtCore
 from client.local.file_location import *
+from client.gui.popup import Popup
 
 
 class Activity(QtGui.QDialog):
@@ -108,7 +109,8 @@ class Activity(QtGui.QDialog):
         self.lbl_location = QtGui.QLabel("Luogo :", self.gdr_data)
 
         self.cmb_location = QtGui.QComboBox(self.gdr_data)
-        self.cmb_location.addItem(self.data['informations']['location'])
+        for location in self.data['locations']:
+            self.cmb_location.addItem(location.values()[0])
 
         # Aggiunta degli oggeti nel lyt_data
         self.lyt_data.addWidget(self.lbl_creator_lbl, 0, 0)
@@ -152,7 +154,9 @@ class Activity(QtGui.QDialog):
             self.lbl_group = QtGui.QLabel("Gruppo :", self.gdr_data)
 
             self.cmb_group = QtGui.QComboBox(self.gdr_data)
-            self.cmb_group.addItem(self.data['informations']['group'])
+            for group in self.data['groups']:
+                self.cmb_group.addItem(group.values()[0])
+            self.connect(self.cmb_group, QtCore.SIGNAL("currentIndexChanged(int)"), self.change_group)
 
             self.lyt_data.addWidget(self.lbl_group, index, 0)
             self.lyt_data.addWidget(self.cmb_group, index, 1)
@@ -201,6 +205,14 @@ class Activity(QtGui.QDialog):
                 # Aggiunta degli oggeti nel lyt_button
                 self.lyt_button.addWidget(self.cmd_modify)
 
+                # Definizione dell'oggetto del bottone: cmd_eliminate
+                self.cmd_delete = QtGui.QPushButton("Elimina", self.hrz_button)
+                self.cmd_delete.setStatusTip("Elimina")
+                self.connect(self.cmd_delete, QtCore.SIGNAL("clicked()"), self.delete)
+
+                # Aggiunta degli oggeti nel lyt_button
+                self.lyt_button.addWidget(self.cmd_delete)
+
             # Definizione dell'oggetto del bottone: cmd_ok
             self.cmd_ok = QtGui.QPushButton("Ok", self.hrz_button)
             self.cmd_ok.setStatusTip("Ok")
@@ -215,7 +227,7 @@ class Activity(QtGui.QDialog):
         # Definizione dell'oggetto del bottone: cmd_creator
         self.cmd_creator = QtGui.QPushButton("Crea", self.hrz_button)
         self.cmd_creator.setStatusTip("Crea")
-        self.connect(self.cmd_creator, QtCore.SIGNAL("clicked()"), self.extend)
+        self.connect(self.cmd_creator, QtCore.SIGNAL("clicked()"), self.insert)
 
         # Aggiunta degli oggeti nel lyt_button
         self.lyt_button.addWidget(self.cmd_creator)
@@ -230,8 +242,10 @@ class Activity(QtGui.QDialog):
 
     def switch_to_create(self):
         self.lyt_button.removeWidget(self.cmd_modify)
+        self.lyt_button.removeWidget(self.cmd_delete)
         self.lyt_button.removeWidget(self.cmd_ok)
         self.cmd_modify.deleteLater()
+        self.cmd_delete.deleteLater()
         self.cmd_ok.deleteLater()
 
         self.set_enabled_view()
@@ -254,7 +268,7 @@ class Activity(QtGui.QDialog):
 
         if self.data['type'] != "single":
             if self.data['type'] == "group":
-                self.cmb_group.setEnabled(enabled)
+                self.cmb_group.setEnabled(False)
 
             self.scrl_participants.setEnabled(enabled)
 
@@ -282,6 +296,19 @@ class Activity(QtGui.QDialog):
         # Aggiungiamo il vrtComandi nel scrlComandi
         self.scrl_participants.setWidget(self.vrt_participants)
 
+    def change_group(self, index):
+        self.data['informations']['participants'] = self.data['functions'].get_remain_participants(
+            self.data['groups'][index].keys()[0],
+            {}
+        )
 
+        self.chk_participants = {}
 
+        self.add_participants(self.data['informations']['participants'])
+
+    def delete(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+
+    def insert(self):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 

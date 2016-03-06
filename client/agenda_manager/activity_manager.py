@@ -24,11 +24,10 @@ class ActivityManager:
         self.activity.exec_()
 
     def get_remain_participants(self, _id, already_participants):
-        print "already_participants", already_participants
         participants = self.agenda_manager.get_participants(_id)
-        print "participants", participants
+
         for key in already_participants.keys():
             participants.pop(key)
-        print "participants dopo", participants
+
         return participants
 
