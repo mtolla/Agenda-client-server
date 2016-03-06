@@ -110,8 +110,6 @@ class Activity(QtGui.QDialog):
         self.cmb_location = QtGui.QComboBox(self.gdr_data)
         self.cmb_location.addItem(self.data['informations']['location'])
 
-        self.lyt_participants = QtGui.QVBoxLayout()
-
         # Aggiunta degli oggeti nel lyt_data
         self.lyt_data.addWidget(self.lbl_creator_lbl, 0, 0)
         self.lyt_data.addWidget(self.lbl_creator, 0, 1)
@@ -168,24 +166,9 @@ class Activity(QtGui.QDialog):
         self.scrl_participants.setBackgroundRole(QtGui.QPalette.NoRole)
         self.scrl_participants.setObjectName("scrl_participants")
 
-        # Creazione del contenitore dei partecipanti e il suo layout: vrt_participants(lyt_participants)
-        self.vrt_participants = QtGui.QWidget(self.scrl_participants)
-
         # Aggiungiamo i contenitori nel vrtComandi
-        self.chk_participants = []
-        i = 0
-        for _id, name in self.data['informations']['participants'].items():
-            self.chk_participants.append(QtGui.QCheckBox(name, self.vrt_participants))
-            self.chk_participants[i].setObjectName(str(_id))
-            # self.chk_participants[i].setChecked(True)
-            self.lyt_participants.addWidget(self.chk_participants[i])
-            i += 1
-
-        # Settiamo il layout del vrtComandi
-        self.vrt_participants.setLayout(self.lyt_participants)
-
-        # Aggiungiamo il vrtComandi nel scrlComandi
-        self.scrl_participants.setWidget(self.vrt_participants)
+        self.chk_participants = {}
+        self.add_participants(self.data['informations']['participants'])
 
         self.lyt_data.addWidget(self.lbl_participants, index, 0)
         self.lyt_data.addWidget(self.scrl_participants, index, 1)
@@ -253,6 +236,13 @@ class Activity(QtGui.QDialog):
 
         self.set_enabled_view()
 
+        if self.data['type'] != "single":
+            participants = self.data['functions'].get_remain_participants(
+                self.data['informations']['activity']['group'],
+                self.data['informations']['participants']
+            )
+            self.add_participants(participants)
+
         self.add_create_buttons()
 
     def set_enabled_view(self, enabled=True):
@@ -269,6 +259,29 @@ class Activity(QtGui.QDialog):
             self.scrl_participants.setEnabled(enabled)
 
     def checked_participants(self):
-        for chk in self.chk_participants:
+        for chk in self.chk_participants.values():
             chk.setChecked(True)
+
+    def add_participants(self, participants):
+        # Creazione del contenitore dei partecipanti e il suo layout: vrt_participants(lyt_participants)
+        self.vrt_participants = QtGui.QWidget(self.scrl_participants)
+
+        self.lyt_participants = QtGui.QVBoxLayout()
+
+        for chk_participant in self.chk_participants.values():
+            self.lyt_participants.addWidget(chk_participant)
+
+        for _id, name in participants.items():
+            self.chk_participants[_id] = QtGui.QCheckBox(name, self.vrt_participants)
+            self.chk_participants[_id].setObjectName(str(_id))
+            self.lyt_participants.addWidget(self.chk_participants[_id])
+
+        # Settiamo il layout del vrtComandi
+        self.vrt_participants.setLayout(self.lyt_participants)
+
+        # Aggiungiamo il vrtComandi nel scrlComandi
+        self.scrl_participants.setWidget(self.vrt_participants)
+
+
+
 

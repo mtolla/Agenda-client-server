@@ -5,7 +5,7 @@ import json
 
 class AgendaManager:
     def __init__(self):
-        self.activity_manager = ActivityManager()
+        self.activity_manager = ActivityManager(self)
 
     def show(self):
         self.agenda.show()
@@ -72,12 +72,10 @@ class AgendaManager:
                 data['groups'] = groups
 
             if groups:
-                participants = self.server_manager.group_id_participants(groups[0].keys()[0])
-                participants = self.sort_participants(self.reformat_participants(participants))
+                participants = self.get_participants(groups[0].keys()[0])
             elif _type == "project":
                 group = self.info_agenda['project']['group']
-                participants = self.server_manager.group_id_participants(self.info_agenda['project']['group'])
-                participants = self.sort_participants(self.reformat_participants(participants))
+                participants = self.get_participants(self.info_agenda['project']['group'])
 
             location = self.server_manager.locations()
 
@@ -155,3 +153,7 @@ class AgendaManager:
 
         return new_participants
 
+    def get_participants(self, _id):
+        participants = self.server_manager.group_id_participants(_id)
+        participants = self.sort_participants(self.reformat_participants(participants))
+        return participants
