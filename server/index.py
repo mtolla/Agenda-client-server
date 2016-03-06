@@ -158,7 +158,7 @@ def get_activity_day(id_proj, day, month, year, token, ip):
 
 @index.route('/testpj')
 def testpj():
-    return api.get_activity_day(7, 10, 3, 2016)
+    return api.get_teamleader_groups(7, 7)
 
 @index.route('/activity/<int:id_act>/<token>/<ip>', methods=['GET'])
 def get_activity_info(id_act, token, ip):

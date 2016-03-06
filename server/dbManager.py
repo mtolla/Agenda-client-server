@@ -164,8 +164,6 @@ class ClassDbManager:
         # Cerco l'id del gruppo dal progetto, lo confronto nella tabella user
         if not day:
             day = self.time_now()
-        print "Day"
-        print day
         list_app_proj = self.open_file('project')
         list_app_user = self.open_file('user')
         dict_return = dict()
@@ -198,7 +196,6 @@ class ClassDbManager:
         list_app = self.open_file('holiday')
         list_return = []
         proj_group = self.from_group_sub_all(id_proj)
-        print proj_group
         list_usr = self.open_file('user')
         list_id_hol = []
         for user in list_usr:
@@ -431,8 +428,6 @@ class ClassDbManager:
         list_app = self.open_file('activity')
         list_return = []
         for activity in list_app:
-            print "Project: "
-            print activity['project']
             dict_app = {}
             if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
                 'year'] == day['year'] and activity['project'] == id_proj:
@@ -443,8 +438,6 @@ class ClassDbManager:
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
                      'type': activity['type'], 'room': self.get_room_from_id(activity['location']),
                      'participants': activity['participants']})
-        print "return"
-        print list_return
         return list_return
 
     def get_activity_day_all(self, day):
@@ -462,8 +455,6 @@ class ClassDbManager:
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
                      'type': activity['type'], 'room': self.get_room_from_id(activity['location']),
                      'participants': activity['participants']})
-        print "return"
-        print list_return
         return list_return
 
     def get_activity_info(self, id_act, id_user):
@@ -636,8 +627,8 @@ class ClassDbManager:
             if group['ID'] == id_group:
                 list_return.append(id_group)
                 for sub in group['subgroup']:
-                    list_app =  self.from_group_sub_all(sub)
-                    set(list_return).union(list_app)
+                    list_app = self.from_group_sub_all(sub)
+                    list_return = set(list_return).union(list_app)
                 break
         return list_return
 
@@ -652,16 +643,18 @@ class ClassDbManager:
     def get_teamleader_groups(self, id_proj, id_usr):
         # Ritorno tutti i gruppi di cui è teamleader
         list_user = self.open_file('user')
+        list_group_tm = []
         list_return = []
-        iist_group = self.from_group_sub_all(self.get_group_from_proj(id_proj))
+        list_group = self.from_group_sub_all(self.get_group_from_proj(id_proj))
+
         for user in list_user:
             if user['ID'] == id_usr:
-                list_return += self.get_teamleader_groups_app(user['groups'])
+                list_group_tm += self.get_teamleader_groups_app(user['groups'])
                 break
         # Avendo assegnano l'id sia alla chiave che al valore posso usarli per ricavare il nome del gruppo
-        for group in list_return:
-            if group['ID'] in iist_group:
-                group['ID'] = self.get_group_name_from_group(group['ID'])
+        for group in list_group_tm:
+            if group in list_group:
+                list_return.append({group: self.get_group_name_from_group(group)})
         return list_return
 
     def get_participants_from_proj(self, id_proj):
@@ -1139,6 +1132,7 @@ class ClassDbManager:
 
     @staticmethod
     def get_teamleader_groups_app(groups):
+        # Ritorna una lista di gruppi dove il livello è teamleader
         list_return = []
         for group in groups:
             if group['level'] == 'teamleader':

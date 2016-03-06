@@ -145,6 +145,7 @@ class Api:
     def get_teamleader_groups(self,id_proj, token):
         return json.dumps(self.db_manager.get_teamleader_groups(id_proj,self.from_token_get_iduser(token)))
 
+
     def get_participants_from_proj(self, id_proj):
         return json.dumps(self.db_manager.get_participants_from_proj(id_proj))
 

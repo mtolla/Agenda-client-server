@@ -61,11 +61,11 @@ class AgendaManager:
             participants = {}
             if self.info_agenda['level'] == "teamleader" and _type == "group":
                 # ------------- non funziona query ----------------------
-                '''
+
                 groups = self.server_manager.groups_teamleader(self.info_agenda['project']['ID'])
                 print groups
-                '''
-                groups = [{7: "AgendaGroup"}]
+
+                #groups = [{7: "AgendaGroup"}]
 
 
                 data['groups'] = groups
