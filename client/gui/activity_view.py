@@ -381,12 +381,12 @@ class Activity(QtGui.QDialog):
         participants = []
         for _id, chk in self.chk_participants.items():
             if chk.isChecked():
-                participants.append(_id)
+                participants.append(int(_id))
         return participants
 
     def set_goup_project(self):
         if self.data['type'] == "group":
-            self.activity['group'] = self.data['groups'][self.index_group].keys()[0]
+            self.activity['group'] = int(self.data['groups'][self.index_group].keys()[0])
 
         participants = self.get_checked()
         if len(participants) < 2:
@@ -400,30 +400,6 @@ class Activity(QtGui.QDialog):
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def insert(self):
-        '''
-        self.data['functions'].insert_activity({
-            "project": 7,
-            "date": {
-                "year": 2016,
-                "minute": 50,
-                "day": 6,
-                "hour": 12,
-                "month": 3
-            },
-            "participants": [
-                2,
-                3
-            ],
-            "name": "nome",
-            "duration": 60,
-            "description": "descriz",
-            "type": "group",
-            "ID": 0,
-            "location": 1,
-            "group": 7,
-            "creator": 2,
-        })
-        '''
         self.activity = dict()
 
         if not self.set_name():
@@ -435,11 +411,11 @@ class Activity(QtGui.QDialog):
         if not self.set_description():
             return False
 
-        self.activity['location'] = self.data['locations'][self.index_location].keys()[0]
+        self.activity['location'] = int(self.data['locations'][self.index_location].keys()[0])
 
         self.activity['group'] = False
 
-        self.activity['creator'] = self.data['creator'].keys()[0]
+        self.activity['creator'] = int(self.data['creator'].keys()[0])
 
         self.activity['type'] = self.data['type']
 
@@ -449,4 +425,5 @@ class Activity(QtGui.QDialog):
             if not self.set_goup_project():
                 return False
 
-        self.data['functions'].insert_activity(self.activity)
+            self.data['functions'].insert_activity(self.activity)
+

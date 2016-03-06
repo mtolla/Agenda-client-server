@@ -1,1 +1,1 @@
-{"client_url": "127.0.0.1:5001", "token": "c78bc46245052fe592556f6ae0216f6c102f0b6b82682b5fcc582fa4dffebe23b7dcf78ce77d5d804c3a4dff92f53ee50ed5bfc06ff77f570e7a354b5e59fb9a", "server_url": "http://127.0.0.1:5000"}
+{"client_url": "127.0.0.1:5001", "token": false, "server_url": "http://127.0.0.1:5000"}
