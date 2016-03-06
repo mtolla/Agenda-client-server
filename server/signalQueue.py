@@ -19,11 +19,15 @@ class ClassSignalQueue:
         app_list = self.db_manager.get_users_from_activity(id_act)
         for item in app_list:
             item['action'] = "update"
+            item['attempt'] = 0
+            item['date'] = self.db_manager.time_now()
             self.modified_queue.append(item)
 
     def add_to_activity(self, app_list):
         for item in app_list:
             item['action'] = "reminder"
+            item['attempt'] = 0
+            item['date'] = self.db_manager.time_now()
             self.modified_queue.append(item)
 
     def check_modified(self):
@@ -37,7 +41,14 @@ class ClassSignalQueue:
             self.add_to_activity(app_list)
 
     def clean_queue(self):
-        pass
+        # Controllo se hanno due mesi di differenza ed elimino
+        time = self.db_manager.time_now()
+        for item in self.mod_error_queue:
+            if time['month'] == item['time']['month'] + 2:
+                self.mod_error_queue.pop(item)
+        for item in self.act_error_queue:
+            if time['month'] == item['time']['month'] + 2:
+                self.act_error_queue.pop(item)
 
     # Id, nome/tempo che manca 24 = giorno,1 = ora,30 = minuti
     # Effettua 5 tentativi, al sesto mette la richiesta nella coda di errore
