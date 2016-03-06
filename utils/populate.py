@@ -7,6 +7,7 @@ group_file = sys.path[1] + "/database/group.json"
 location_file = sys.path[1] + "/database/location.json"
 project_file = sys.path[1] + "/database/project.json"
 user_file = sys.path[1] + "/database/user.json"
+holiday_file = sys.path[1] + "/database/holiday.json"
 
 # Load json utility
 def load(path):
@@ -23,7 +24,7 @@ def write(path, data):
 
 # Find next index
 def next_index(dict):
-    i = 0
+    i = 1
     while i < len(dict) and i == dict[i]["ID"]:
         i += 1
     return i
@@ -45,26 +46,20 @@ def setholidays(user, holidays):
     :param holidays = dictionary
     example: setholidays(1, {"begin":timestamp,"end":timestamp})
     """
-    # Load user data
-    data = load(user_file)
-    # Find user ID
-    x = 0
+    # Load user and holidays data
     found = False
-    holidays_list = []
-    while (found == False) and (x < len(data)):
-        if user == data[x]["ID"]:
-            holidays_list = data[x]["holiday"]
-            found = True
-            # Set holiday id
-            holidays["ID"] = next_index(holidays_list)
-            # Add new holiday
-            holidays_list.append(holidays)
-
+    x = 0
+    data_user = load(user_file)
+    data_holiday = load(holiday_file)
+    holiday_index = next_index(holidays)
+    holidays["ID"] = holiday_index
+    while (found == False) and (x < len(data_user)):
+        if data_user[x]["ID"] == user:
+            data_user[x]["holiday"].append(holiday_index)
         x += 1
-        data[x]["holiday"] = holidays_list
-        # Write user data
-        write(user_file, data)
-
+    write(holiday_file, data_holiday)
+    write(user_file, data_user)
+    
 def add_dict(dictionary, path):
     data = load(path)
     count = next_index(data)
