@@ -2,7 +2,7 @@
   {
     "ID": 0,
     "name": "AgAct0",
-    "project": 0,
+    "project": 7,
     "creator": 2,
     "location": 0,
     "type": "group",
@@ -15,7 +15,7 @@
   {
     "ID": 1,
     "name": "AgAct1",
-    "project": 0,
+    "project": 7,
     "creator": 2,
     "type": "group",
     "location": 0,
@@ -34,7 +34,7 @@
   {
     "ID": 2,
     "name": "AgAct2",
-    "project": 0,
+    "project": 7,
     "type": "group",
     "creator": 1,
     "location": 1,
@@ -50,7 +50,7 @@
   {
     "ID": 3,
     "name": "AgAct3",
-    "project": 0,
+    "project": 7,
     "type": "group",
     "creator": 1,
     "location": 2,
@@ -66,7 +66,7 @@
   {
     "ID": 4,
     "name": "AgAct4",
-    "project": 0,
+    "project": 7,
     "type": "group",
     "creator": 2,
     "location": 3,
@@ -82,7 +82,7 @@
   {
     "ID": 5,
     "name": "Act5",
-    "project": 0,
+    "project": 7,
     "type": "single",
     "creator": 3,
     "location": 3,
@@ -97,7 +97,7 @@
   {
     "ID": 6,
     "name": "Act6",
-    "project": 0,
+    "project": 7,
     "type": "single",
     "creator": 3,
     "location": 2,
@@ -112,7 +112,7 @@
   {
     "ID": 7,
     "name": "Act7",
-    "project": 0,
+    "project": 7,
     "type": "single",
     "creator": 5,
     "location": 1,

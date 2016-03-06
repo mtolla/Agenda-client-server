@@ -6,4 +6,13 @@
   "status" : true,
   "projectManager" : 0,
   "group" : 7
+},
+{
+  "ID" : 12,
+  "name" : "Ghost Polpetters",
+  "begin" : {"day" : 1, "month": 1, "year": 2016},
+  "end" : {"day" : 10, "month": 12, "year": 2017},
+  "status" : true,
+  "projectManager" : 0,
+  "group" : 9
 }]

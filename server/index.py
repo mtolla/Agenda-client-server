@@ -156,6 +156,9 @@ def get_activity_day(id_proj, day, month, year, token, ip):
         return api.get_activity_day(id_proj, day, month, year)
     return False, 401
 
+@index.route('/testpj')
+def testpj():
+    return api.get_activity_day(7, 10, 3, 2016)
 
 @index.route('/activity/<int:id_act>/<token>/<ip>', methods=['GET'])
 def get_activity_info(id_act, token, ip):

@@ -211,6 +211,21 @@ class ClassDbManager:
                 list_return.append(holiday)
         return list_return
 
+    def get_holidays_day_all(self, day):
+        # Da un giorno restituisco una lista con dentro le vacanze di quel giorno
+        list_app = self.open_file('holiday')
+        list_return = []
+        list_usr = self.open_file('user')
+        list_id_hol = []
+        for user in list_usr:
+                list_id_hol.append(user['holiday'])
+        for holiday in list_app:
+            if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
+                'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end'][
+                'day'] and holiday['ID'] in list_id_hol:
+                list_return.append(holiday)
+        return list_return
+
     def from_holiday_get_user(self, id_hol):
         list_usr = self.open_file('user')
         for user in list_usr:
@@ -290,6 +305,14 @@ class ClassDbManager:
             dict_app['date'] = time
             list_return.append(dict_app)
         return list_return
+
+    def get_user_name(self, id_usr):
+        # Da un id user ricavo il nome e lo restituisco come dizionario
+        list_usr = self.open_file('user')
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                return {id_usr: user['username']}
+        return False
 
     def check_today_tomorrow_act(self):
         # Controllo tutte le attività di oggi e domani
@@ -408,9 +431,30 @@ class ClassDbManager:
         list_app = self.open_file('activity')
         list_return = []
         for activity in list_app:
+            print "Project: "
+            print activity['project']
             dict_app = {}
             if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
                 'year'] == day['year'] and activity['project'] == id_proj:
+                dict_app['hour'] = activity['date']['hour']
+                dict_app['minute'] = activity['date']['minute']
+                dict_duration = self.calc_duration(dict_app, activity['duration'])
+                list_return.append(
+                    {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
+                     'type': activity['type'], 'room': self.get_room_from_id(activity['location']),
+                     'participants': activity['participants']})
+        print "return"
+        print list_return
+        return list_return
+
+    def get_activity_day_all(self, day):
+        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end) i quel progetto
+        list_app = self.open_file('activity')
+        list_return = []
+        for activity in list_app:
+            dict_app = {}
+            if activity['date']['day'] == day['day'] and activity['date']['month'] == day['month'] and activity['date'][
+                'year'] == day['year']:
                 dict_app['hour'] = activity['date']['hour']
                 dict_app['minute'] = activity['date']['minute']
                 dict_duration = self.calc_duration(dict_app, activity['duration'])
@@ -587,13 +631,15 @@ class ClassDbManager:
     def from_group_sub_all(self, id_group):
         # Da un gruppo ritorno tutti i sottogruppi
         list_group = self.open_file('group')
-        list_sub = []
+        list_return = []
         for group in list_group:
             if group['ID'] == id_group:
-                list_sub.append(group['subgroup'])
-        for sub in list_sub:
-            set(list_sub).union(self.from_group_sub_all(sub))
-        return list_sub
+                list_return.append(id_group)
+                for sub in group['subgroup']:
+                    list_app =  self.from_group_sub_all(sub)
+                    set(list_return).union(list_app)
+                break
+        return list_return
 
     def get_locations(self):
         # Ritorno tutti gli edifici
@@ -774,8 +820,8 @@ class ClassDbManager:
         #  Ricevo una attività, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
 
         # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
-        day_act = self.get_activity_day(act['date'])
-        day_hol = self.get_holidays_day(act['date'])
+        day_act = self.get_activity_day_all(act['date'])
+        day_hol = self.get_holidays_day_all(act['date'])
         # Controllo subito se la stanza non è già occupata
         list_occ_room = self.room_occupied(day_act, act['date'], act['duration'])
         for acttivity in day_act:
@@ -816,7 +862,7 @@ class ClassDbManager:
         for year in range(hol['begin']['year'], hol['end']['year'], 1):
             for month in range(hol['begin']['month'], hol['end']['month'], 1):
                 for day in range(hol['begin']['day'], hol['end']['day'], 1):
-                    days_act.append(self.get_activity_day({'day': day, 'month': month, 'year': year}))
+                    days_act.append(self.get_activity_day_all({'day': day, 'month': month, 'year': year}))
         list_error = self.is_there_something_holiday(id_usr, days_act)
         if list_error:
             return list_error

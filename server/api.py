@@ -68,6 +68,7 @@ class Api:
         dict_return['activities'] = self.db_manager.get_today_activities_from_proj(id_proj)
         dict_return['holidays'] = self.db_manager.get_holidays_from_proj(id_proj)
         dict_return['level'] = self.get_level_usr(token)
+        dict_return['user'] = self.db_manager.get_user_name(self.from_token_get_iduser(token))
         return json.dumps(dict_return)
 
     def get_activity(self, id_att):
