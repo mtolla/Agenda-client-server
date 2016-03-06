@@ -4,7 +4,7 @@
   "begin" : {"day" : 2, "month": 12, "year": 2015},
   "end" : {"day" : 2, "month": 12, "year": 2016},
   "status" : true,
-  "projectManager" : 0,
+  "projectManager" : 14,
   "group" : 7
 },
 {
@@ -13,6 +13,6 @@
   "begin" : {"day" : 1, "month": 1, "year": 2016},
   "end" : {"day" : 10, "month": 12, "year": 2017},
   "status" : true,
-  "projectManager" : 0,
+  "projectManager" : 14,
   "group" : 9
 }]
