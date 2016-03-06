@@ -174,10 +174,14 @@ class Api:
     def delete_project(self, id):
         return self.db_helper.delete_proj(id)
 
-    def create_group(self, group):
-        return self.db_helper.create_group(group)
+    def create_group(self, group, token, list_id_usr):
+        id_usr = self.from_token_get_iduser(token)
+        self.db_helper.create_group(group, id_usr, list_id_usr)
+        return True
 
-    def create_project(self, project):
-        return self.db_helper.create_project(project)
+    def create_project(self, project, group, list_id_usr, token):
+        id_usr = self.from_token_get_iduser(token)
+        self.db_helper.create_project(project, group, list_id_usr, id_usr)
+        return True
 
         

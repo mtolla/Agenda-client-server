@@ -255,7 +255,7 @@ def delete_project(id_proj, token, ip):
 def create_group():
     dict_app = ast.literal_eval(request.form['dict_create_group'])
     if api.check_token(dict_app['token'], dict_app['ip']):
-        return api.create_group(dict_app['group'])
+        return api.create_group(dict_app['group'], dict_app['token'], dict_app['list_id_usr'])
     return False, 401
 
 
@@ -263,7 +263,7 @@ def create_group():
 def create_project():
     dict_app = ast.literal_eval(request.form['dict_create_project'])
     if api.check_token(dict_app['token'], dict_app['ip']):
-        return api.create_project(dict_app['project'])
+        return api.create_project(dict_app['project'], dict_app['token'], dict_app['group'], dict_app['list_id_usr'])
     return False, 401
 
 

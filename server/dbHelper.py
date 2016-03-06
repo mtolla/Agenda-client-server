@@ -304,8 +304,28 @@ class ClassDbHelper:
                 break
         return self.db_manager.write_file(list_group, 'group')
 
-    def create_group(self, group):
-        pass
+    def create_group(self, group, id_usr, list_id_usr):
+        # Inserisco in gruppi
+        list_group = self.db_manager.open_file('group')
+        id = populate.next_index(list_group)
+        group['ID'] = id
+        list_group.append(group)
+        self.db_manager.write_file(group, 'group')
+        self.add_group_to_usr(id, list_id_usr, id_usr)
 
-    def create_project(self, project):
-        pass
+    def add_group_to_usr(self, id, list_id_usr, id_usr):
+        list_usr = self.db_manager.open_file('user')
+        for user in list_usr:
+            if user['ID'] in list_id_usr:
+                if user['ID'] == id_usr:
+                    user['groups'].append({'ID': id, 'level': 'teamleader'})
+                user['groups'].append({'ID': id, 'level': 'participant'})
+
+    def create_project(self, project, group, list_id_usr, id_usr):
+        # Inserisco nei progetti
+        list_proj = self.db_manager.open_file('project')
+        id = populate.next_index(list_proj)
+        project['ID'] = id
+        list_proj.append(project)
+        self.db_manager.write_file(project, 'project')
+        self.create_group(group, list_id_usr, id_usr)
