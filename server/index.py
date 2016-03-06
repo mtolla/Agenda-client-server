@@ -67,22 +67,6 @@ def get_holidays_day(id_proj, day, month, year, token, ip):
     return False, 401
 
 
-@index.route('/insert/activity/', methods=['POST'])
-def insert_activity():
-    dict_app = ast.literal_eval(request.form['dict_activity'])
-    if api.check_token(dict_app['token'], dict_app['ip']):
-        return api.insert_activity(dict_app['activity'])
-    return False, 401
-
-
-@index.route('/insert/holiday/', methods=['POST'])
-def insert_holiday():
-    dict_app = ast.literal_eval(request.form['dict_holiday'])
-    if api.check_token(dict_app['token'], dict_app['ip']):
-        return api.insert_holiday(dict_app['holiday'], dict_app['token'])
-    return False, 401
-
-
 @index.route('/projects/<token>/<ip>', methods=['GET'])
 def get_user_project(token, ip):
     if api.check_token(token, ip):
