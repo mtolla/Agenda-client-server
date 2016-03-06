@@ -304,4 +304,8 @@ class ClassDbHelper:
                 break
         return self.db_manager.write_file(list_group, 'group')
 
+    def create_group(self, group):
+        pass
 
+    def create_project(self, project):
+        pass

@@ -166,78 +166,110 @@ def user_holiday(id_usr, token, ip):
         return api.user_holiday(id_usr)
     return False, 401
 
+
 @index.route('/insert/activity', methods=['POST'])
 def insert_activity():
     dict_app = ast.literal_eval(request.form['dict_activity'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.insert_activity(dict_app['activity'])
     return False, 401
+
+
 @index.route('/insert/holiday', methods=['POST'])
 def insert_holiday():
     dict_app = ast.literal_eval(request.form['dict_holiday'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.insert_holiday(dict_app['holiday'], dict_app['token'])
     return False, 401
+
+
 @index.route('/modify/activity', methods=['POST'])
 def modify_activity():
     dict_app = ast.literal_eval(request.form['dict_activity'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.modify_activity(dict_app['old'], dict_app['new'])
     return False, 401
+
+
 @index.route('/modify/holiday', methods=['POST'])
 def modify_holiday():
     dict_app = ast.literal_eval(request.form['dict_holiday'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.modify_holiday(dict_app['old'], dict_app['new'])
     return False, 401
+
+
 @index.route('/modify/group', methods=['POST'])
 def modify_group():
     dict_app = ast.literal_eval(request.form['dict_group'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.modify_group(dict_app['new'])
     return False, 401
+
+
 @index.route('/modify/level', methods=['POST'])
 def modify_level():
     dict_app = ast.literal_eval(request.form['dict_level'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.modify_level(dict_app['user'], dict_app['group'], dict_app['level'])
     return False, 401
+
+
 @index.route('/modify/project', methods=['POST'])
 def modify_project():
     dict_app = ast.literal_eval(request.form['dict_activity'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.modify_project(dict_app['new'])
     return False, 401
+
+
 @index.route('/delete/activity/<int:id_act>/token/<token>/ip/<ip>', methods=['GET'])
 def delete_activity(id_act, token, ip):
     if api.check_token(token, ip):
         return api.delete_activity(id_act)
     return False, 401
+
+
 @index.route('/delete/holiday/<int:id_hol>/token/<token>/ip/<ip>', methods=['GET'])
 def delete_holiday(id_hol, token, ip):
     if api.check_token(token, ip):
         return api.delete_holiday(id_hol)
     return False, 401
+
+
 @index.route('/delete/group/<int:id_group>/token/<token>/ip/<ip>', methods=['GET'])
 def delete_group(id_group, token, ip):
     if api.check_token(token, ip):
         return api.delete_group(id_group)
     return False, 401
+
+
 @index.route('/delete/project/<int:id_proj>/token/<token>/ip/<ip>', methods=['GET'])
 def delete_project(id_proj, token, ip):
     if api.check_token(token, ip):
         return api.delete_project(id_proj)
     return False, 401
+
+
 @index.route('/create/group', methods=['POST'])
+def create_group():
+    dict_app = ast.literal_eval(request.form['dict_create_group'])
+    if api.check_token(dict_app['token'], dict_app['ip']):
+        return api.create_group(dict_app['group'])
+    return False, 401
+
+
 @index.route('/create/project', methods=['POST'])
-
-
+def create_project():
+    dict_app = ast.literal_eval(request.form['dict_create_project'])
+    if api.check_token(dict_app['token'], dict_app['ip']):
+        return api.create_project(dict_app['project'])
+    return False, 401
 
 
 @index.errorhandler(404)
 def page_not_found(app):
     return api.error(True), 404
-
 
 
 if __name__ == "__main__":

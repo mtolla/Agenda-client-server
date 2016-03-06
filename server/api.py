@@ -174,4 +174,10 @@ class Api:
     def delete_project(self, id):
         return self.db_helper.delete_proj(id)
 
+    def create_group(self, group):
+        return self.db_helper.create_group(group)
+
+    def create_project(self, project):
+        return self.db_helper.create_project(project)
+
         
