@@ -62,6 +62,10 @@ class Activity(QtGui.QDialog):
         #                                     | lbl_participants | +
         #                                                  +-------+
         #                                                  +-> scrl_participants -> vrt_participants(lyt_participants) |
+        self.lbl_creator_lbl = QtGui.QLabel("Creatore :", self.gdr_data)
+
+        self.lbl_creator = QtGui.QLabel(self.data['creator'].values()[0], self.gdr_data)
+
         self.lbl_name = QtGui.QLabel("Nome :", self.gdr_data)
 
         self.txt_name = QtGui.QLineEdit(self.gdr_data)
@@ -106,18 +110,20 @@ class Activity(QtGui.QDialog):
         self.lyt_participants = QtGui.QVBoxLayout()
 
         # Aggiunta degli oggeti nel lyt_data
-        self.lyt_data.addWidget(self.lbl_name, 0, 0)
-        self.lyt_data.addWidget(self.txt_name, 0, 1)
-        self.lyt_data.addWidget(self.lbl_start, 1, 0)
-        self.lyt_data.addWidget(self.dtm_start, 1, 1)
-        self.lyt_data.addWidget(self.lbl_end, 2, 0)
-        self.lyt_data.addWidget(self.dtm_end, 2, 1)
-        self.lyt_data.addWidget(self.lbl_description, 3, 0)
-        self.lyt_data.addWidget(self.txt_description, 3, 1)
-        self.lyt_data.addWidget(self.lbl_type_lbl, 4, 0)
-        self.lyt_data.addWidget(self.lbl_type, 4, 1)
-        self.lyt_data.addWidget(self.lbl_location, 5, 0)
-        self.lyt_data.addWidget(self.cmb_location, 5, 1)
+        self.lyt_data.addWidget(self.lbl_creator_lbl, 0, 0)
+        self.lyt_data.addWidget(self.lbl_creator, 0, 1)
+        self.lyt_data.addWidget(self.lbl_name, 1, 0)
+        self.lyt_data.addWidget(self.txt_name, 1, 1)
+        self.lyt_data.addWidget(self.lbl_start, 2, 0)
+        self.lyt_data.addWidget(self.dtm_start, 2, 1)
+        self.lyt_data.addWidget(self.lbl_end, 3, 0)
+        self.lyt_data.addWidget(self.dtm_end, 3, 1)
+        self.lyt_data.addWidget(self.lbl_description, 4, 0)
+        self.lyt_data.addWidget(self.txt_description, 4, 1)
+        self.lyt_data.addWidget(self.lbl_type_lbl, 5, 0)
+        self.lyt_data.addWidget(self.lbl_type, 5, 1)
+        self.lyt_data.addWidget(self.lbl_location, 6, 0)
+        self.lyt_data.addWidget(self.cmb_location, 6, 1)
 
         # Set layout del gdr_data
         self.gdr_data.setLayout(self.lyt_data)
@@ -131,7 +137,7 @@ class Activity(QtGui.QDialog):
         # Definizione dell'oggetto del bottone: cmd_ok
         self.cmd_ok = QtGui.QPushButton("Ok", self.hrz_button)
         self.cmd_ok.setStatusTip("Ok")
-        self.connect(self.cmd_ok, QtCore.SIGNAL("clicked()"), self.extend_to_group)
+        self.connect(self.cmd_ok, QtCore.SIGNAL("clicked()"), self.extend)
 
         # Aggiunta degli oggeti nel lyt_password
         self.lyt_button.addWidget(self.cmd_ok)
@@ -146,11 +152,19 @@ class Activity(QtGui.QDialog):
         # Settiamo il layout della pagina
         self.setLayout(self.lyt_page)
 
-    def extend_to_group(self):
-        self.lbl_group = QtGui.QLabel("Gruppo :", self.gdr_data)
+    def extend(self):
+        index = 7
 
-        self.cmb_group = QtGui.QComboBox(self.gdr_data)
-        self.cmb_group.addItem(self.data['information']['group'])
+        if self.data['type'] == "group":
+            self.lbl_group = QtGui.QLabel("Gruppo :", self.gdr_data)
+
+            self.cmb_group = QtGui.QComboBox(self.gdr_data)
+            self.cmb_group.addItem(self.data['information']['group'])
+
+            self.lyt_data.addWidget(self.lbl_group, index, 0)
+            self.lyt_data.addWidget(self.cmb_group, index, 1)
+
+            index += 1
 
         self.lbl_participants = QtGui.QLabel("Partecipanti :", self.gdr_data)
 
@@ -178,17 +192,9 @@ class Activity(QtGui.QDialog):
         # Aggiungiamo il vrtComandi nel scrlComandi
         self.scrl_participants.setWidget(self.vrt_participants)
 
-        self.lyt_data.addWidget(self.lbl_group, 6, 0)
-        self.lyt_data.addWidget(self.cmb_group, 6, 1)
-        self.lyt_data.addWidget(self.lbl_participants, 7, 0)
-        self.lyt_data.addWidget(self.scrl_participants, 7, 1)
-        '''
-        self.lyt_page.addWidget(self.scrl_participants)
+        self.lyt_data.addWidget(self.lbl_participants, index, 0)
+        self.lyt_data.addWidget(self.scrl_participants, index, 1)
 
-        self.setLayout(self.lyt_page)
-        self.setCentralWidget(self)
-        '''
-        #self.setFixedSize(QtCore.QSize(self.width + self.width_extend, self.height + self.height_extend))
         self.setStyleSheet(
             '''
                 * {

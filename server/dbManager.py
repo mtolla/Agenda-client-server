@@ -20,6 +20,8 @@ class ClassDbManager:
         self.tomorrow_act = []
         # Data di default, viene modificata al primo avvio di check_today_tomorrow_act()
         self.last_check = {'day': 12, 'month': 11, 'year': 1955, 'hour': 06, 'minute': 38}
+        # Lista con id attività modificate
+        self.modified_act = []
 
     def do_login(self, usr, psw):
         # Dizionario di appoggio
@@ -986,6 +988,7 @@ class ClassDbManager:
         if insert == "OK":
             return True
         self.insert_activity(old_act)
+        self.modified_act.append(new_act['ID'])
 
     def modify_hol(self, old_hol, new_hol):
         # Ricevo la vacanza nuova da modificare e quella vecchia

@@ -8,7 +8,7 @@ class ActivityManager:
     def exec_(self, data):
         self.activity = Activity(data)
 
-        if data['type'] == "group":
-            self.activity.extend_to_group()
+        if data['type'] != "single":
+            self.activity.extend()
 
         self.activity.exec_()

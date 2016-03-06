@@ -10,7 +10,7 @@
     "email": "carluca@testprovider.nl"
   },
   {
-    "username": "Angelica",
+    "username": "angelica",
     "holiday": [1],
     "surname": "Bianchi",
     "name": "Angelica",
@@ -98,7 +98,7 @@
     "ID": 4
   },
   {
-    "username": "Simone",
+    "username": "simone",
     "password": "46eb352fb4b6bc151ce5a37256c53863d46646f9a9c76f24c80044e42a9659d901354d2df99630920fa45726ab84ed0eee1e60397635dbeefa769ee3f400747f",
     "surname": "Renzo",
     "name": "Simone",

@@ -57,31 +57,31 @@ class AgendaManager:
             data['type'] = data['information']['activity']['type']
             data['information']['participants'] = self.sort_participants(data['information']['participants'])
         else:
+            group = False
             groups = False
             participants = {}
             if self.info_agenda['level'] == "teamleader" and _type == "group":
-                # ------------- non funziona query ----------------------
-
                 groups = self.server_manager.groups_teamleader(self.info_agenda['project']['ID'])
-                print groups
 
-                #groups = [{7: "AgendaGroup"}]
-
+                group = groups[0].values()[0]
 
                 data['groups'] = groups
 
             if groups:
                 participants = self.server_manager.group_id_participants(groups[0].keys()[0])
-                participants = self.sort_participants(self.reformact_participants(participants))
+                participants = self.sort_participants(self.reformat_participants(participants))
             elif _type == "project":
+                group = self.info_agenda['project']['group']
                 participants = self.server_manager.group_id_participants(self.info_agenda['project']['group'])
-                participants = self.sort_participants(self.reformact_participants(participants))
+                participants = self.sort_participants(self.reformat_participants(participants))
 
             location = self.server_manager.locations()
+
+            data['creator'] = self.info_agenda['user']
             data['modality'] = "create"
             data['type'] = _type
             data['information'] = {
-                'group': groups[0].values()[0],
+                'group': group,
                 'participants': participants,
                 'location': location[0].values()[0],
                 'activity': {
@@ -133,7 +133,7 @@ class AgendaManager:
         self.exec_activity_view(_type="project")
 
     @staticmethod
-    def reformact_participants(participants):
+    def reformat_participants(participants):
         dict_app = {}
         for participant in participants:
             for _id, name in participant.items():
@@ -148,6 +148,6 @@ class AgendaManager:
             participants,
             key=lambda k: participants.keys()):
             new_participants[key] = participants[key]
-        print new_participants
+
         return new_participants
 
