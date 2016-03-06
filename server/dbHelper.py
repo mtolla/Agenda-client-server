@@ -18,10 +18,10 @@ class ClassDbHelper:
         day_act = self.db_manager.get_activity_day_all(act['date'])
         day_hol = self.db_manager.get_holidays_day_all(act['date'])
         # Controllo subito se la stanza non è già occupata
-        list_occ_room = self.db_manager.room_occupied(day_act, act['date'], act['duration'])
-        for acttivity in day_act:
-            if acttivity['room'] in list_occ_room:
-                return "Error: Stanza occupata"
+        list_occ_room = self.room_occupied(day_act, act['date'], act['duration'])
+        for activity in day_act:
+            if activity['room'] in list_occ_room:
+                return False
         # Controllo se è un attività singola
         if act['type'] == 'single':
             ids_act = self.get_activites_rel_al_activity(act['creator'])
@@ -35,16 +35,17 @@ class ClassDbHelper:
         day_hol = self.cleaner_list(day_hol, ids_hol)
         # Ci sono delle vacanze in quel giorno
         if day_hol:
-            return "Error: Esistono delle vacanze"
+            return False
         data_end = self.db_manager.calc_duration(act['date'], act['duration'])
         list_error = self.is_there_something_activity(act['date'], data_end, day_act)
         if list_error:
-            return list_error
+            return False
         # Implementazione programma teo
         list_act = self.db_manager.open_file('activity')
         act['ID'] = populate.next_index(list_act)
         list_act.append(act)
-        return self.db_manager.write_file(act, 'activity')
+        self.db_manager.write_file(list_act, 'activity')
+        return True
 
     @staticmethod
     def cleaner_list(list_res, list_del):
@@ -68,7 +69,8 @@ class ClassDbHelper:
         if list_error:
             return list_error
         # Implementazione programma teo
-        return populate.setholidays(id_usr, hol)
+        populate.setholidays(id_usr, hol)
+        return "OK"
 
     def is_there_something_activity(self, date_star, date_end, day_act):
         # Activity edition
@@ -81,32 +83,41 @@ class ClassDbHelper:
         # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
         list_return = []
         for activity in day_act:
-            date_end_anct = self.db_manager.calc_duration(activity['date'], activity['duration'])
-            if self.is_there_appa(activity, date_star, date_end, date_end_anct) or self.is_there_appb(activity,
+            if self.is_there_appa(activity['begin'], date_star, date_end, activity['end']) or self.is_there_appb(activity['begin'],
                                                                                                       date_star,
                                                                                                       date_end,
-                                                                                                      date_end_anct):
+                                                                                                      activity['end']):
                 list_return.append({'activity': activity})
         return list_return
 
     @staticmethod
     def is_there_appa(activity, date_star, date_end, date_end_anct):
-        if (activity['date']['hour'] >= date_star['hour'] and activity['date']['hour'] > date_end['hour']) or (
-                        activity['date']['hour'] <= date_star['hour'] and date_end_anct['hour'] >= date_end[
+        if (activity['hour'] >= date_star['hour'] and activity['hour'] > date_end['hour']) or (
+                        activity['hour'] <= date_star['hour'] and date_end_anct['hour'] >= date_end[
                     'hour']) or (
                         date_star['hour'] < date_end_anct['hour'] <= date_end['hour']) or (
-                    activity['date']['hour'] == date_star['hour']):
+                    activity['hour'] == date_star['hour']):
             return True
         return False
 
     @staticmethod
     def is_there_appb(activity, date_star, date_end, date_end_anct):
-        if ((activity['date']['minute'] >= date_star['minute'] and activity['date']['minute'] > date_end['minute']) or (
-                        activity['date']['minute'] <= date_star['minute'] and date_end_anct['date']['minute'] >=
-                    date_end[
-                        'minute']) or (date_star['minute'] < activity['date']['minute'] <= date_end['minute'])):
+        if ((activity['minute'] >= date_star['minute'] and activity['minute'] > date_end['minute']) or (
+                        activity['minute'] <= date_star['minute'] and date_end_anct['minute'] >= date_end[
+                        'minute']) or (date_star['minute'] < activity['minute'] <= date_end['minute'])):
             return True
         return False
+
+    def room_occupied(self, day_act, begin, dur):
+        # Da una lista di attività della giornata, l'ora di inizio e la durata
+        # rispondo con le stanze occupate in quel lasso di tempo
+        end = self.db_manager.calc_duration(begin, dur)
+        list_return = []
+        for activity in day_act:
+            if self.is_there_appa(activity['begin'], begin, end, activity['end']) or self.is_there_appa(activity['begin'], begin, end, activity['end']):
+                list_return.append(activity['room'])
+        return list_return
+
 
     @staticmethod
     def is_there_something_holiday(id_usr, ids_act):
@@ -140,7 +151,7 @@ class ClassDbHelper:
         list_app_usr = []
         list_act = []
         for user in list_usr:
-            for group in list_usr['groups']:
+            for group in user['groups']:
                 if group['ID'] == id_group:
                     list_group.append(self.db_manager.from_user_get_groups(user['ID']))
                     break
@@ -161,7 +172,7 @@ class ClassDbHelper:
         list_app_usr = []
         list_hol = []
         for user in list_usr:
-            for group in list_usr['groups']:
+            for group in user['groups']:
                 if group['ID'] == id_group:
                     list_app_usr.append(user['ID'])
                     break

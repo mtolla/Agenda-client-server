@@ -142,10 +142,12 @@ class Api:
         return self.login_manager.check_token(token, ip)
 
     def insert_activity(self, activity):
-        return self.db_helper.insert_activity(json.loads(activity))
+        if self.db_helper.insert_activity(activity):
+            return "OK", 200
+        return "ERROR", 401
 
     def insert_holiday(self, holiday, token):
-        return self.db_helper.insert_holiday(json.loads(holiday), self.from_token_get_iduser(token))
+        return self.db_helper.insert_holiday(holiday, self.from_token_get_iduser(token))
 
     def modify_activity(self, old, new):
         return self.db_helper.modify_act(old, new)
@@ -183,5 +185,3 @@ class Api:
         id_usr = self.from_token_get_iduser(token)
         self.db_helper.create_project(project, group, list_id_usr, id_usr)
         return True
-
-        
