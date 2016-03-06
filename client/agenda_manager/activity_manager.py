@@ -11,4 +11,12 @@ class ActivityManager:
         if data['type'] != "single":
             self.activity.extend()
 
+        self.activity.add_buttons()
+
+        if data['modality'] == "view":
+            self.activity.set_enabled_view(False)
+
+            if data['type'] != "single":
+                self.activity.checked_participants()
+
         self.activity.exec_()

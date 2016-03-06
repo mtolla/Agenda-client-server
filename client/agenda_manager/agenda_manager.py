@@ -53,12 +53,12 @@ class AgendaManager:
 
         if _id:
             data['modality'] = "view"
-            data['information'] = self.server_manager.activity_id(_id)
-            data['type'] = data['information']['activity']['type']
-            data['information']['participants'] = self.sort_participants(data['information']['participants'])
+            data['informations'] = self.server_manager.activity_id(_id)
+            data['type'] = data['informations']['activity']['type']
+            data['informations']['participants'] = self.sort_participants(data['informations']['participants'])
             data['creator'] = {
-                str(data['information']['activity']['creator']):
-                data['information']['participants'][str(data['information']['activity']['creator'])]
+                str(data['informations']['activity']['creator']):
+                data['informations']['participants'][str(data['informations']['activity']['creator'])]
             }
         else:
             group = False
@@ -84,7 +84,7 @@ class AgendaManager:
             data['creator'] = self.info_agenda['user']
             data['modality'] = "create"
             data['type'] = _type
-            data['information'] = {
+            data['informations'] = {
                 'group': group,
                 'participants': participants,
                 'location': location[0].values()[0],
