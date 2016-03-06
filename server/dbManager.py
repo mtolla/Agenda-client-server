@@ -744,6 +744,7 @@ class ClassDbManager:
         for user in list_usr:
             if user['ID'] == id_usr:
                 return user['holiday']
+            print "pollo"
         return []
 
     def error(self, app):
