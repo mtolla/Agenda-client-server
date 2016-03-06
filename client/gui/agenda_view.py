@@ -347,9 +347,9 @@ class Agenda(Page):
         icon.setPixmap(QtGui.QIcon(INFO).pixmap(QtCore.QSize(24, 24)))
         icon.setStatusTip("Ottieni piu informazioni o modifica")
         if activity['type'] != "holiday":
-            icon.mouseReleaseEvent = lambda (event): self.view_activity(str(activity['ID']))
+            icon.mouseReleaseEvent = lambda (event): self.view_activity(activity['ID'])
         else:
-            icon.mouseReleaseEvent = lambda (event): self.view_holiday(str(activity['ID']))
+            icon.mouseReleaseEvent = lambda (event): self.view_holiday(activity['ID'])
 
         # Aggiunta degli oggeti nel lyt_agenda
         lyt_activity.addWidget(lbl_color, 0, 0, 3, 1)

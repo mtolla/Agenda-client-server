@@ -5,9 +5,10 @@ class ActivityManager:
     def __init__(self):
         pass
 
-    def exec_(self, type=False, informations=False):
-        if type:
-            pass
-        else:
-            self.activity = Activity()
-            self.activity.exec_()
+    def exec_(self, data):
+        self.activity = Activity(data)
+
+        if data['type'] == "group":
+            self.activity.extend_to_group()
+
+        self.activity.exec_()

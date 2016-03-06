@@ -63,13 +63,13 @@ class ServerManager:
 
     def activities_day(self, prj, day):
         return json.loads(self.server_request_handler.activities_day({
-            'prj': prj,
+            'prj': str(prj),
             'day': day
         }))
 
     def activity_id(self, _id):
         return json.loads(self.server_request_handler.activity_id({
-            'id': _id
+            'id': str(_id)
         }))
 
     def locations(self):
@@ -87,40 +87,40 @@ class ServerManager:
 
     def project_prj_participant(self, prj):
         return self.server_request_handler.project_prj_participant({
-            'prj': prj
+            'prj': str(prj)
         })
 
     def project_prj_groups(self, prj):
         return self.server_request_handler.project_prj_groups({
-            'prj': prj
+            'prj': str(prj)
         })
 
     def groups_prj_participant_level(self, prj, _id):
         return self.server_request_handler.groups_id_participant_level({
-            'prj': prj,
-            'id': _id
+            'prj': str(prj),
+            'id': str(_id)
         })
 
     def project_prj_not_participant(self, prj):
         return self.server_request_handler.project_prj_not_participant({
-            'prj': prj
+            'prj': str(prj)
         })
 
     def participants(self, prj):
         return self.server_request_handler.participants({
-            'prj': prj
+            'prj': str(prj)
         })
 
     def groups_id_father(self, prj, _id):
         return self.server_request_handler.groups_id_father({
-            'prj': prj,
-            'id': _id
+            'prj': str(prj),
+            'id': str(_id)
         })
 
     def holiday_id(self, prj, _id):
         return self.server_request_handler.holiday_id({
-            'prj': prj,
-            'id': _id
+            'prj': str(prj),
+            'id': str(_id)
         })
 
     def logout(self):
@@ -128,6 +128,6 @@ class ServerManager:
 
     def holidays_day(self, prj, day):
         return json.loads(self.server_request_handler.holidays_day({
-            'prj': prj,
+            'prj': str(prj),
             'day': day
         }))

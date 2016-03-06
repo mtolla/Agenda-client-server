@@ -22,13 +22,13 @@ class AgendaManager:
         self.agenda.lbl_year.setText(str(data.year()))
 
         new_list_activity = self.server_manager.activities_day(
-            str(self.info_agenda['project']['ID']),
+            self.info_agenda['project']['ID'],
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
 
         # ------------ Holidays -------------
         new_list_holiday = self.server_manager.holidays_day(
-            str(self.info_agenda['project']['ID']),
+            self.info_agenda['project']['ID'],
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
 
@@ -53,58 +53,63 @@ class AgendaManager:
 
         if _id:
             data['modality'] = "view"
-            for activity in self.info_agenda['activities']:
-                if activity["ID"] == _id:
-                    data['type'] = self.info_agenda['activities']['type']
             data['information'] = self.server_manager.activity_id(_id)
+            data['type'] = data['information']['activity']['type']
+            data['information']['participants'] = self.sort_participants(data['information']['participants'])
         else:
-            group = False
-            participants = []
+            groups = False
+            participants = {}
             if self.info_agenda['level'] == "teamleader" and _type == "group":
                 # ------------- non funziona query ----------------------
                 '''
-                group = self.server_manager.groups_teamleader(self.info_agenda['project']['ID'])
+                groups = self.server_manager.groups_teamleader(self.info_agenda['project']['ID'])
+                print groups
                 '''
-                group = {7: "AgendaGroup"}
+                groups = [{7: "AgendaGroup"}]
 
-            if group:
-                participants = self.server_manager.group_id_participants(group.keys()[0])
+
+                data['groups'] = groups
+
+            if groups:
+                participants = self.server_manager.group_id_participants(groups[0].keys()[0])
+                participants = self.sort_participants(self.reformact_participants(participants))
             elif _type == "project":
                 participants = self.server_manager.group_id_participants(self.info_agenda['project']['group'])
+                participants = self.sort_participants(self.reformact_participants(participants))
 
+            location = self.server_manager.locations()
             data['modality'] = "create"
             data['type'] = _type
             data['information'] = {
-                "group": group,
-                "participants": participants,
-                "location": self.server_manager.locations(),
-                "activity": {
-                    "name": "",
-                    "project": self.info_agenda['project']['ID'],
-                    "duration": 60,
-                    "participants": [],
-                    "location": [],
-                    "date": {
-                        "year": QtCore.QDate.currentDate().year(),
-                        "month": QtCore.QDate.currentDate().month(),
-                        "day": QtCore.QDate.currentDate().day(),
-                        "hour": QtCore.QTime.currentTime().hour(),
-                        "minute": QtCore.QTime.currentTime().minute()
+                'group': groups[0].values()[0],
+                'participants': participants,
+                'location': location[0].values()[0],
+                'activity': {
+                    'name': "",
+                    'project': self.info_agenda['project']['ID'],
+                    'duration': 60,
+                    'participants': [],
+                    'location': [],
+                    'date': {
+                        'year': QtCore.QDate.currentDate().year(),
+                        'month': QtCore.QDate.currentDate().month(),
+                        'day': QtCore.QDate.currentDate().day(),
+                        'hour': QtCore.QTime.currentTime().hour(),
+                        'minute': QtCore.QTime.currentTime().minute()
                     },
-                    "type": _type,
-                    "ID": None,
-                    "description": ""
+                    'type': _type,
+                    'ID': None,
+                    'description': ""
                 }
             }
 
-        print data
         self.activity_manager.exec_(data)
 
     def create_holiday(self):
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def create_single_activity(self):
-        self.exec_activity_view(_type="single")
+        self.exec_activity_view()
 
     def create_group_activity(self):
         self.exec_activity_view(_type="group")
@@ -126,3 +131,23 @@ class AgendaManager:
 
     def create_activity_project(self):
         self.exec_activity_view(_type="project")
+
+    @staticmethod
+    def reformact_participants(participants):
+        dict_app = {}
+        for participant in participants:
+            for _id, name in participant.items():
+                dict_app[_id] = name
+        return dict_app
+
+    @staticmethod
+    def sort_participants(participants):
+        new_participants = dict()
+
+        for key in sorted(
+            participants,
+            key=lambda k: participants.keys()):
+            new_participants[key] = participants[key]
+        print new_participants
+        return new_participants
+
