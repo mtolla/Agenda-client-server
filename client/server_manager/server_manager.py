@@ -53,7 +53,7 @@ class ServerManager:
         projects = json.loads(self.server_request_handler.projects())
 
         if projects:
-            agenda = json.loads(self.server_request_handler.project_id({
+            agenda = json.loads(self.server_request_handler.project_prj({
                 'prj': projects.keys()[0]
             }))
             if agenda:
@@ -67,45 +67,43 @@ class ServerManager:
             'day': day
         }))
 
-    def activity_id(self, prj, _id):
+    def activity_id(self, _id):
         return json.loads(self.server_request_handler.activity_id({
-            'prj': prj,
             'id': _id
         }))
 
     def locations(self):
-        return self.server_request_handler.locations()
+        return json.loads(self.server_request_handler.locations())
 
     def groups_teamleader(self, prj):
-        return self.server_request_handler.groups_teamleader({
+        return json.loads(self.server_request_handler.groups_teamleader({
+            'prj': str(prj)
+        }))
+
+    def group_id_participants(self, _id):
+        return json.loads(self.server_request_handler.group_id_participants({
+            'id': str(_id)
+        }))
+
+    def project_prj_participant(self, prj):
+        return self.server_request_handler.project_prj_participant({
             'prj': prj
         })
 
-    def group_id_participants(self, prj, _id):
-        return self.server_request_handler.group_id_participants({
-            'prj': prj,
-            'id': _id
+    def project_prj_groups(self, prj):
+        return self.server_request_handler.project_prj_groups({
+            'prj': prj
         })
 
-    def project_id_participant(self, _id):
-        return self.server_request_handler.project_id_participant({
-            'id': _id
-        })
-
-    def project_id_groups(self, _id):
-        return self.server_request_handler.project_id_groups({
-            'id': _id
-        })
-
-    def groups_id_participant_level(self, prj, _id):
+    def groups_prj_participant_level(self, prj, _id):
         return self.server_request_handler.groups_id_participant_level({
             'prj': prj,
             'id': _id
         })
 
-    def project_id_not_participant(self, _id):
-        return self.server_request_handler.project_id_not_participant({
-            'id': _id
+    def project_prj_not_participant(self, prj):
+        return self.server_request_handler.project_prj_not_participant({
+            'prj': prj
         })
 
     def participants(self, prj):

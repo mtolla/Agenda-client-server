@@ -50,18 +50,54 @@ class AgendaManager:
 
     def exec_activity_view(self, _id=False, _type="single"):
         data = dict()
+
         if _id:
             data['modality'] = "view"
-            data['type'] = self.info_agenda
-            informations = self.server_manager.activity_id(
-                self.info_agenda['project']['ID'],
-                _id
-            )
+            for activity in self.info_agenda['activities']:
+                if activity["ID"] == _id:
+                    data['type'] = self.info_agenda['activities']['type']
+            data['information'] = self.server_manager.activity_id(_id)
         else:
+            group = False
+            participants = []
+            if self.info_agenda['level'] == "teamleader" and _type == "group":
+                # ------------- non funziona query ----------------------
+                '''
+                group = self.server_manager.groups_teamleader(self.info_agenda['project']['ID'])
+                '''
+                group = {7: "AgendaGroup"}
+
+            if group:
+                participants = self.server_manager.group_id_participants(group.keys()[0])
+            elif _type == "project":
+                participants = self.server_manager.group_id_participants(self.info_agenda['project']['group'])
+
             data['modality'] = "create"
             data['type'] = _type
-            data['information'] = None
+            data['information'] = {
+                "group": group,
+                "participants": participants,
+                "location": self.server_manager.locations(),
+                "activity": {
+                    "name": "",
+                    "project": self.info_agenda['project']['ID'],
+                    "duration": 60,
+                    "participants": [],
+                    "location": [],
+                    "date": {
+                        "year": QtCore.QDate.currentDate().year(),
+                        "month": QtCore.QDate.currentDate().month(),
+                        "day": QtCore.QDate.currentDate().day(),
+                        "hour": QtCore.QTime.currentTime().hour(),
+                        "minute": QtCore.QTime.currentTime().minute()
+                    },
+                    "type": _type,
+                    "ID": None,
+                    "description": ""
+                }
+            }
 
+        print data
         self.activity_manager.exec_(data)
 
     def create_holiday(self):

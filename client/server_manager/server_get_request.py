@@ -11,16 +11,16 @@ class ServerGetRequest(ServerRequestInterface):
 
         self.request_url = {
             'projects': server_url + "/projects",
-            'project_id': server_url + "/project/<int:prj>",
+            'project_prj': server_url + "/project/<int:prj>",
             'activities_day': server_url + "/project/<int:prj>/activities/<int:day>",
             'activity_id': server_url + "/activity/<int:id>",
             'locations': server_url + "/locations",
             'groups_teamleader': server_url + "/project/<int:prj>/groups/teamleader",
-            'group_id_participants': server_url + "/project/<int:prj>/group/<int:id>/participants",
-            'project_id_participant': server_url + "/project/<int:prj>/participant",
-            'project_id_groups': server_url + "/project/<int:prj>/groups",
+            'group_id_participants': server_url + "/group/<int:id>/participants",
+            'project_prj_participant': server_url + "/project/<int:prj>/participant",
+            'project_prj_groups': server_url + "/project/<int:prj>/groups",
             'groups_id_participant_level': server_url + "/project/<int:prj>/groups/<int:id>/participant/level",
-            'project_id_not_participant': server_url + "/project/<int:prj>/not/participant",
+            'project_prj_not_participant': server_url + "/project/<int:prj>/not/participant",
             'participants': server_url + "/project/<int:prj>/participants",
             'groups_id_father': server_url + "/project/<int:prj>/groups/<int:id>/father",
             'holiday_id': server_url + "/project/<int:prj>/holiday/<int:id>",
@@ -53,8 +53,8 @@ class ServerGetRequest(ServerRequestInterface):
 
         return self.get_response(response)
 
-    def project_id(self, _id):
-        response = self.request.get(self.url_generator('project_id', _id)).__dict__
+    def project_prj(self, prj):
+        response = self.request.get(self.url_generator('project_prj', prj)).__dict__
 
         return self.get_response(response)
 
@@ -83,13 +83,13 @@ class ServerGetRequest(ServerRequestInterface):
 
         return self.get_response(response)
 
-    def project_id_participant(self, _id):
-        response = self.request.get(self.url_generator('project_id_participant', _id)).__dict__
+    def project_prj_participant(self, prj):
+        response = self.request.get(self.url_generator('project_prj_participant', prj)).__dict__
 
         return self.get_response(response)
 
-    def project_id_groups(self, _id):
-        response = self.request.get(self.url_generator('project_id_groups', _id)).__dict__
+    def project_prj_groups(self, prj):
+        response = self.request.get(self.url_generator('project_prj_groups', prj)).__dict__
 
         return self.get_response(response)
 
@@ -98,8 +98,8 @@ class ServerGetRequest(ServerRequestInterface):
 
         return self.get_response(response)
 
-    def project_id_not_participant(self, _id):
-        response = self.request.get(self.url_generator('project_id_not_participant', _id)).__dict__
+    def project_prj_not_participant(self, prj):
+        response = self.request.get(self.url_generator('project_prj_not_participant', prj)).__dict__
 
         return self.get_response(response)
 

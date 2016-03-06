@@ -345,8 +345,11 @@ class Agenda(Page):
         # Creazione icona info
         icon = QtGui.QLabel(self)
         icon.setPixmap(QtGui.QIcon(INFO).pixmap(QtCore.QSize(24, 24)))
-        icon.mouseReleaseEvent = lambda (event): self.icon_clicked(str(activity['ID']))
         icon.setStatusTip("Ottieni piu informazioni o modifica")
+        if activity['type'] != "holiday":
+            icon.mouseReleaseEvent = lambda (event): self.view_activity(str(activity['ID']))
+        else:
+            icon.mouseReleaseEvent = lambda (event): self.view_holiday(str(activity['ID']))
 
         # Aggiunta degli oggeti nel lyt_agenda
         lyt_activity.addWidget(lbl_color, 0, 0, 3, 1)
@@ -388,8 +391,11 @@ class Agenda(Page):
             key=lambda k: (k['begin']['hour'], k['begin']['minute'], k['name'])
         )
 
-    def icon_clicked(self, _id):
+    def view_activity(self, _id):
         self.function.exec_activity_view(_id)
+
+    def view_holiday(self, _id):
+        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def holiday_to_activity(self):
         list_app = []
@@ -397,7 +403,8 @@ class Agenda(Page):
         for _id, holidays in self.info_agenda['holidays'].items():
             for holiday in holidays:
                 activity = dict()
-                activity['type'] = "holidays"
+                activity['ID'] = holiday['ID']
+                activity['type'] = "holiday"
                 activity['begin'] = dict()
                 activity['begin']['hour'] = str(holiday['begin']['day']) + "/" + str(holiday['begin']['month'])
                 activity['begin']['minute'] = holiday['begin']['year']

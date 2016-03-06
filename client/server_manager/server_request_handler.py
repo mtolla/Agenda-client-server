@@ -17,8 +17,8 @@ class ServerRequestHandler:
     def projects(self):
         return self.server_get_request.projects()
 
-    def project_id(self, _id):
-        return self.server_get_request.project_id(_id)
+    def project_prj(self, prj):
+        return self.server_get_request.project_prj(prj)
 
     def activities_day(self, day):
         return self.server_get_request.activities_day(day)
@@ -35,17 +35,17 @@ class ServerRequestHandler:
     def group_id_participants(self, _id):
         return self.server_get_request.group_id_participants(_id)
 
-    def project_id_participant(self, _id):
-        return self.server_get_request.project_id_participant(_id)
+    def project_prj_participant(self, prj):
+        return self.server_get_request.project_prj_participant(prj)
 
-    def project_id_groups(self, _id):
-        return self.server_get_request.project_id_groups(_id)
+    def project_prj_groups(self, prj):
+        return self.server_get_request.project_prj_groups(prj)
 
     def groups_id_participant_level(self, _id):
         return self.server_get_request.groups_id_participant_level(_id)
 
-    def project_id_not_participant(self, _id):
-        return self.server_get_request.project_id_not_participant(_id)
+    def project_prj_not_participant(self, prj):
+        return self.server_get_request.project_prj_not_participant(prj)
 
     def participants(self, prj):
         return self.server_get_request.participants(prj)
