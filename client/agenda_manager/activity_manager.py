@@ -31,3 +31,5 @@ class ActivityManager:
 
         return participants
 
+    def insert_activity(self, activity):
+        return self.agenda_manager.insert_activity(activity)

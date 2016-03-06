@@ -61,3 +61,6 @@ class ServerRequestHandler:
 
     def holidays_day(self, day):
         return self.server_get_request.holidays_day(day)
+
+    def insert_activity(self, activity):
+        return self.server_post_request.insert_activity(activity)

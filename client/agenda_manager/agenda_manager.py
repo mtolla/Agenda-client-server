@@ -151,8 +151,8 @@ class AgendaManager:
         new_participants = dict()
 
         for key in sorted(
-            participants,
-            key=lambda k: participants.keys()):
+                participants,
+                key=lambda k: participants.keys()):
             new_participants[key] = participants[key]
 
         return new_participants
@@ -164,3 +164,6 @@ class AgendaManager:
 
     def groups_teamleader(self, prj):
         return self.server_manager.groups_teamleader(prj)
+
+    def insert_activity(self, activity):
+        return self.server_manager.insert_activity(activity)

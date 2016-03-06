@@ -16,7 +16,8 @@ class ServerPostRequest(ServerRequestInterface):
 
         self.request_url = {
             'get_token': server_url + "/login/token",
-            'do_login': server_url + "/login"
+            'do_login': server_url + "/login",
+            'insert_activity': server_url + "/insert/activity"
         }
 
     @staticmethod
@@ -57,6 +58,21 @@ class ServerPostRequest(ServerRequestInterface):
             data={
                 'token': token,
                 'ip': self.client_url
+            }
+        ).__dict__
+
+        return self.get_response(response)
+
+    def insert_activity(self, activity):
+        dict_activity = dict()
+        dict_activity['token'] = self.token
+        dict_activity['ip'] = self.client_url
+        dict_activity['activity'] = activity
+
+        response = self.request.post(
+            self.request_url['insert_activity'],
+            data={
+                'dict_activity': json.dumps(dict_activity)
             }
         ).__dict__
 

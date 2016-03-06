@@ -310,5 +310,25 @@ class Activity(QtGui.QDialog):
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def insert(self):
-        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
-
+        self.data['functions'].insert_activity({
+            "group": 7,
+            "name": "caccamolle",
+            "creator": 2,
+            "project": 7,
+            "duration": 60,
+            "participants": [
+                2,
+                3
+            ],
+            "location": 1,
+            "date": {
+                "year": 2016,
+                "minute": 50,
+                "day": 6,
+                "hour": 12,
+                "month": 3
+            },
+            "type": "group",
+            "ID": 0,
+            "description": "descriz"
+        })

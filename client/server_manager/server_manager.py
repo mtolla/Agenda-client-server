@@ -131,3 +131,6 @@ class ServerManager:
             'prj': str(prj),
             'day': day
         }))
+
+    def insert_activity(self, activity):
+        return self.server_request_handler.insert_activity(activity)
