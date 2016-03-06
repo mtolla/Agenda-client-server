@@ -56,6 +56,10 @@ class AgendaManager:
             data['information'] = self.server_manager.activity_id(_id)
             data['type'] = data['information']['activity']['type']
             data['information']['participants'] = self.sort_participants(data['information']['participants'])
+            data['creator'] = {
+                str(data['information']['activity']['creator']):
+                data['information']['participants'][str(data['information']['activity']['creator'])]
+            }
         else:
             group = False
             groups = False

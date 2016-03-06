@@ -65,6 +65,7 @@ class Activity(QtGui.QDialog):
         self.lbl_creator_lbl = QtGui.QLabel("Creatore :", self.gdr_data)
 
         self.lbl_creator = QtGui.QLabel(self.data['creator'].values()[0], self.gdr_data)
+        self.lbl_creator.setStyleSheet("qproperty-alignment: 'AlignLeft | AlignVCenter';")
 
         self.lbl_name = QtGui.QLabel("Nome :", self.gdr_data)
 
@@ -182,7 +183,7 @@ class Activity(QtGui.QDialog):
         for _id, name in self.data['information']['participants'].items():
             self.chk_participants.append(QtGui.QCheckBox(name, self.vrt_participants))
             self.chk_participants[i].setObjectName(str(_id))
-            self.chk_participants[i].setChecked(True)
+            #self.chk_participants[i].setChecked(True)
             self.lyt_participants.addWidget(self.chk_participants[i])
             i += 1
 
