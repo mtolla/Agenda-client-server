@@ -25,7 +25,7 @@ class ServerManager:
         if not notifications:
             return
 
-        Popup("Ei hai delle notifiche!!!!", NOTIFICATION).exec_()
+        Popup("Sono presenti nuove notifiche!", NOTIFICATION).exec_()
 
     def get_token(self, user):
         """
