@@ -3,6 +3,8 @@
 
 # Importo db_manager
 from dbManager import ClassDbManager
+# Importo db_manager helper
+from dbHelper import ClassDbHelper
 # Importo login_manager
 from loginManager import ClassLoginManager
 # Importo backgroundThread
@@ -18,6 +20,7 @@ class Api:
     def __init__(self):
         # Creazione oggetti db,login Manager
         self.db_manager = ClassDbManager()
+        self.db_helper = ClassDbHelper(self.db_manager)
         self.login_manager = ClassLoginManager()
         # Creazione thread controllo token
         token_thread = TokenThread(self.login_manager, self.db_manager)
@@ -41,7 +44,7 @@ class Api:
         return json.dumps(list_return)
 
     # Login con token
-    def do_login_token(self, token, ip, ):
+    def do_login_token(self, token, ip):
         if self.login_manager.do_login_token(token, ip):
             list_return = self.signal_queue.send_user_logged(self.login_manager.from_token_get_user(token))
             return json.dumps(list_return)
@@ -81,12 +84,6 @@ class Api:
     def get_holidays_day(self, id_proj, day, month, year):
         dict_app = {'day': day, 'month': month, 'year': year}
         return json.dumps(self.db_manager.get_holidays_from_proj(id_proj, dict_app))
-
-    def insert_activity(self, activity):
-        return self.db_manager.insert_activity(json.loads(activity))
-
-    def insert_holiday(self, holiday, token):
-        return self.db_manager.insert_holiday(json.loads(holiday), self.from_token_get_iduser(token))
 
     def get_user_project(self, token):
         return json.dumps(self.db_manager.get_proj_from_user(self.login_manager.from_token_get_iduser(token)))
@@ -144,69 +141,37 @@ class Api:
     def check_token(self, token, ip):
         return self.login_manager.check_token(token, ip)
 
-    """
-    def get_activity(self, id_att):
-        # Dato id attività restituire:
-        #   - Attività
-        #   - Gruppo se è un attività di gruppo
-        dict_return = dict()
-        dict_return['activity'] = self.get_activity_from_id_act(id_att)
-        dict_return['group'] = self.get_group_name_from_group(dict_return['activity']['group'])
-        return json.dumps(dict_return)
+    def insert_activity(self, activity):
+        return self.db_helper.insert_activity(json.loads(activity))
 
-    def get_name_projects(self, list_id_proj):
-        return self.db_manager.get_name_from_id_projects(list_id_proj)
+    def insert_holiday(self, holiday, token):
+        return self.db_helper.insert_holiday(json.loads(holiday), self.from_token_get_iduser(token))
 
-    def get_project(self, id_proj):
-        return self.db_manager.get_proj_from_id_proj(id_proj)
+    def modify_activity(self, old, new):
+        return self.db_helper.modify_act(old, new)
+    
+    def modify_holiday(self, old, new):
+        return self.db_helper.modify_hol(old, new)
+    
+    def modify_group(self, new):
+        return self.db_helper.modify_group(new)
+    
+    def modify_level(self, id_usr, id_group, level):
+        return self.db_helper.modify_level(id_usr, id_group, level)
+    
+    def modify_project(self, new):
+        return self.db_helper.modify_proj(new)
+    
+    def delete_activity(self, id):
+        return self.db_helper.delete_act(id)
 
-    def get_pjmanager_mail(self, id_proj):
-        return self.db_manager.get_pjmanager_email(id_proj)
+    def delete_holiday(self, id):
+        return self.db_helper.delete_hol(id)
 
-    def get_activities_project_today(self, id_proj):
-        return self.db_manager.get_today_activities_from_proj(id_proj)
+    def delete_group(self, id):
+        return self.db_helper.delete_group(id)
 
-    def get_holidays_proj(self, id_proj):
-        return json.dumps(self.db_manager.get_holidays_from_proj(id_proj))
+    def delete_project(self, id):
+        return self.db_helper.delete_proj(id)
 
-    def get_group_name(self, id_group):
-        return self.db_manager.get_group_name_from_group(id_group)
-
-    def test(self):
-        return json.dumps(self.login_manager.user_token)
-
-    # Implementazioni per test, se non serviranno più eliminare pure
-
-    def delete_token(self, app, login_app):
-        return self.login_manager.delete_token(app, login_app)
-
-    def from_token_get_user(self, token):
-        return self.login_manager.from_token_get_user(token)
-
-    def get_activity_from_id_act(self, id_act):
-        return self.db_manager.get_activity_from_id_act(id_act)
-
-    def get_name_from_id_projects(self, id_proj):
-        return self.db_manager.get_name_from_id_projects(id_proj)
-
-    def get_proj_from_id_proj(self, id_proj):
-        return self.db_manager.get_proj_from_id_proj(id_proj)
-
-    def get_pjmanager_email(self, id_proj):
-        return self.db_manager.get_pjmanager_email(id_proj)
-
-    def is_teamleader(self, id_group):
-        return self.db_manager.is_teamleader(id_group)
-
-    def get_holidays_from_proj(self, id_proj):
-        return self.db_manager.get_holidays_from_proj(id_proj)
-
-    def get_group_name_from_group(self, id_group):
-        return self.db_manager.get_group_name_from_group(id_group)
-
-    def get_proj_from_user(self, id_user):
-        return self.db_manager.get_proj_from_user(id_user)
-
-    def get_user_token(self):
-        return self.login_manager.user_token
-    """
+        
