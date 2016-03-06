@@ -286,7 +286,7 @@ class ClassDbManager:
         # Se l'ultima volta che è stato aggiornato è oggi non esegue il controllo
         if self.last_check['day'] == actual_time['day'] or self.last_check['month'] == actual_time['month'] or \
                         self.last_check['hour'] == actual_time['hour']:
-            return
+            return True
         for row in list_app:
             if row['date']['year'] == actual_time['year'] and row['date']['month'] == actual_time['month']:
                 if row['date']['day'] == actual_time['day']:
@@ -746,36 +746,6 @@ class ClassDbManager:
                 return user['holiday']
         return []
 
-    def room_occupied(self, day_act, begin, dur):
-        # Da una lista di attività della giornata, l'ora di inizio e la durata
-        # rispondo con le stanze occupate in quel lasso di tempo
-        end = self.calc_duration(begin, dur)
-        list_return = []
-        for activity in day_act:
-            if self.room_occupied_appa(activity, begin, end) or self.room_occupied_appb(activity, begin, end):
-                list_return.append(activity['room'])
-        return list_return
-
-    @staticmethod
-    def room_occupied_appa(activity, begin, end):
-        if (activity['begin']['hour'] == begin['hour'] and ((activity['begin']['minute'] >= begin[
-            'minute'] and activity['begin']['minute'] > end['minute']) or (
-                        activity['begin']['minute'] <= begin['minute'] and activity['end']['minute'] >= end[
-                    'minute']) or (
-                        begin['minute'] < activity['begin']['minute'] <= end['minute']))):
-            return True
-        return False
-
-    @staticmethod
-    def room_occupied_appb(activity, begin, end):
-        if (activity['begin']['hour'] == begin['hour'] and ((activity['begin']['minute'] >= begin[
-            'minute'] and activity['begin']['minute'] > end['minute']) or (
-                        activity['begin']['minute'] <= begin['minute'] and activity['end']['minute'] >= end[
-                    'minute']) or (
-                        begin['minute'] < activity['begin']['minute'] <= end['minute']))):
-            return True
-        return False
-
     def error(self, app):
         if app:
             return self.er + '5UL9yj">'
@@ -870,5 +840,5 @@ class ClassDbManager:
         except IOError:
             return False
         else:
-            return json.load(f)
+            return True
 

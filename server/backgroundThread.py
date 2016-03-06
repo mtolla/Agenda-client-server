@@ -57,7 +57,7 @@ class SignalThread(QtCore.QRunnable):
             self.signal_queue.clean_queue()
             time.sleep(self.sleep_time)
 
-
+# Classe Thread, lavora giornalmente
 class JournalThread(QtCore.QRunnable):
     def __init__(self, db_manager):
         QtCore.QRunnable.__init__(self)

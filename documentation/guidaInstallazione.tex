@@ -1,0 +1,205 @@
+\documentclass[12pt]{scrartcl}
+\usepackage{listings}
+\usepackage{epigraph}
+
+\title{Guida all'Installazione}
+\subtitle{Ingegneria del Software}
+\author{Stefano Ravetta, Simone Renzo, Matteo Scarpone, Mattia Tollari}
+\date{29 Febbraio, 2016}
+\begin{document}
+\maketitle
+\section{Informazioni su questo documento}
+    Questo documento \`e la guida all'installazione del software sviluppato.
+    Contiene le istruzioni da seguire per poter installare su varie piattaforme
+    le dipendenze richieste.
+\section{Ottenere i permessi necessari}
+    \subsection{Gnu/Linux}
+        \`E necessario dare i seguenti comandi da un emulatore di terminale.
+        Nel caso sia attivo il login da utente root:
+        \begin{verbatim}
+        su -
+        \end{verbatim}
+        nel caso invece si abbiano i privilegi di sudouser:
+        \begin{verbatim}
+        sudo su -
+        \end{verbatim}
+    \subsection{Windows, Mac OS X}
+        \`E necessario aver effettuato il login con utente che abbia i permessi
+        di installare software.
+\section{Installazione dipendenze}
+\subsection{Installazione di Python}
+    
+    \subsubsection{Gnu/Linux}
+    Nella maggior parte di distribuzioni l'interprete Python risulta preinstallato.
+    Nel caso non si disponesse di un interprete Python \`e possibile installarlo dai
+    gestori di pacchetti. \`E richiesto Python2.
+    \begin{itemize}
+        \item{Debian}
+            \begin{verbatim}
+apt-get install python2.7
+            \end{verbatim}
+    \item{Arch Linux}
+            \begin{verbatim}
+pacman -Sy python2
+            \end{verbatim}
+        \item{Gentoo}
+            \begin{verbatim}
+emerge --ask dev-lang/python:2.7
+        \end{verbatim}
+    \item{Ubuntu}
+            \begin{verbatim}
+apt-get install python2.7
+            \end{verbatim}
+    \item{Fedora}
+            \begin{verbatim}
+yum install python27
+            \end{verbatim}
+    \end{itemize}
+    Nel caso fosse necessario installare Python compilando il sorgente, i sorgenti possono
+    essere scaricati da: \\
+    http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tar.xz
+    Seguono i comandi per la compilazione ed installazione
+    \begin{verbatim}
+tar xvzf Python-2.7.6.tar.xz
+cd Python-2.7.6
+./configure --prefix=~/python-2.7.6 --enable-shared
+make
+make install
+    \end{verbatim}
+    \subsubsection{Windows}
+    Scaricare ed installare il pacchetto "python2.7" disponibile alla pagina:\\
+    https://www.python.org/downloads/windows/
+    \subsubsection{Mac OS X}
+    Scaricare ed installare il pacchetto:\\
+    https://www.python.org/ftp/python/2.7.11/python-2.7.11-macosx10.6.pkg\\
+    Per Mac OS X a 64 bit
+    o il pacchetto:\\
+    https://www.python.org/ftp/python/2.7.11/python-2.7.11-macosx10.5.pkg\\
+    per Mac OS X a 32 bit
+    \subsection{Installazione di PyQt}
+        \subsubsection{Gnu/Linux}
+        Usando le moderne distribuzioni Linux \`e possibile instsallare PyQt usando
+        il gestore di pacchetti della propria distribuzione. Segue un elenco di 
+        comandi che richiedono al gestore di pacchetti di installare la dipendenza.
+        I comandi seguenti devono essere dati con i privilegi di superuser:\\
+        \begin{itemize}
+            \item Debian
+            \begin{verbatim}
+apt-get install python-qt4
+            \end{verbatim}
+            \item Arch Linux
+            \begin{verbatim}
+pacman -Sy pyqt
+            \end{verbatim}
+            \item Gentoo
+            \begin{verbatim}
+emerge PyQt4
+            \end{verbatim}
+            \item Fedora
+            \begin{verbatim}
+apt-get install python-qt4
+            \end{verbatim}
+            \item Ubuntu
+             \begin{verbatim}
+yum install PyQt4
+            \end{verbatim}
+        \end{itemize}
+        \`E possibile installare PyQt scaricando i sorgenti e compilandoli (sconsigliato).
+        Scaricare i sorgenti da
+        \\http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/PyQt-x11-gpl-4.11.4.tar.gz .
+        \\Seguono comandi per generiche distribuzioni Linux.
+        \begin{verbatim}
+tar xvzf PyQt-x11-gpl-4.11.4.tar.gz
+cd PyQt-x11-gpl-4.11.4
+python2 configure-ng.py
+make
+make install
+        \end{verbatim}
+    \subsection{Flask}
+    \subsubsection{Gnu/Linux}
+        \begin{itemize}
+            \item Debian
+            \begin{verbatim}
+apt-get install python-flask
+            \end{verbatim}
+            \item Arch Linux
+            \begin{verbatim}
+pacman -Sy python2-flask
+            \end{verbatim}
+            \item Gentoo
+            \begin{verbatim}
+emerge flask
+            \end{verbatim}
+            \item Ubuntu
+            \begin{verbatim}
+apt-get install python-flask
+            \end{verbatim}
+            \item Fedora
+             \begin{verbatim}
+yum install python-flask
+            \end{verbatim}
+        \end{itemize}
+        
+        \subsubsection{Pyton-pip}
+        Nel caso non si disponesse di un gestore di pacchetti \`e consigliata l'installazione
+        tramite python-pip.
+        \begin{verbatim}
+pip install flask
+        \end{verbatim}
+        \`E possibile usare pip anche tramite Windows o Mac OS X.
+\section{Scaricamento ed uso del software}
+Clonare tramite git il repository.
+\begin{verbatim}
+git@github.com:UnimibSoftEngCourse1516/progetto-gruppo4.git
+\end{verbatim}
+Eseguire il file che avvier\`a il server:
+\begin{verbatim}
+python2 progetto-gruppo4/startServer.py &
+\end{verbatim}
+Ora \`e possibile
+    \begin{itemize}
+        \item Avviare l'applicazione per la creazione dei nuovi utenti:
+        \begin{verbatim}
+python2 progetto-gruppo4/administration.py
+        \end{verbatim}
+        \item Avviare il Client
+        \begin{verbatim}
+python2 progetto-gruppo4/startClient.py
+        \end{verbatim}
+    \end{itemize}
+subsection{Analisi con sonarqube}
+Per eseguire l'analisi del software con Sonarqube \`e necessario:
+scaricare ed installare sonar-runner
+\begin{verbatim}
+http://www.sonarqube.org/downloads/
+\end{verbatim}
+Accedere alla directory di sonarqube, accedere alla
+directory "bin" ed accedere alla directory corrispondente al sistema operativo usato e lanciare
+l'eseguibile contenuto. Cos\`i facendo si avvier\`a il server. Creare un file nella directory
+del progetto col nome "sonar-project.properties" ed inserirvi le seguenti righe.
+
+\begin{verbatim}
+
+# Required metadata
+sonar.projectKey=org.sonarqube:python-simple-sonar-scanner
+sonar.projectName=NOME PROGETTO
+sonar.projectVersion=1.0
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=CARTELLA PROGETTO
+
+# Language
+sonar.language=py
+
+# Encoding of the source files
+sonar.sourceEncoding=UTF-8
+
+\end{verbatim}
+Accedere con un web-browser all'indirizzo 127.0.0.1:9000.
+Se necessario, effettuare il login con le credenziali:\\
+username: admin\\
+password: admin\\
+Aprire la sezione "System/Update Center" e ricercare il plugin Python installato.
+
+
+\end{document}
