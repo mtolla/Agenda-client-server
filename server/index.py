@@ -25,16 +25,6 @@ def omg_tolla():
     return api.omg_tolla()
 
 
-@index.route("/ping")
-def ping():
-    return True
-
-
-@index.route("/testbg")
-def testbg():
-    return api.test()
-
-
 @index.route('/login/token', methods=['POST'])
 def do_login():
     dict_login = ast.literal_eval(request.form['dict_login'])
@@ -62,56 +52,11 @@ def do_logut(token, ip):
         return api.do_logout(token)
     return False, 401
 
-###########################################################################
-# DA ELIMINARE SERVE PER TEST
-@index.route('/login/<user>/<passw>/<ip>', methods=['GET'])
-def asd(user, passw, ip):
-    if user and passw and ip:
-        response = api.do_login(user, passw, ip)
-        if response:
-            return response
-        return 0
 
-
-# Modificata, da testare
 @index.route('/project/<int:id_proj>/<token>/<ip>', methods=['GET'])
 def project(id_proj, token, ip):
-    api.check_token(token, ip)
-    return api.project(token, id_proj)
-
-
-@index.route('/activity/<int:id_att>', methods=['GET'])
-def get_activity(id_att):
-    return api.get_activity(id_att)
-
-
-@index.route('/name_projects/<list_id_proj>', methods=['GET'])
-def get_name_projects(list_id_proj):
-    return api.get_name_projects(list_id_proj)
-
-
-@index.route('/project/<int:id_proj>', methods=['GET'])
-def get_project(id_proj):
-    return api.get_project(id_proj)
-
-
-@index.route('/pjmanager_mail/<int:id_proj>', methods=['GET'])
-def get_pjmanager_mail(id_proj):
-    return api.get_pjmanager_mail(id_proj)
-
-
-@index.route('/is_teamleader/<token>', methods=['GET'])
-def get_is_teamleader(token):
-    if api.get_is_teamleader(token):
-        return "True", 200
-    else:
-        return "False", 404
-
-
-@index.route('/holidays_proj/<int:id_proj>/<token>/<ip>', methods=['GET'])
-def get_holidays_proj(id_proj, token, ip):
     if api.check_token(token, ip):
-        return api.get_holidays_proj(id_proj)
+        return api.project(token, id_proj)
     return False, 401
 
 
@@ -122,16 +67,13 @@ def get_holidays_day(id_proj, day, month, year, token, ip):
     return False, 401
 
 
-@index.route('/group_name/<int:id_group>', methods=['GET'])
-def get_group_name(id_group):
-    return api.get_group_name(id_group)
-
 @index.route('/insert/activity/', methods=['POST'])
 def insert_activity():
     dict_app = ast.literal_eval(request.form['dict_activity'])
     if api.check_token(dict_app['token'], dict_app['ip']):
         return api.insert_activity(dict_app['activity'])
     return False, 401
+
 
 @index.route('/insert/holiday/', methods=['POST'])
 def insert_holiday():
@@ -140,8 +82,7 @@ def insert_holiday():
         return api.insert_holiday(dict_app['holiday'], dict_app['token'])
     return False, 401
 
-###########################################################################
-# ASSOLUTAMENTE DA TESTARE
+
 @index.route('/projects/<token>/<ip>', methods=['GET'])
 def get_user_project(token, ip):
     if api.check_token(token, ip):
@@ -152,13 +93,9 @@ def get_user_project(token, ip):
 @index.route('/project/<int:id_proj>/activities/<int:day>/<int:month>/<int:year>/<token>/<ip>', methods=['GET'])
 def get_activity_day(id_proj, day, month, year, token, ip):
     if api.check_token(token, ip):
-        print api.get_activity_day(id_proj, day, month, year)
         return api.get_activity_day(id_proj, day, month, year)
     return False, 401
 
-@index.route('/testpj')
-def testpj():
-    return api.get_teamleader_groups(7, 7)
 
 @index.route('/activity/<int:id_act>/<token>/<ip>', methods=['GET'])
 def get_activity_info(id_act, token, ip):
@@ -238,3 +175,30 @@ def page_not_found(app):
 if __name__ == "__main__":
     # index.run(host='127.0.0.1', port=5000, debug=True)
     index.run(debug=True)
+
+"""
+@index.route('/name_projects/<list_id_proj>', methods=['GET'])
+def get_name_projects(list_id_proj):
+    return api.get_name_projects(list_id_proj)
+
+@index.route('/pjmanager_mail/<int:id_proj>', methods=['GET'])
+def get_pjmanager_mail(id_proj):
+    return api.get_pjmanager_mail(id_proj)
+
+@index.route('/is_teamleader/<token>', methods=['GET'])
+def get_is_teamleader(token):
+    if api.get_is_teamleader(token):
+        return "True", 200
+    else:
+        return "False", 404
+
+@index.route('/holidays_proj/<int:id_proj>/<token>/<ip>', methods=['GET'])
+def get_holidays_proj(id_proj, token, ip):
+    if api.check_token(token, ip):
+        return api.get_holidays_proj(id_proj)
+    return False, 401
+
+@index.route('/group_name/<int:id_group>', methods=['GET'])
+def get_group_name(id_group):
+    return api.get_group_name(id_group)
+"""

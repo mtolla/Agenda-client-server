@@ -14,6 +14,7 @@ class ClassSignalQueue:
         self.login_manager = login_manager
         self.db_manager = db_manager
 
+
     def add_to_modified(self, id_act):
         app_list = self.db_manager.get_users_from_activity(id_act)
         for item in app_list:
@@ -24,6 +25,11 @@ class ClassSignalQueue:
         for item in app_list:
             item['action'] = "reminder"
             self.modified_queue.append(item)
+
+    def check_modified(self):
+        for activity in self.db_manager.modified_act:
+            self.add_to_modified(activity)
+            self.db_manager.modified_act.remove(activity)
 
     def check_activity(self):
         app_list = self.db_manager.check_activity()
@@ -39,7 +45,7 @@ class ClassSignalQueue:
         for user in self.modified_queue:
             try:
                 requests.post(self.login_manager.from_user_get_ip(user['user']), data={user['act']})
-            except Exception:
+            except:
                 if user['attempt'] < 5:
                     user['attempt'] += 1
                 else:
@@ -48,7 +54,7 @@ class ClassSignalQueue:
         for user in self.activity_queue:
             try:
                 requests.post(self.login_manager.from_user_get_ip(user['user']), data={user['act']})
-            except Exception:
+            except:
                 if user['attempt'] < 5:
                     user['attempt'] += 1
                 else:

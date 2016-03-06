@@ -31,6 +31,8 @@ class Api:
         journal_thread = JournalThread(self.db_manager)
         QtCore.QThreadPool.globalInstance().start(journal_thread)
 
+    ####################################################################################################################
+
     # Login con user, password
     def do_login(self, user, password, ip):
         token = self.login_manager.do_login(user, password, ip)
@@ -52,7 +54,12 @@ class Api:
     def home(self):
         return self.db_manager.home()
 
-    ####################################################################################################################
+    def error(self, app):
+        return self.db_manager.error(app)
+
+    def omg_tolla(self):
+        return self.db_manager.omg_tolla()
+
     # Query
     def project(self, token, id_proj):
         # Dato token e id progetto restituire:
@@ -71,6 +78,73 @@ class Api:
         dict_return['user'] = self.db_manager.get_user_name(self.from_token_get_iduser(token))
         return json.dumps(dict_return)
 
+    def get_holidays_day(self, id_proj, day, month, year):
+        dict_app = {'day': day, 'month': month, 'year': year}
+        return json.dumps(self.db_manager.get_holidays_from_proj(id_proj, dict_app))
+
+    def insert_activity(self, activity):
+        return self.db_manager.insert_activity(json.loads(activity))
+
+    def insert_holiday(self, holiday, token):
+        return self.db_manager.insert_holiday(json.loads(holiday), self.from_token_get_iduser(token))
+
+    def get_user_project(self, token):
+        return json.dumps(self.db_manager.get_proj_from_user(self.login_manager.from_token_get_iduser(token)))
+
+    def get_activity_day(self, id_proj, day, month, year):
+        dict_app = {'day': day, 'month': month, 'year': year}
+        return json.dumps(self.db_manager.get_activity_day(id_proj, dict_app))
+
+    def get_activity_info(self, id_act, token):
+        return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
+
+    def get_locations(self):
+        return json.dumps(self.db_manager.get_locations())
+
+    def get_teamleader_groups(self, id_proj, token):
+        return json.dumps(self.db_manager.get_teamleader_groups(id_proj, self.from_token_get_iduser(token)))
+
+    def get_participants_from_group(self, id_group):
+        return json.dumps(self.db_manager.get_participants_from_group(id_group))
+
+    def get_participants_from_proj(self, id_proj):
+        return json.dumps(self.db_manager.get_participants_from_proj(id_proj))
+
+    def get_participants_name_lvl_group(self, id_group):
+        return json.dumps(self.db_manager.get_participants_name_lvl_group(id_group))
+
+    def get_not_participants_from_proj(self, id_proj):
+        return json.dumps(self.db_manager.get_not_participants_from_proj(id_proj))
+
+    def everybody(self, id_proj):
+        return json.dumps(self.db_manager.everybody(id_proj))
+
+    def user_father_group(self, id_group):
+        return json.dumps(self.db_manager.user_father_group(id_group))
+
+    def user_holiday(self, id_usr):
+        return json.dumps(self.db_manager.user_holiday(id_usr))
+
+    def get_level_usr(self, token):
+        if self.get_is_projectmanager(token):
+            return "projectmanager"
+        if self.get_is_teamleader(token):
+            return "teamleader"
+        return "participant"
+
+    def get_is_projectmanager(self, token):
+        return self.db_manager.is_projectmanager(self.login_manager.from_token_get_iduser(token))
+
+    def get_is_teamleader(self, token):
+        return self.db_manager.is_teamleader(self.login_manager.from_token_get_iduser(token))
+
+    def from_token_get_iduser(self, token):
+        return self.login_manager.from_token_get_iduser(token)
+
+    def check_token(self, token, ip):
+        return self.login_manager.check_token(token, ip)
+
+    """
     def get_activity(self, id_att):
         # Dato id attività restituire:
         #   - Attività
@@ -89,95 +163,17 @@ class Api:
     def get_pjmanager_mail(self, id_proj):
         return self.db_manager.get_pjmanager_email(id_proj)
 
-    def get_is_teamleader(self, token):
-        id_user = self.login_manager.from_token_get_iduser(token)
-        return self.db_manager.is_teamleader(id_user)
-
-    def get_is_projectmanager(self, token):
-        id_user = self.login_manager.from_token_get_iduser(token)
-        return self.db_manager.is_projectmanager(id_user)
-
-    def get_level_usr(self, token):
-        if self.get_is_projectmanager(token):
-            return "projectmanager"
-        if self.get_is_teamleader(token):
-            return "teamleader"
-        return "participant"
-
     def get_activities_project_today(self, id_proj):
         return self.db_manager.get_today_activities_from_proj(id_proj)
 
     def get_holidays_proj(self, id_proj):
         return json.dumps(self.db_manager.get_holidays_from_proj(id_proj))
 
-    def get_holidays_day(self, id_proj, day, month, year):
-        dict_app = {'day': day, 'month': month, 'year': year}
-        return json.dumps(self.db_manager.get_holidays_from_proj(id_proj, dict_app))
-
     def get_group_name(self, id_group):
         return self.db_manager.get_group_name_from_group(id_group)
 
-    def error(self, app):
-        return self.db_manager.error(app)
-
-    def omg_tolla(self):
-        return self.db_manager.omg_tolla()
-
     def test(self):
         return json.dumps(self.login_manager.user_token)
-
-    def get_user_project(self, token):
-        return json.dumps(self.db_manager.get_proj_from_user(self.login_manager.from_token_get_iduser(token)))
-
-    def check_token(self, token, ip):
-        return self.login_manager.check_token(token, ip)
-
-    def get_activity_day(self, id_proj, day, month, year):
-        dict_app = {'day': day, 'month': month, 'year': year}
-        return json.dumps(self.db_manager.get_activity_day(id_proj, dict_app))
-
-    def get_activity_info(self, id_act, token):
-        return json.dumps(self.db_manager.get_activity_info(id_act, self.from_token_get_iduser(token)))
-
-    def get_locations(self):
-        return json.dumps(self.db_manager.get_locations())
-
-    def get_teamleader_groups(self,id_proj, token):
-        return json.dumps(self.db_manager.get_teamleader_groups(id_proj,self.from_token_get_iduser(token)))
-
-
-    def get_participants_from_proj(self, id_proj):
-        return json.dumps(self.db_manager.get_participants_from_proj(id_proj))
-
-    def get_not_participants_from_proj(self, id_proj):
-        return json.dumps(self.db_manager.get_not_participants_from_proj(id_proj))
-
-    def get_participants_name_lvl_group(self, id_group):
-        return json.dumps(self.db_manager.get_participants_name_lvl_group(id_group))
-
-    def everybody(self,id_proj):
-        return json.dumps(self.db_manager.everybody(id_proj))
-
-    def user_father_group(self, id_group):
-        return json.dumps(self.db_manager.user_father_group(id_group))
-
-    def user_holiday(self, id_usr):
-        return json.dumps(self.db_manager.user_holiday(id_usr))
-
-    def insert_activity(self, activity):
-        return self.db_manager.insert_activity(json.loads(activity))
-
-    def insert_holiday(self, holiday, token):
-        return self.db_manager.insert_holiday(json.loads(holiday, self.from_token_get_iduser(token)))
-
-
-
-
-
-
-
-
-
 
     # Implementazioni per test, se non serviranno più eliminare pure
 
@@ -187,14 +183,8 @@ class Api:
     def from_token_get_user(self, token):
         return self.login_manager.from_token_get_user(token)
 
-    def from_token_get_iduser(self, token):
-        return self.login_manager.from_token_get_iduser(token)
-
     def get_activity_from_id_act(self, id_act):
         return self.db_manager.get_activity_from_id_act(id_act)
-
-    def get_participants_from_group(self, id_group):
-        return json.dumps(self.db_manager.get_participants_from_group(id_group))
 
     def get_name_from_id_projects(self, id_proj):
         return self.db_manager.get_name_from_id_projects(id_proj)
@@ -219,3 +209,4 @@ class Api:
 
     def get_user_token(self):
         return self.login_manager.user_token
+    """
