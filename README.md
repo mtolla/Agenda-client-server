@@ -9,4 +9,4 @@ Al progetto manca di implementare al lato client le seguenti funzionalità:
   - Modifica di: gruppi, progetti, attività, vacanze e ruoli
   - Eliminazione di: gruppi, progetti, attività e vacanze
   - Gestione parziale delle notifiche
-Tutto questo è presente sul lato server in attesa di testing
+<br>Tutto questo è presente sul lato server in attesa di testing
