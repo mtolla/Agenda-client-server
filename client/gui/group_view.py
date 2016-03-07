@@ -8,7 +8,6 @@ class Group(Dialog):
     def __init__(self, data):
         Dialog.__init__(self, data)
 
-        self.extend()
 
     def switch_to_create(self):
         self.lyt_button.removeWidget(self.cmd_modify)
@@ -76,21 +75,22 @@ class Group(Dialog):
         # Aggiungiamo il vrtComandi nel scrlComandi
         self.scrl_participants.setWidget(self.vrt_participants)
 
-    def change_group(self, index):
-        self.index_group = index
+    def change_location(self, index):
+        self.index_location = index
 
+    def change_group(self, index):
+        self.data['ID'] = self.data['groups'][index].keys()[0]
+        print self.data['ID']
         self.data['informations']['participants'] = self.data['functions'].get_remain_participants(
             self.data['groups'][index].keys()[0],
-            {},
-            self.data['type']
+            {}
         )
 
         self.chk_participants = {}
 
         self.add_participants(self.data['informations']['participants'])
 
-    def change_location(self, index):
-        self.index_location = index
+        self.data['functions'].groups_id_father(self.data['project'], self.data['ID'])
 
     @staticmethod
     def get_date(dtm):

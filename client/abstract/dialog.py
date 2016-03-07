@@ -186,6 +186,17 @@ class Dialog(QtGui.QDialog):
             '''
         )
 
+    def change_group(self, index):
+        self.index_group = index
+        self.data['informations']['participants'] = self.data['functions'].get_remain_participants(
+            self.data['groups'][index].keys()[0],
+            {}
+        )
+
+        self.chk_participants = {}
+
+        self.add_participants(self.data['informations']['participants'])
+
     def add_create_buttons(self):
         # Definizione dell'oggetto del bottone: cmd_creator
         self.cmd_creator = QtGui.QPushButton("Crea", self.hrz_button)

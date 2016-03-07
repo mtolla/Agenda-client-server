@@ -2,8 +2,11 @@
 from flask import Flask
 from flask import request
 import json
+notification = ""
 
-notification = Flask(__name__)
+class Notification:
+    def __init__(self):
+        notification = Flask(__name__)
 
 
 @notification.route("/")

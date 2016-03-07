@@ -161,11 +161,16 @@ class AgendaManager:
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
     def modify_group(self):
+        groups = self.groups_teamleader(self.info_agenda['project']['ID'])
+        print groups
         self.group_manager.exec_({
             'type': "group",
-            'groups': [],
+            'project': self.info_agenda['project']['ID'],
+            'ID': groups[0].keys()[0],
+            'creator': self.info_agenda['user'],
+            'groups': groups,
             'informations': {
-                'participants': {}
+                'participants': self.get_participants(groups[0].keys()[0])
             }
         })
 
@@ -233,3 +238,6 @@ class AgendaManager:
 
     def insert_holiday(self, holiday):
         return self.server_manager.insert_holiday(holiday)
+
+    def groups_id_father(self, prj, _id):
+        return self.server_manager.groups_id_father(prj, _id)

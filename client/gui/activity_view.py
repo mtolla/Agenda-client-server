@@ -137,19 +137,6 @@ class Activity(Dialog):
         # Aggiungiamo il vrtComandi nel scrlComandi
         self.scrl_participants.setWidget(self.vrt_participants)
 
-    def change_group(self, index):
-        self.index_group = index
-
-        self.data['informations']['participants'] = self.data['functions'].get_remain_participants(
-            self.data['groups'][index].keys()[0],
-            {},
-            self.data['type']
-        )
-
-        self.chk_participants = {}
-
-        self.add_participants(self.data['informations']['participants'])
-
     def change_location(self, index):
         self.index_location = index
 
