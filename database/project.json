@@ -6,4 +6,12 @@
   "status" : true,
   "projectManager" : 14,
   "group" : 7
+},{
+  "ID" : 12,
+  "name" : "Agenda2",
+  "begin" : {"day" : 1, "month": 3, "year": 2016},
+  "end" : {"day" : 3, "month": 8, "year": 2016},
+  "status" : 0,
+  "projectManager" : 14,
+  "group" : 15
 }]

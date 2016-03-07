@@ -130,6 +130,7 @@ class Agenda(Page):
         self.cmb_project.setFont(self.font_12)
         for key, value in self.info_agenda['projects'].items():
             self.cmb_project.addItem(value)
+        self.connect(self.cmb_project, QtCore.SIGNAL("currentIndexChanged(int)"), self.change_project)
 
     def create_operation_list(self):
         self.scrl_operation = QtGui.QScrollArea(self.gdr_agenda)
@@ -416,3 +417,28 @@ class Agenda(Page):
                 list_app.append(activity)
 
         self.info_agenda['holidays'] = list_app
+
+    def change_project(self, index):
+        self.info_agenda = self.function.change_project(index)
+
+
+        self.create_operation_list()
+
+        self.dted_date_begin.setDate(QtCore.QDate(
+            self.info_agenda['project']['begin']['year'],
+            self.info_agenda['project']['begin']['month'],
+            self.info_agenda['project']['begin']['day']
+        ))
+
+        self.dted_date_end.setDate(QtCore.QDate(
+            self.info_agenda['project']['end']['year'],
+            self.info_agenda['project']['end']['month'],
+            self.info_agenda['project']['end']['day']
+        ))
+
+        self.lbl_mail.setText(self.info_agenda['email'])
+        #self.lbl_mail.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+
+        self.create_lbl_status()
+
+        self.function.change_day(self.calendar.selectedDate())

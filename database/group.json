@@ -2,7 +2,7 @@
   {
     "ID": 7,
     "name": "AgendaGroup",
-    "father": false,
+    "father": 0,
     "subgroup": [
       1,
       2
@@ -26,6 +26,12 @@
     "ID": 3,
     "name": "Testing",
     "father": 2,
+    "subgroup": []
+  },
+  {
+    "ID": 15,
+    "name": "Agenda 2",
+    "father": 0,
     "subgroup": []
   }
 ]

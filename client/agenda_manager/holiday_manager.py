@@ -10,7 +10,10 @@ class HolidayManager:
 
         self.holiday = Holiday(data)
 
-        self.holiday.add_buttons(data['modality'], data['modify'])
+        if data['modality'] == "view":
+            self.holiday.add_buttons(data['modality'], data['modify'])
+        else:
+            self.holiday.add_buttons(data['modality'], False)
 
         if data['modality'] == "view":
             self.holiday.set_enabled_view(False)

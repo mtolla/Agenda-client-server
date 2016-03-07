@@ -216,3 +216,9 @@ class AgendaManager:
                         },
                         'holiday': holiday
                     }
+
+    def change_project(self, index):
+        project_list = self.info_agenda['projects']
+        self.info_agenda = self.server_manager.info_agenda(project_list.keys()[index])
+        self.info_agenda['projects'] = project_list
+        return self.info_agenda

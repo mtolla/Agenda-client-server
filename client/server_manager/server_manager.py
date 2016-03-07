@@ -49,17 +49,27 @@ class ServerManager:
 
         return self.login_gateway.do_login(token)
 
-    def info_agenda(self):
-        projects = json.loads(self.server_request_handler.projects())
+    def info_agenda(self, prj=False):
+        if not prj:
+            projects = json.loads(self.server_request_handler.projects())
 
-        if projects:
+            if projects:
+                agenda = json.loads(self.server_request_handler.project_prj({
+                    'prj': projects.keys()[0]
+                }))
+                if agenda:
+                    agenda['projects'] = projects
+                    return agenda
+
+            return False
+        else:
             agenda = json.loads(self.server_request_handler.project_prj({
-                'prj': projects.keys()[0]
+                'prj': prj
             }))
+
             if agenda:
-                agenda['projects'] = projects
                 return agenda
-        return False
+            return False
 
     def activities_day(self, prj, day):
         return json.loads(self.server_request_handler.activities_day({
