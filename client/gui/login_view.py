@@ -1,4 +1,4 @@
-from page import *
+from client.abstract.page import *
 
 
 class Login(Page):

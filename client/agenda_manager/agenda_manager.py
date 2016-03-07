@@ -1,5 +1,6 @@
 from client.gui.agenda_view import *
 from activity_manager import ActivityManager
+from holiday_manager import HolidayManager
 import json
 
 
@@ -7,12 +8,16 @@ class AgendaManager:
     def __init__(self):
         self.activity_manager = ActivityManager(self)
 
+        self.holiday_manager = HolidayManager(self)
+
     def show(self):
         self.agenda.show()
 
     def set_server_manager(self, server_manager):
         self.server_manager = server_manager
         self.info_agenda = server_manager.info_agenda()
+
+        self.holidays = self.info_agenda['holidays']
 
         self.agenda = Agenda(self.info_agenda, self)
 
@@ -27,12 +32,12 @@ class AgendaManager:
         )
 
         # ------------ Holidays -------------
-        new_list_holiday = self.server_manager.holidays_day(
+        self.holidays = self.server_manager.holidays_day(
             self.info_agenda['project']['ID'],
             str(data.day()) + "/" + str(data.month()) + "/" + str(data.year())
         )
 
-        self.agenda.set_list_activities(new_list_activity, new_list_holiday)
+        self.agenda.set_list_activities(new_list_activity, self.holidays)
 
     def logout(self):
         if self.server_manager.logout() == "True":
@@ -47,6 +52,31 @@ class AgendaManager:
             local_save.close()
 
             self.agenda.setHidden(True)
+
+    def exec_holiday_view(self, _id=False):
+        data = dict()
+        if _id:
+            data['modality'] = "view"
+            data.update(self.get_holiday(_id))
+            data['modify'] = self.info_agenda['user'] == data['creator']
+        else:
+            data['modality'] = "create"
+            data['creator'] = self.info_agenda['user']
+            data['holiday'] = {
+                'begin': {
+                    'month': QtCore.QDate.currentDate().month(),
+                    'day': QtCore.QDate.currentDate().day(),
+                    'year': QtCore.QDate.currentDate().year()
+                },
+                'end': {
+                    'month': QtCore.QDate.currentDate().month(),
+                    'day': QtCore.QDate.currentDate().addDays(1).day(),
+                    'year': QtCore.QDate.currentDate().year()
+                },
+                'name': ""
+            }
+
+        self.holiday_manager.exec_(data)
 
     def exec_activity_view(self, _id=False, _type="single"):
         data = dict()
@@ -114,9 +144,8 @@ class AgendaManager:
 
         self.activity_manager.exec_(data)
 
-    @staticmethod
-    def create_holiday():
-        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+    def create_holiday(self):
+        self.exec_holiday_view()
 
     def create_single_activity(self):
         self.exec_activity_view()
@@ -176,3 +205,14 @@ class AgendaManager:
 
     def insert_activity(self, activity):
         return self.server_manager.insert_activity(activity)
+
+    def get_holiday(self, _id):
+        for key, holidays in self.holidays.items():
+            for holiday in holidays:
+                if holiday['ID'] == _id:
+                    return {
+                        'creator': {
+                            str(key): self.server_manager.participant_id(key)
+                        },
+                        'holiday': holiday
+                    }

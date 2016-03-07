@@ -1,5 +1,5 @@
 {
   "client_url": "127.0.0.1:5001",
-  "token": false,
+  "token": "05dd9b15f111c6dd9853b474ebb4ee73a0ac04c920d94f53c2cf83dfa16a64d8e467fbc7df46a8771efeab69f610da8ba792616ad77964221bdcfa7767bc7f46",
   "server_url": "http://127.0.0.1:5000"
 }

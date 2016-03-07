@@ -1,4 +1,4 @@
-from page import *
+from client.abstract.page import *
 
 
 class Agenda(Page):
@@ -394,9 +394,8 @@ class Agenda(Page):
     def view_activity(self, _id):
         self.function.exec_activity_view(_id)
 
-    @staticmethod
-    def view_holiday(_id):
-        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+    def view_holiday(self, _id):
+        self.function.exec_holiday_view(_id)
 
     def holiday_to_activity(self):
         list_app = []

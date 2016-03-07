@@ -1,37 +1,15 @@
 from PyQt4 import QtGui, QtCore
 from client.local.file_location import *
-from client.gui.popup import Popup
+from client.abstract.popup import Popup
+from client.abstract.dialog import Dialog
 
 
-class Activity(QtGui.QDialog):
+class Activity(Dialog):
     def __init__(self, data):
-        QtGui.QDialog.__init__(self)
-        self.setWindowTitle('ManageIT')
-        self.setWindowIcon(QtGui.QIcon(MANAGE_IT))
-
-        self.data = data
-
-        self.index_group = 0
-        self.index_location = 0
-        self.setStyleSheet(
-            '''
-                * {
-                    font-size: 15px;
-                }
-
-                #hrz_button {
-                    min-height: 50px;
-                    max-height: 50px;
-                }
-
-                QLabel {
-                    qproperty-alignment: 'AlignRight | AlignCenter';
-                }
-            '''
-        )
-
-        # ------------------------------------- Pagina -------------------------------------
+        Dialog.__init__(self, data)
         '''
+        # ------------------------------------- Pagina -------------------------------------
+
         lyt_page -+-> gdr_data(lyt_data) -> | lbl_creator_lbl  | lbl_creator       |
                   |                         | lbl_name         | txt_name          |
                   |                         | lbl_start        | dtm_start         |
@@ -42,39 +20,9 @@ class Activity(QtGui.QDialog):
                   |                         | lbl_participants | scrl_participants |
                   +-> hrz_button(lyt_button) -> cmd_modify | cmd_ok || cmd_creator | cmd_annul
         '''
-        # Creazione del layout della pagina: lyt_page
-        self.lyt_page = QtGui.QVBoxLayout()
 
-        # Creazione del contenitore dei dati e del suo layout: gdr_data(lyt_data)
-        self.gdr_data = QtGui.QWidget(self)
-        self.gdr_data.setObjectName("gdr_data")
-
-        self.lyt_data = QtGui.QGridLayout()
-
-        # Definizione degli oggetti dei dati: | lbl_creator_lbl  | lbl_creator     |
-        #                                     | lbl_name         | txt_name        |
-        #                                     | lbl_start        | dtm_start       |
-        #                                     | lbl_end          | dtm_end         |
-        #                                     | lbl_description  | txt_description |
-        #                                     | lbl_type         | cmb_type        |
-        #                                     | lbl_location     | cmb_location    |
-        #                                     | lbl_group        | cmb_group       |
-        #                                     | lbl_participants | +
-        #                                                  +-------+
-        #                                                  +-> scrl_participants -> vrt_participants(lyt_participants) |
-        self.lbl_creator_lbl = QtGui.QLabel("Creatore :", self.gdr_data)
-
-        self.lbl_creator = QtGui.QLabel(self.data['creator'].values()[0], self.gdr_data)
-        self.lbl_creator.setStyleSheet("qproperty-alignment: 'AlignLeft | AlignVCenter';")
-
-        self.lbl_name = QtGui.QLabel("Nome :", self.gdr_data)
-
-        self.txt_name = QtGui.QLineEdit(self.gdr_data)
         self.txt_name.setText(self.data['informations']['activity']['name'])
 
-        self.lbl_start = QtGui.QLabel("Inizio :", self.gdr_data)
-
-        self.dtm_start = QtGui.QDateTimeEdit(self.gdr_data)
         self.dtm_start.setDateTime(QtCore.QDateTime(
             self.data['informations']['activity']['date']['year'],
             self.data['informations']['activity']['date']['month'],
@@ -84,9 +32,6 @@ class Activity(QtGui.QDialog):
         ))
         self.dtm_start.setDisplayFormat("dd MMMM yyyy - hh:mm")
 
-        self.lbl_end = QtGui.QLabel("Fine :", self.gdr_data)
-
-        self.dtm_end = QtGui.QDateTimeEdit(self.gdr_data)
         self.dtm_end.setDateTime(self.dtm_start.dateTime().addSecs(
             60 * self.data['informations']['activity']['duration']
         ))
@@ -95,6 +40,7 @@ class Activity(QtGui.QDialog):
         self.lbl_description = QtGui.QLabel("Descrizione :", self.gdr_data)
 
         self.txt_description = QtGui.QTextEdit(self.gdr_data)
+
         self.txt_description.setText(self.data['informations']['activity']['description'])
 
         self.lbl_type_lbl = QtGui.QLabel("Tipo :", self.gdr_data)
@@ -111,14 +57,6 @@ class Activity(QtGui.QDialog):
         self.connect(self.cmb_location, QtCore.SIGNAL("currentIndexChanged(int)"), self.change_location)
 
         # Aggiunta degli oggeti nel lyt_data
-        self.lyt_data.addWidget(self.lbl_creator_lbl, 0, 0)
-        self.lyt_data.addWidget(self.lbl_creator, 0, 1)
-        self.lyt_data.addWidget(self.lbl_name, 1, 0)
-        self.lyt_data.addWidget(self.txt_name, 1, 1)
-        self.lyt_data.addWidget(self.lbl_start, 2, 0)
-        self.lyt_data.addWidget(self.dtm_start, 2, 1)
-        self.lyt_data.addWidget(self.lbl_end, 3, 0)
-        self.lyt_data.addWidget(self.dtm_end, 3, 1)
         self.lyt_data.addWidget(self.lbl_description, 4, 0)
         self.lyt_data.addWidget(self.txt_description, 4, 1)
         self.lyt_data.addWidget(self.lbl_type_lbl, 5, 0)
@@ -126,24 +64,49 @@ class Activity(QtGui.QDialog):
         self.lyt_data.addWidget(self.lbl_location, 6, 0)
         self.lyt_data.addWidget(self.cmb_location, 6, 1)
 
-        # Set layout del gdr_data
-        self.gdr_data.setLayout(self.lyt_data)
+    def add_buttons(self, **kwargs):
+        modality = self.data['modality']
+        modify = self.data['informations']['modify']
+        Dialog.add_buttons(modality, modify)
 
-        # Creazione del contenitore del bottone e del suo layout: hrz_button(lyt_button)
-        self.hrz_button = QtGui.QWidget(self)
-        self.hrz_button.setObjectName("hrz_button")
+    def switch_to_create(self):
+        self.lyt_button.removeWidget(self.cmd_modify)
+        self.lyt_button.removeWidget(self.cmd_delete)
+        self.lyt_button.removeWidget(self.cmd_ok)
+        self.cmd_modify.deleteLater()
+        self.cmd_delete.deleteLater()
+        self.cmd_ok.deleteLater()
 
-        self.lyt_button = QtGui.QHBoxLayout()
+        self.set_enabled_view()
 
-        # Set layout del hrz_password
-        self.hrz_button.setLayout(self.lyt_button)
+        if self.data['type'] != "single":
+            if self.data['type'] == "project":
+                self.data['informations']['participants'].pop(self.data['creator'].keys()[0])
 
-        # Aggiungiamo il contenitore e lo scrlMappa
-        self.lyt_page.addWidget(self.gdr_data)
-        self.lyt_page.addWidget(self.hrz_button)
+            participants = self.data['functions'].get_remain_participants(
+                self.data['informations']['activity']['group'],
+                self.data['informations']['participants']
+            )
 
-        # Settiamo il layout della pagina
-        self.setLayout(self.lyt_page)
+            if self.data['type'] == "project":
+                self.data['informations']['participants'].update(self.data['creator'])
+
+            self.add_participants(participants)
+
+        self.add_create_buttons()
+
+    def set_enabled_view(self, enabled=True):
+        self.txt_name.setEnabled(enabled)
+        self.dtm_start.setEnabled(enabled)
+        self.dtm_end.setEnabled(enabled)
+        self.txt_description.setEnabled(enabled)
+        self.cmb_location.setEnabled(enabled)
+
+        if self.data['type'] != "single":
+            if self.data['type'] == "group":
+                self.cmb_group.setEnabled(False)
+
+            self.scrl_participants.setEnabled(enabled)
 
     def extend(self):
         index = 7
@@ -191,91 +154,6 @@ class Activity(QtGui.QDialog):
                 }
             '''
         )
-
-    def add_buttons(self):
-        if self.data['modality'] == "view":
-            if self.data['informations']['modify']:
-                # Definizione dell'oggetto del bottone: cmd_modify
-                self.cmd_modify = QtGui.QPushButton("Modifica", self.hrz_button)
-                self.cmd_modify.setStatusTip("Modifica")
-                self.connect(self.cmd_modify, QtCore.SIGNAL("clicked()"), self.switch_to_create)
-
-                # Aggiunta degli oggeti nel lyt_button
-                self.lyt_button.addWidget(self.cmd_modify)
-
-                # Definizione dell'oggetto del bottone: cmd_eliminate
-                self.cmd_delete = QtGui.QPushButton("Elimina", self.hrz_button)
-                self.cmd_delete.setStatusTip("Elimina")
-                self.connect(self.cmd_delete, QtCore.SIGNAL("clicked()"), self.delete)
-
-                # Aggiunta degli oggeti nel lyt_button
-                self.lyt_button.addWidget(self.cmd_delete)
-
-            # Definizione dell'oggetto del bottone: cmd_ok
-            self.cmd_ok = QtGui.QPushButton("Ok", self.hrz_button)
-            self.cmd_ok.setStatusTip("Ok")
-            self.connect(self.cmd_ok, QtCore.SIGNAL("clicked()"), self.close)
-
-            # Aggiunta degli oggeti nel lyt_button
-            self.lyt_button.addWidget(self.cmd_ok)
-        else:
-            self.add_create_buttons()
-
-    def add_create_buttons(self):
-        # Definizione dell'oggetto del bottone: cmd_creator
-        self.cmd_creator = QtGui.QPushButton("Crea", self.hrz_button)
-        self.cmd_creator.setStatusTip("Crea")
-        self.connect(self.cmd_creator, QtCore.SIGNAL("clicked()"), self.insert)
-
-        # Aggiunta degli oggeti nel lyt_button
-        self.lyt_button.addWidget(self.cmd_creator)
-
-        # Definizione dell'oggetto del bottone: cmd_annul
-        self.cmd_annul = QtGui.QPushButton("Annulla", self.hrz_button)
-        self.cmd_annul.setStatusTip("Annulla")
-        self.connect(self.cmd_annul, QtCore.SIGNAL("clicked()"), self.close)
-
-        # Aggiunta degli oggeti nel lyt_button
-        self.lyt_button.addWidget(self.cmd_annul)
-
-    def switch_to_create(self):
-        self.lyt_button.removeWidget(self.cmd_modify)
-        self.lyt_button.removeWidget(self.cmd_delete)
-        self.lyt_button.removeWidget(self.cmd_ok)
-        self.cmd_modify.deleteLater()
-        self.cmd_delete.deleteLater()
-        self.cmd_ok.deleteLater()
-
-        self.set_enabled_view()
-
-        if self.data['type'] != "single":
-            if self.data['type'] == "project":
-                self.data['informations']['participants'].pop(self.data['creator'].keys()[0])
-
-            participants = self.data['functions'].get_remain_participants(
-                self.data['informations']['activity']['group'],
-                self.data['informations']['participants']
-            )
-
-            if self.data['type'] == "project":
-                self.data['informations']['participants'].update(self.data['creator'])
-
-            self.add_participants(participants)
-
-        self.add_create_buttons()
-
-    def set_enabled_view(self, enabled=True):
-        self.txt_name.setEnabled(enabled)
-        self.dtm_start.setEnabled(enabled)
-        self.dtm_end.setEnabled(enabled)
-        self.txt_description.setEnabled(enabled)
-        self.cmb_location.setEnabled(enabled)
-
-        if self.data['type'] != "single":
-            if self.data['type'] == "group":
-                self.cmb_group.setEnabled(False)
-
-            self.scrl_participants.setEnabled(enabled)
 
     def checked_participants(self):
         for chk in self.chk_participants.values():
@@ -331,12 +209,6 @@ class Activity(QtGui.QDialog):
         }
 
     @staticmethod
-    def is_same_day(start, end):
-        return start['year'] == end['year'] and \
-               start['month'] == end['month'] and \
-               start['day'] == end['day']
-
-    @staticmethod
     def is_before(start, end):
         return start['hour'] < end['hour'] or \
                (start['hour'] == end['hour'] and start['minute'] <= end['minute'])
@@ -344,6 +216,12 @@ class Activity(QtGui.QDialog):
     @staticmethod
     def get_duration(start, end):
         return (end['hour'] - start['hour']) * 60 + abs(end['minute'] - start['minute'])
+
+    @staticmethod
+    def is_same_day(start, end):
+        return start['year'] == end['year'] and \
+               start['month'] == end['month'] and \
+               start['day'] == end['day']
 
     def set_time(self, start, end):
         if self.is_same_day(start, end):
@@ -360,15 +238,6 @@ class Activity(QtGui.QDialog):
         else:
             Popup("Deve iniziare e finire nello stesso giorno!", ALERT).exec_()
         return False
-
-    def set_name(self):
-        name = str(self.txt_name.text())
-        if name != "":
-            self.activity['name'] = name
-            return True
-        else:
-            Popup("Inserire nome!", ALERT).exec_()
-            return False
 
     def set_description(self):
         description = str(self.txt_description.toPlainText()).strip()
@@ -407,15 +276,11 @@ class Activity(QtGui.QDialog):
     def insert(self):
         self.activity = dict()
 
-        if not self.set_name():
-            return False
-
+        self.activity['name'] = self.set_name()
         start = self.get_date(self.dtm_start)
         end = self.get_date(self.dtm_end)
-        if not self.set_time(start, end):
-            return False
 
-        if not self.set_description():
+        if not self.activity['name'] and not self.set_time(start, end) and not self.set_description():
             return False
 
         self.activity['location'] = int(self.data['locations'][self.index_location].keys()[0])
@@ -430,12 +295,9 @@ class Activity(QtGui.QDialog):
 
         self.activity['project'] = self.data['informations']['activity']['project']
 
-        if self.data['type'] != "single":
-            if not self.set_group_project():
-                return False
+        if self.data['type'] != "single" and not self.set_group_project():
+            return False
 
-        for k,v in self.activity.items():
-            print k,v
         if self.data['functions'].insert_activity(self.activity):
             self.close()
         else:

@@ -26,6 +26,7 @@ class ServerGetRequest(ServerRequestInterface):
             'holiday_id': server_url + "/project/<int:prj>/holiday/<int:id>",
             'logout': server_url + "/logout",
             'holidays_day': server_url + "/project/<int:prj>/holidays/<int:day>",
+            'participant_id': server_url + "/participant/<int:id>",
             'token_ip': "/" + token + "/" + client_url,
             'id': "<int:id>",
             'day': "<int:day>",
@@ -125,6 +126,11 @@ class ServerGetRequest(ServerRequestInterface):
 
     def holidays_day(self, day):
         response = self.request.get(self.url_generator('holidays_day', day)).__dict__
+
+        return self.get_response(response)
+
+    def participant_id(self, _id):
+        response = self.request.get(self.url_generator('participant_id', _id)).__dict__
 
         return self.get_response(response)
 

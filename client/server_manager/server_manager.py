@@ -2,7 +2,7 @@
 from login_gateway import LoginGateway
 from server_request_handler import ServerRequestHandler
 from client.local.file_location import *
-from client.gui.popup import Popup
+from client.abstract.popup import Popup
 import json
 
 
@@ -131,6 +131,11 @@ class ServerManager:
             'prj': str(prj),
             'day': day
         }))
+
+    def participant_id(self, _id):
+        return self.server_request_handler.participant_id({
+            'id': str(_id)
+        })
 
     def insert_activity(self, activity):
         return self.server_request_handler.insert_activity(activity)
