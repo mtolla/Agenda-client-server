@@ -330,12 +330,12 @@ class Activity(QtGui.QDialog):
 
     @staticmethod
     def is_before(start, end):
-        return start['hour'] <= end['hour'] and \
-               start['minute'] <= end['minute']
+        return start['hour'] < end['hour'] or \
+               (start['hour'] == end['hour'] and start['minute'] <= end['minute'])
 
     @staticmethod
     def get_duration(start, end):
-        return (end['hour'] - start['hour']) * 60 + (end['minute'] - start['minute'])
+        return (end['hour'] - start['hour']) * 60 + abs(end['minute'] - start['minute'])
 
     def set_time(self, start, end):
         if self.is_same_day(start, end):
@@ -400,7 +400,9 @@ class Activity(QtGui.QDialog):
         if not self.set_name():
             return False
 
-        if not self.set_time(self.get_date(self.dtm_start), self.get_date(self.dtm_end)):
+        start = self.get_date(self.dtm_start)
+        end = self.get_date(self.dtm_end)
+        if not self.set_time(start, end):
             return False
 
         if not self.set_description():
@@ -408,7 +410,9 @@ class Activity(QtGui.QDialog):
 
         self.activity['location'] = int(self.data['locations'][self.index_location].keys()[0])
 
-        self.activity['group'] = False
+        self.activity['group'] = 0
+
+        self.activity['participants'] = [int(self.data['creator'].keys()[0])]
 
         self.activity['creator'] = int(self.data['creator'].keys()[0])
 
@@ -420,5 +424,11 @@ class Activity(QtGui.QDialog):
             if not self.set_group_project():
                 return False
 
-            self.data['functions'].insert_activity(self.activity)
+        for k,v in self.activity.items():
+            print k,v
+        if self.data['functions'].insert_activity(self.activity):
+            self.close()
+        else:
+            Popup("Ricontrolla se la tua nuova attivita' non collide con delle altre!", ALERT).exec_()
+
 

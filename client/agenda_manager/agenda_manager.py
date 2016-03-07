@@ -82,6 +82,8 @@ class AgendaManager:
             elif _type == "project":
                 group = self.info_agenda['project']['group']
                 participants = self.get_participants(self.info_agenda['project']['group'])
+                for _id, name in self.info_agenda['user'].items():
+                    participants[_id] = name
 
             data['creator'] = self.info_agenda['user']
             data['modality'] = "create"
