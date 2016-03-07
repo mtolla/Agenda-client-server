@@ -48,6 +48,9 @@ class Dialog(QtGui.QDialog):
 
         self.lyt_data = QtGui.QGridLayout()
 
+        # Set layout del gdr_data
+        self.gdr_data.setLayout(self.lyt_data)
+
         # Creazione del contenitore del bottone e del suo layout: hrz_button(lyt_button)
         self.hrz_button = QtGui.QWidget(self)
         self.hrz_button.setObjectName("hrz_button")
@@ -102,8 +105,6 @@ class Dialog(QtGui.QDialog):
         self.lyt_data.addWidget(self.dtm_end, self.index, 1)
         self.index += 1
 
-        # Set layout del gdr_data
-        self.gdr_data.setLayout(self.lyt_data)
 
     def add_buttons(self, modality, modify):
         if modality == "view":
