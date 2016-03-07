@@ -215,7 +215,6 @@ class Agenda(Page):
         self.scrl_operation.setWidget(self.vrt_opreations)
 
     def create_lbl_status(self):
-        print self.info_agenda['project']['status']
         if self.info_agenda['project']['status']:
             message = "Attivo"
             style = "background-color: rgb(0, 255, 0);"
@@ -423,7 +422,10 @@ class Agenda(Page):
     def change_project(self, index):
         self.info_agenda = self.function.change_project(index)
 
+        self.lyt_agenda.removeWidget(self.scrl_operation)
+        self.scrl_operation.deleteLater()
         self.create_operation_list()
+        self.lyt_agenda.addWidget(self.scrl_operation, 2, 0, 4, 1)
 
         self.dted_date_begin.setDate(QtCore.QDate(
             self.info_agenda['project']['begin']['year'],

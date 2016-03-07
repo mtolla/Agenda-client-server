@@ -1,6 +1,7 @@
 from client.gui.agenda_view import *
 from activity_manager import ActivityManager
 from holiday_manager import HolidayManager
+from group_manager import GroupManager
 import json
 
 
@@ -9,6 +10,8 @@ class AgendaManager:
         self.activity_manager = ActivityManager(self)
 
         self.holiday_manager = HolidayManager(self)
+
+        self.group_manager = GroupManager(self)
 
     def show(self):
         self.agenda.show()
@@ -157,9 +160,14 @@ class AgendaManager:
     def create_group():
         Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
 
-    @staticmethod
-    def modify_group():
-        Popup("Work in progess!!!! Stiamo lavorando per voi", NOTIFICATION).exec_()
+    def modify_group(self):
+        self.group_manager.exec_({
+            'type': "group",
+            'groups': [],
+            'informations': {
+                'participants': {}
+            }
+        })
 
     @staticmethod
     def create_project():

@@ -1,15 +1,16 @@
-from client.gui.holiday_view import *
+from client.gui.group_view import *
 
 
-class HolidayManager:
+class GroupManager:
     def __init__(self, agenda_manager):
         self.agenda_manager = agenda_manager
 
     def exec_(self, data):
         data['functions'] = self
 
-        self.holiday = Holiday(data)
+        self.group = Group(data)
 
+        '''
         if data['modality'] == "view":
             self.holiday.add_buttons(data['modality'], data['modify'])
         else:
@@ -17,11 +18,5 @@ class HolidayManager:
 
         if data['modality'] == "view":
             self.holiday.set_enabled_view(False)
-
-        self.holiday.exec_()
-
-    def insert_holiday(self, holiday):
-        return self.agenda_manager.insert_holiday(holiday)
-
-    def change_day(self, time):
-        self.agenda_manager.change_day(time)
+        '''
+        self.group.exec_()

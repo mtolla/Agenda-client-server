@@ -36,3 +36,6 @@ class ActivityManager:
 
     def insert_activity(self, activity):
         return self.agenda_manager.insert_activity(activity)
+
+    def change_day(self, time):
+        self.agenda_manager.change_day(time)

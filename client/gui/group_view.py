@@ -4,70 +4,11 @@ from client.abstract.popup import Popup
 from client.abstract.dialog import Dialog
 
 
-class Activity(Dialog):
+class Group(Dialog):
     def __init__(self, data):
         Dialog.__init__(self, data)
-        '''
-        # ------------------------------------- Pagina -------------------------------------
 
-        lyt_page -+-> gdr_data(lyt_data) -> | lbl_creator_lbl  | lbl_creator       |
-                  |                         | lbl_name         | txt_name          |
-                  |                         | lbl_start        | dtm_start         |
-                  |                         | lbl_end          | dtm_end           |
-                  |                         | lbl_description  | txt_description   |
-                  |                         | lbl_type         | cmb_type          |
-                  |                         | lbl_group        | cmb_group         |
-                  |                         | lbl_participants | scrl_participants |
-                  +-> hrz_button(lyt_button) -> cmd_modify | cmd_ok || cmd_creator | cmd_annul
-        '''
-
-        self.initial_view()
-
-        self.txt_name.setText(self.data['informations']['activity']['name'])
-
-        self.dtm_start.setDateTime(QtCore.QDateTime(
-            self.data['informations']['activity']['date']['year'],
-            self.data['informations']['activity']['date']['month'],
-            self.data['informations']['activity']['date']['day'],
-            self.data['informations']['activity']['date']['hour'],
-            self.data['informations']['activity']['date']['minute']
-        ))
-        self.dtm_start.setDisplayFormat("dd MMMM yyyy - hh:mm")
-
-        self.dtm_end.setDateTime(self.dtm_start.dateTime().addSecs(
-            60 * self.data['informations']['activity']['duration']
-        ))
-        self.dtm_end.setDisplayFormat("dd MMMM yyyy - hh:mm")
-
-        self.lbl_description = QtGui.QLabel("Descrizione :", self.gdr_data)
-
-        self.txt_description = QtGui.QTextEdit(self.gdr_data)
-
-        self.txt_description.setText(self.data['informations']['activity']['description'])
-
-        self.lbl_type_lbl = QtGui.QLabel("Tipo :", self.gdr_data)
-
-        self.lbl_type = QtGui.QLabel(self.gdr_data)
-        self.lbl_type.setText(self.data['type'])
-        self.lbl_type.setStyleSheet("qproperty-alignment: 'AlignLeft | AlignVCenter';")
-
-        self.lbl_location = QtGui.QLabel("Luogo :", self.gdr_data)
-
-        self.cmb_location = QtGui.QComboBox(self.gdr_data)
-        for location in self.data['locations']:
-            self.cmb_location.addItem(location.values()[0])
-        self.connect(self.cmb_location, QtCore.SIGNAL("currentIndexChanged(int)"), self.change_location)
-
-        # Aggiunta degli oggeti nel lyt_data
-        self.lyt_data.addWidget(self.lbl_description, self.index, 0)
-        self.lyt_data.addWidget(self.txt_description, self.index, 1)
-        self.index += 1
-        self.lyt_data.addWidget(self.lbl_type_lbl, self.index, 0)
-        self.lyt_data.addWidget(self.lbl_type, self.index, 1)
-        self.index += 1
-        self.lyt_data.addWidget(self.lbl_location, self.index, 0)
-        self.lyt_data.addWidget(self.cmb_location, self.index, 1)
-        self.index += 1
+        self.extend()
 
     def switch_to_create(self):
         self.lyt_button.removeWidget(self.cmd_modify)
@@ -107,8 +48,6 @@ class Activity(Dialog):
                 self.cmb_group.setEnabled(False)
 
             self.scrl_participants.setEnabled(enabled)
-
-
 
     def checked_participants(self):
         for chk in self.chk_participants.values():
@@ -254,7 +193,6 @@ class Activity(Dialog):
             return False
 
         if self.data['functions'].insert_activity(self.activity):
-            self.data['functions'].change_day(self.dtm_start.date())
             self.close()
         else:
             Popup("Ricontrolla se la tua nuova attivita' non collide con delle altre!", ALERT).exec_()

@@ -13,6 +13,7 @@ class Dialog(QtGui.QDialog):
 
         self.index_group = 0
         self.index_location = 0
+        self.index = 0
         self.setStyleSheet(
             '''
                 * {
@@ -47,6 +48,25 @@ class Dialog(QtGui.QDialog):
 
         self.lyt_data = QtGui.QGridLayout()
 
+        # Creazione del contenitore del bottone e del suo layout: hrz_button(lyt_button)
+        self.hrz_button = QtGui.QWidget(self)
+        self.hrz_button.setObjectName("hrz_button")
+
+        self.lyt_button = QtGui.QHBoxLayout()
+
+        # Set layout del hrz_button
+        self.hrz_button.setLayout(self.lyt_button)
+
+        # Aggiungiamo la tabella e il contenitore dei bottoni
+        self.lyt_page.addWidget(self.gdr_data)
+        self.lyt_page.addWidget(self.hrz_button)
+
+        # Settiamo il layout della pagina
+        self.setLayout(self.lyt_page)
+
+    def initial_view(self):
+
+
         # Definizione degli oggetti dei dati: | lbl_creator_lbl  | lbl_creator     |
         #                                     | lbl_name         | txt_name        |
         #                                     | lbl_start        | dtm_start       |
@@ -69,33 +89,21 @@ class Dialog(QtGui.QDialog):
         self.dtm_end = QtGui.QDateTimeEdit(self.gdr_data)
 
         # Aggiunta degli oggeti nel lyt_data
-        self.lyt_data.addWidget(self.lbl_creator_lbl, 0, 0)
-        self.lyt_data.addWidget(self.lbl_creator, 0, 1)
-        self.lyt_data.addWidget(self.lbl_name, 1, 0)
-        self.lyt_data.addWidget(self.txt_name, 1, 1)
-        self.lyt_data.addWidget(self.lbl_start, 2, 0)
-        self.lyt_data.addWidget(self.dtm_start, 2, 1)
-        self.lyt_data.addWidget(self.lbl_end, 3, 0)
-        self.lyt_data.addWidget(self.dtm_end, 3, 1)
+        self.lyt_data.addWidget(self.lbl_creator_lbl, self.index, 0)
+        self.lyt_data.addWidget(self.lbl_creator, self.index, 1)
+        self.index += 1
+        self.lyt_data.addWidget(self.lbl_name, self.index, 0)
+        self.lyt_data.addWidget(self.txt_name, self.index, 1)
+        self.index += 1
+        self.lyt_data.addWidget(self.lbl_start, self.index, 0)
+        self.lyt_data.addWidget(self.dtm_start, self.index, 1)
+        self.index += 1
+        self.lyt_data.addWidget(self.lbl_end, self.index, 0)
+        self.lyt_data.addWidget(self.dtm_end, self.index, 1)
+        self.index += 1
 
         # Set layout del gdr_data
         self.gdr_data.setLayout(self.lyt_data)
-
-        # Creazione del contenitore del bottone e del suo layout: hrz_button(lyt_button)
-        self.hrz_button = QtGui.QWidget(self)
-        self.hrz_button.setObjectName("hrz_button")
-
-        self.lyt_button = QtGui.QHBoxLayout()
-
-        # Set layout del hrz_button
-        self.hrz_button.setLayout(self.lyt_button)
-
-        # Aggiungiamo la tabella e il contenitore dei bottoni
-        self.lyt_page.addWidget(self.gdr_data)
-        self.lyt_page.addWidget(self.hrz_button)
-
-        # Settiamo il layout della pagina
-        self.setLayout(self.lyt_page)
 
     def add_buttons(self, modality, modify):
         if modality == "view":
@@ -128,6 +136,54 @@ class Dialog(QtGui.QDialog):
 
     def switch_to_create(self):
         pass
+
+    def extend(self):
+
+        if self.data['type'] == "group":
+            self.lbl_group = QtGui.QLabel("Gruppo :", self.gdr_data)
+
+            self.cmb_group = QtGui.QComboBox(self.gdr_data)
+            for group in self.data['groups']:
+                self.cmb_group.addItem(group.values()[0])
+            self.connect(self.cmb_group, QtCore.SIGNAL("currentIndexChanged(int)"), self.change_group)
+
+            self.lyt_data.addWidget(self.lbl_group, self.index, 0)
+            self.lyt_data.addWidget(self.cmb_group, self.index, 1)
+
+            self.index += 1
+
+        self.lbl_participants = QtGui.QLabel("Partecipanti :", self.gdr_data)
+
+        # Creazione del contenitore della vrt_participants: scrl_participants
+        self.scrl_participants = QtGui.QScrollArea(self.gdr_data)
+        self.scrl_participants.setBackgroundRole(QtGui.QPalette.NoRole)
+        self.scrl_participants.setObjectName("scrl_participants")
+
+        # Aggiungiamo i contenitori nel vrtComandi
+        self.chk_participants = {}
+        self.add_participants(self.data['informations']['participants'])
+
+        self.lyt_data.addWidget(self.lbl_participants, self.index, 0)
+        self.lyt_data.addWidget(self.scrl_participants, self.index, 1)
+        self.index += 1
+
+
+        self.setStyleSheet(
+            '''
+                * {
+                    font-size: 15px;
+                }
+
+                #scrl_participants {
+                    min-height: 180px;
+                    max-height: 180px;
+                }
+
+                QLabel {
+                    qproperty-alignment: 'AlignRight | AlignCenter';
+                }
+            '''
+        )
 
     def add_create_buttons(self):
         # Definizione dell'oggetto del bottone: cmd_creator

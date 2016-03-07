@@ -18,6 +18,8 @@ class Holiday(Dialog):
                   |                         | lbl_end          | dtm_end           |
                   +-> hrz_button(lyt_button) -> cmd_modify | cmd_ok || cmd_creator | cmd_annul
         '''
+        self.initial_view()
+
         self.txt_name.setText(self.data['holiday']['name'])
 
         self.dtm_start.setDate(QtCore.QDate(
@@ -103,6 +105,7 @@ class Holiday(Dialog):
             return False
 
         if self.data['functions'].insert_holiday(self.holday):
+            self.data['functions'].change_day(self.dtm_start.date())
             self.close()
         else:
             Popup("Ricontrolla se la tua vacanza non collide con delle tue attivita'!", ALERT).exec_()
