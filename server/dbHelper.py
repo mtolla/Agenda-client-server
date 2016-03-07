@@ -42,7 +42,7 @@ class ClassDbHelper:
         act_original['ID'] = populate.next_index(list_act)
         list_act.append(act_original)
         self.db_manager.write_file(list_act, 'activity')
-        self.db_manager.check_today_tomorrow_act()
+        self.db_manager.check_today_tomorrow_act(True)
         return True
 
     @staticmethod

@@ -277,7 +277,7 @@ class ClassDbManager:
                 return {id_usr: user['username']}
         return False
 
-    def check_today_tomorrow_act(self):
+    def check_today_tomorrow_act(self, forced=False):
         # Controllo tutte le attività di oggi e domani
         # Lista di appoggio
         list_app = self.open_file('activity')
@@ -285,7 +285,7 @@ class ClassDbManager:
         actual_time = self.time_now()
         # Se l'ultima volta che è stato aggiornato è oggi non esegue il controllo
         if self.last_check['day'] == actual_time['day'] or self.last_check['month'] == actual_time['month'] or \
-                        self.last_check['hour'] == actual_time['hour']:
+                        self.last_check['hour'] == actual_time['hour'] and not forced:
             return True
         for row in list_app:
             if row['date']['year'] == actual_time['year'] and row['date']['month'] == actual_time['month']:

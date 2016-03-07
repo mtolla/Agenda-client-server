@@ -28,7 +28,7 @@ class ClassSignalQueue:
         list_id = self.get_id_from_activity()
         for act in self.db_manager.today_act:
             # Manca un ora
-            if act['time']['hour'] - 1 == time['hour'] and act['time']['minute'] == time['minute'] and act[
+            if act['date']['hour'] - 1 == time['hour'] and act['date']['minute'] == time['minute'] and act[
                 'ID'] not in list_id:
                 self.add_to_activity_app(self.db_manager.get_users_from_activity(act['ID']), time)
 
