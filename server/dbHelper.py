@@ -18,6 +18,7 @@ class ClassDbHelper:
         #  Ricevo una attività, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
         # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
         act_original = copy.deepcopy(act)
+        print act
         day_act = self.db_manager.get_activity_day_all(act['date'])
         day_hol = self.db_manager.get_holidays_day_all(act['date'])
         # Controllo subito se la stanza non è già occupata
@@ -58,21 +59,33 @@ class ClassDbHelper:
         #  Ricevo una vacanza, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
         # Trovo tutte le attività in quel periodo
         days_act = []
+        list_hol = []
         hol_original = copy.deepcopy(hol)
-        for year in range(hol['begin']['year'], hol['end']['year'], 1):
-            for month in range(hol['begin']['month'], hol['end']['month'], 1):
-                for day in range(hol['begin']['day'], hol['end']['day'], 1):
-                    days_act.append(self.db_manager.get_activity_day_all({'day': day, 'month': month, 'year': year}))
+        by = hol['begin']['year']
+        bm = hol['begin']['month']
+        bd = hol['begin']['day']
+        y = 0
+        while hol['begin']['year'] + y <= hol['end']['year']:
+            m = 0
+            while hol['begin']['month'] + m <= hol['end']['month']:
+                d = 0
+                while hol['begin']['day'] + d <= hol['end']['day']:
+                    days_act[len(days_act):] = self.db_manager.get_activity_day_all({'day': bd, 'month': bm, 'year': by})
+                    list_hol[len(list_hol):] = self.db_manager.get_holidays_day_all({'day': bd, 'month': bm, 'year': by})
+                    d += 1
+                m += 1
+            y += 1
         list_error = self.is_there_something_holiday(id_usr, days_act)
+        list_error[len(list_error):] = self.is_there_something_hol_hol(id_usr, list_hol)
         if list_error:
-            return list_error
+            return False
         # Implementazione programma teo
         list_hol = self.db_manager.open_file('holiday')
         hol_original['ID'] = populate.next_index(list_hol)
         list_hol.append(hol_original)
         self.db_manager.write_file(list_hol, 'holiday')
         self.set_user_holiday(id_usr, hol_original['ID'])
-        return "OK"
+        return True
 
     def is_there_something_activity(self, date_star, date_end, day_act):
         # Activity edition
@@ -130,9 +143,24 @@ class ClassDbHelper:
         # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
         list_return = []
         for activity in ids_act:
-            if id_usr in activity['participant']:
+            if id_usr in activity['participants']:
                 list_return.append(activity)
         return list_return
+
+    def is_there_something_hol_hol(self, id_usr, list_hol):
+        # Holiday edition
+        # Controllo che non ci siano vacanze di quell'utente quelle date
+        list_usr = self.db_manager.open_file('user')
+        list_holb = []
+        list_return = []
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                list_holb[:] = user['holiday']
+        for holiday in list_hol:
+            if holiday['ID'] in list_holb:
+                list_return.append(holiday)
+        return list_return
+
 
     def set_user_holiday(self, id_usr, id_hol):
         list_usr = self.db_manager.open_file('user')

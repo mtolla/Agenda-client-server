@@ -185,14 +185,14 @@ class ClassDbManager:
         # Da un giorno restituisco una lista con dentro le vacanze di quel giorno
         list_app = self.open_file('holiday')
         list_return = []
-        list_usr = self.open_file('user')
-        list_id_hol = []
-        for user in list_usr:
-            list_id_hol = set(list_id_hol).union(user['holiday'])
+        #list_usr = self.open_file('user')
+        #list_id_hol = []
+        #for user in list_usr:
+            #list_id_hol = set(list_id_hol).union(user['holiday'])
         for holiday in list_app:
             if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
                 'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end'][
-                'day'] and holiday['ID'] in list_id_hol:
+                'day']: #and holiday['ID'] in list_id_hol:
                 list_return.append(holiday)
         return list_return
 
@@ -410,7 +410,7 @@ class ClassDbManager:
         return list_return
 
     def get_activity_day_all(self, day):
-        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end) i quel progetto
+        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end) di quel progetto
         list_app = self.open_file('activity')
         list_return = []
         for activity in list_app:
