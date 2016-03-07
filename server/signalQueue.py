@@ -28,8 +28,25 @@ class ClassSignalQueue:
         list_id = self.get_id_from_activity()
         for act in self.db_manager.today_act:
             # Manca un ora
-            if act['date']['hour'] - 1 == time['hour'] and act['date']['minute'] == time['minute'] and act[
-                'ID'] not in list_id:
+            if act['date']['hour'] - 1 == time['hour'] and act['date']['minute'] == time[
+                'minute'] and act not in list_id:
+                self.add_to_activity_app(self.db_manager.get_users_from_activity(act['ID']), time)
+            # Manca mezz'ora
+            if self.add_to_activity_minute(act, time, list_id):
+                self.add_to_activity_app(self.db_manager.get_users_from_activity(act['ID']), time)
+        self.add_to_activity_tomorrow(time, list_id)
+
+    @staticmethod
+    def add_to_activity_minute(act, time, list_id):
+        if (act['date']['hour'] == time['hour'] and act['date']['minute'] - 30 == time['minute'] and act[
+            'ID'] not in list_id) or act['date']['hour'] + 1 == time['hour'] and act['date']['minute'] + 30 == time[
+            'minute'] and act not in list_id:
+            return True
+
+    def add_to_activity_tomorrow(self, time, list_id):
+        for act in self.db_manager.tomorrow_act:
+            # Manca un giorno
+            if act['date']['hour'] == time['hour'] and act['date']['minute'] == time['minute'] and act not in list_id:
                 self.add_to_activity_app(self.db_manager.get_users_from_activity(act['ID']), time)
 
     def add_to_activity_app(self, app_list, time):
@@ -50,11 +67,6 @@ class ClassSignalQueue:
         for activity in self.db_manager.modified_act:
             self.add_to_modified(activity)
             self.db_manager.modified_act.remove(activity)
-
-    def check_activity(self):
-        app_list = self.db_manager.check_activity()
-        if app_list:
-            self.add_to_activity(app_list)
 
     def clean_queue(self):
         # Controllo se hanno due mesi di differenza ed elimino

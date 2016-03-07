@@ -287,6 +287,9 @@ class ClassDbManager:
         if self.last_check['day'] == actual_time['day'] or self.last_check['month'] == actual_time['month'] or \
                         self.last_check['hour'] == actual_time['hour'] and not forced:
             return True
+        return self.check_today_tomorrow_app(list_app, actual_time)
+
+    def check_today_tomorrow_app(self, list_app, actual_time):
         for row in list_app:
             if row['date']['year'] == actual_time['year'] and row['date']['month'] == actual_time['month']:
                 if row['date']['day'] == actual_time['day']:
@@ -329,14 +332,14 @@ class ClassDbManager:
             n_min = 0
             for act2 in range(0, len(self.tomorrow_act), 1):
                 # Se l'ora nel dict_min è maggiore cambio
-                if dict_min['date']['hour'] > self.tomorrow_act[act]['date']['hour']:
-                    dict_min = self.tomorrow_act[act]['date']
-                    n_min = act
+                if dict_min['date']['hour'] > self.tomorrow_act[act2]['date']['hour']:
+                    dict_min = self.tomorrow_act[act2]['date']
+                    n_min = act2
                     # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
-                if dict_min['date']['hour'] == self.tomorrow_act[act]['date']['hour'] and dict_min['date']['minute'] > \
-                        self.tomorrow_act[act]['date']['minute']:
-                    dict_min = self.tomorrow_act[act]['date']
-                    n_min = act
+                if dict_min['date']['hour'] == self.tomorrow_act[act2]['date']['hour'] and dict_min['date']['minute'] > \
+                        self.tomorrow_act[act2]['date']['minute']:
+                    dict_min = self.tomorrow_act[act2]['date']
+                    n_min = act2
             app_list.append(dict_min)
             self.tomorrow_act.pop(n_min)
         self.tomorrow_act = app_list
