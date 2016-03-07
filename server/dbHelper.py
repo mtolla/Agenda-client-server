@@ -43,6 +43,7 @@ class ClassDbHelper:
         list_act.append(act_original)
         self.db_manager.write_file(list_act, 'activity')
         self.db_manager.check_today_tomorrow_act(True)
+        print self.db_manager.today_act
         return True
 
     @staticmethod

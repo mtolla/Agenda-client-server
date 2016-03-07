@@ -284,7 +284,7 @@ class ClassDbManager:
         # Orario attuale
         actual_time = self.time_now()
         # Se l'ultima volta che è stato aggiornato è oggi non esegue il controllo
-        if self.last_check['day'] == actual_time['day'] or self.last_check['month'] == actual_time['month'] or \
+        if self.last_check['day'] == actual_time['day'] and self.last_check['month'] == actual_time['month'] and \
                         self.last_check['hour'] == actual_time['hour'] and not forced:
             return True
         return self.check_today_tomorrow_app(list_app, actual_time)

@@ -205,3 +205,6 @@ class Api:
         id_usr = self.from_token_get_iduser(token)
         self.db_helper.create_project(project, group, list_id_usr, id_usr)
         return True
+
+    def from_id_get_user(self, id):
+        return self.db_manager.from_id_get_user(id)
