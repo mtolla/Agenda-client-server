@@ -18,7 +18,6 @@ class ClassDbHelper:
         #  Ricevo una attività, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
         # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
         act_original = copy.deepcopy(act)
-        print act
         day_act = self.db_manager.get_activity_day_all(act['date'])
         day_hol = self.db_manager.get_holidays_day_all(act['date'])
         # Controllo subito se la stanza non è già occupata

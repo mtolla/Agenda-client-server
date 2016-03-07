@@ -250,11 +250,13 @@ def create_project():
         return api.create_project(dict_app['project'], dict_app['token'], dict_app['group'], dict_app['list_id_usr'])
     return False, 401
 
-@index.route('/participant/<int:id>/<token>/<ip>/')
-def from_id_get_user(id, token, ip):
+
+@index.route('/participant/<int:id_usr>/<token>/<ip>/')
+def from_id_get_user(id_usr, token, ip):
     if api.check_token(token, ip):
-        return api.from_id_get_user(id)
+        return api.from_id_get_user(id_usr)
     return False, 401
+
 
 @index.errorhandler(404)
 def page_not_found(app):

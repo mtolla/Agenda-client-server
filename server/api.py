@@ -133,7 +133,6 @@ class Api:
         return self.db_manager.is_projectmanager(self.login_manager.from_token_get_iduser(token), id_proj)
 
     def get_is_teamleader(self, token, id_proj):
-        print self.db_manager.is_teamleader(self.login_manager.from_token_get_iduser(token), id_proj)
         return self.db_manager.is_teamleader(self.login_manager.from_token_get_iduser(token), id_proj)
 
     def from_token_get_iduser(self, token):
