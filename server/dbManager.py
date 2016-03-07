@@ -693,17 +693,14 @@ class ClassDbManager:
     def user_father_group(self, id_group):
         # Restituisco gli utenti del gruppo padre
         # Trovo i partecipanti del gruppo figlio, quelli del gruppo padre e restituisco la differenza
-        list_son = self.get_participants_from_group(id_group)
         id_father = 0
         list_group = self.open_file('group')
         for group in list_group:
             if group['ID'] == id_group:
                 id_father = group['father']
                 break
-        if id_father:
-            list_father = self.get_participants_from_group(id_father)
-            return list_father
-        return False
+        list_father = self.get_participants_from_group(id_father)
+        return list_father
 
     def user_holiday(self, id_usr):
         # Restituisco tutte le vacanze dell'utente
