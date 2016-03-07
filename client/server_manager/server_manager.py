@@ -121,11 +121,10 @@ class ServerManager:
             'prj': str(prj)
         })
 
-    def groups_id_father(self, prj, _id):
-        return self.server_request_handler.groups_id_father({
-            'prj': str(prj),
+    def groups_id_father(self, _id):
+        return json.loads(self.server_request_handler.groups_id_father({
             'id': str(_id)
-        })
+        }))
 
     def holiday_id(self, prj, _id):
         return self.server_request_handler.holiday_id({

@@ -1,6 +1,5 @@
 from client.interface.server_request_interface import ServerRequestInterface
 import requests
-import json
 
 
 class ServerGetRequest(ServerRequestInterface):
@@ -22,7 +21,7 @@ class ServerGetRequest(ServerRequestInterface):
             'groups_id_participant_level': server_url + "/project/<int:prj>/groups/<int:id>/participant/level",
             'project_prj_not_participant': server_url + "/project/<int:prj>/not/participant",
             'participants': server_url + "/project/<int:prj>/participants",
-            'groups_id_father': server_url + "/project/<int:prj>/groups/<int:id>/father",
+            'groups_id_father': server_url + "/groups/<int:id>/father",
             'holiday_id': server_url + "/project/<int:prj>/holiday/<int:id>",
             'logout': server_url + "/logout",
             'holidays_day': server_url + "/project/<int:prj>/holidays/<int:day>",
