@@ -123,17 +123,17 @@ class Api:
         return json.dumps(self.db_manager.user_holiday(id_usr))
 
     def get_level_usr(self, token, id_proj):
-        if self.get_is_projectmanager(token):
+        if self.get_is_projectmanager(token, id_proj):
             return "projectmanager"
         if self.get_is_teamleader(token, id_proj):
             return "teamleader"
         return "participant"
 
     def get_is_projectmanager(self, token, id_proj):
-        return self.db_manager.is_projectmanager(self.login_manager.from_token_get_iduser(token))
+        return self.db_manager.is_projectmanager(self.login_manager.from_token_get_iduser(token), id_proj)
 
     def get_is_teamleader(self, token, id_proj):
-        return self.db_manager.is_teamleader(self.login_manager.from_token_get_iduser(token))
+        return self.db_manager.is_teamleader(self.login_manager.from_token_get_iduser(token), id_proj)
 
     def from_token_get_iduser(self, token):
         return self.login_manager.from_token_get_iduser(token)
