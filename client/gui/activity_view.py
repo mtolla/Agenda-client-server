@@ -235,7 +235,7 @@ class Activity(Dialog):
         start = self.get_date(self.dtm_start)
         end = self.get_date(self.dtm_end)
 
-        if not self.activity['name'] and not self.set_time(start, end) and not self.set_description():
+        if not(self.activity['name'] and self.set_time(start, end) and self.set_description()):
             return False
 
         self.activity['location'] = int(self.data['locations'][self.index_location].keys()[0])
