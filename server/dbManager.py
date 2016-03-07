@@ -702,7 +702,7 @@ class ClassDbManager:
                 break
         if id_father:
             list_father = self.get_participants_from_group(id_father)
-            return [user for user in list_father if user not in list_son]
+            return list_father
         return False
 
     def user_holiday(self, id_usr):
