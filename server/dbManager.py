@@ -252,7 +252,7 @@ class ClassDbManager:
         list_return = []
         # Controllo scadenza 24 h
         for act in self.tomorrow_act:
-            if act['date']['hour'] == actual_time['hour'] and act['date']['minute'] == actual_time['minute']:
+            if act['hour'] == actual_time['hour'] and act['minute'] == actual_time['minute']:
                 list_app = self.secondary_check_activity(act, 24)
                 list_return[len(list_app):] = list_app[:]
         return list_return
@@ -329,13 +329,13 @@ class ClassDbManager:
             n_min = 0
             for act2 in range(0, len(self.tomorrow_act), 1):
                 # Se l'ora nel dict_min è maggiore cambio
-                if dict_min['date']['hour'] > self.tomorrow_act[act]['date']['hour']:
-                    dict_min = self.tomorrow_act[act]['date']
+                if dict_min['hour'] > self.tomorrow_act[act]['hour']:
+                    dict_min = self.tomorrow_act[act]
                     n_min = act
                     # Se l'ora nel dict_min è uguale ma i minuti sono maggiori cambio
-                if dict_min['date']['hour'] == self.tomorrow_act[act]['date']['hour'] and dict_min['date']['minute'] > \
-                        self.tomorrow_act[act]['date']['minute']:
-                    dict_min = self.tomorrow_act[act]['date']
+                if dict_min['hour'] == self.tomorrow_act[act]['hour'] and dict_min['minute'] > \
+                        self.tomorrow_act[act]['minute']:
+                    dict_min = self.tomorrow_act[act]
                     n_min = act
             app_list.append(dict_min)
             self.tomorrow_act.pop(n_min)
