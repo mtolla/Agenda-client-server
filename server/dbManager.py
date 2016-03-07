@@ -188,12 +188,13 @@ class ClassDbManager:
         list_usr = self.open_file('user')
         list_id_hol = []
         for user in list_usr:
-            list_id_hol.append(user['holiday'])
+            list_id_hol = set(list_id_hol).union(user['holiday'])
         for holiday in list_app:
             if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
                 'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end'][
-                'day'] and holiday['ID'] in list_id_hol:
-                list_return.append(holiday)
+                'day']:
+                if holiday['ID'] in list_id_hol:
+                    list_return.append(holiday)
         return list_return
 
     def get_group_name_from_group(self, id_group):
@@ -419,7 +420,7 @@ class ClassDbManager:
                 dict_duration = self.calc_duration(dict_app, activity['duration'])
                 list_return.append(
                     {'ID': activity['ID'], 'name': activity['name'], 'begin': activity['date'], 'end': dict_duration,
-                     'type': activity['type'], 'room': self.get_room_from_id(activity['location']),
+                     'type': activity['type'], 'room': activity['location'],
                      'participants': activity['participants']})
         return list_return
 
@@ -744,7 +745,6 @@ class ClassDbManager:
         for user in list_usr:
             if user['ID'] == id_usr:
                 return user['holiday']
-            print "pollo"
         return []
 
     def error(self, app):
@@ -842,4 +842,3 @@ class ClassDbManager:
             return False
         else:
             return True
-

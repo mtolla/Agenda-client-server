@@ -17,28 +17,30 @@ class ClassDbHelper:
         # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
         day_act = self.db_manager.get_activity_day_all(act['date'])
         day_hol = self.db_manager.get_holidays_day_all(act['date'])
+        print day_hol
         # Controllo subito se la stanza non è già occupata
+        self.room_occupied(day_act, act['date'], act['duration'])
         list_occ_room = self.room_occupied(day_act, act['date'], act['duration'])
         for activity in day_act:
+            print "activity"
+            print activity['room']
             if activity['room'] in list_occ_room:
+                print "YO"
                 return False
-        # Controllo se è un attività singola
-        if act['type'] == 'single':
-            ids_act = self.get_activites_rel_al_activity(act['creator'])
-            ids_hol = self.get_holidays_rel_alone_activity(act['creator'])
-        else:
-            ids_act = self.get_activites_rel_activity(act['group'])
-            ids_hol = self.get_holidays_rel_activity(act['group'])
         # Faccio un intersezione tra tutte le attività di gruppo e quelle del giorno
-        day_act = self.cleaner_list(day_act, ids_act)
+        day_act = self.cleaner_list(day_act, act['participants'])
         # Faccio una intersezione tra le festività e quelle del giorno
-        day_hol = self.cleaner_list(day_hol, ids_hol)
+        day_hol = self.cleaner_list(day_hol, act['participants'])
+        print "ASD"
+        print day_hol
         # Ci sono delle vacanze in quel giorno
         if day_hol:
+            print "So"
             return False
         data_end = self.db_manager.calc_duration(act['date'], act['duration'])
         list_error = self.is_there_something_activity(act['date'], data_end, day_act)
         if list_error:
+            print "to"
             return False
         # Implementazione programma teo
         list_act = self.db_manager.open_file('activity')
@@ -49,16 +51,23 @@ class ClassDbHelper:
 
     @staticmethod
     def cleaner_list(list_res, list_del):
+        print "lista"
+        print list_res
+        print "list del"
+        print list_del
         for app in list_res:
+            print "app"
+            print app
             if not app['ID'] in list_del:
                 list_res.remove(app)  ## Controllare
+                print "lista return"
+                print list_res
         return list_res
 
     def insert_holiday(self, hol, id_usr):
         # hol ha dentro {"begin": {"day", "month", "year"}, "end": {"day", "month","year"}, "name"}
         # id_usr mi serve per capire di chi è la vacanza
         #  Ricevo una vacanza, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
-        ids_act = self.get_activites_rel_holiday(id_usr)
         # Trovo tutte le attività in quel periodo
         days_act = []
         for year in range(hol['begin']['year'], hol['end']['year'], 1):
@@ -83,28 +92,28 @@ class ClassDbHelper:
         # Se è una attività devo controllare che sia di quel giorno e la data di inizio non si incroci con una delle due
         list_return = []
         for activity in day_act:
-            if self.is_there_appa(activity['begin'], date_star, date_end, activity['end']) or self.is_there_appb(activity['begin'],
-                                                                                                      date_star,
-                                                                                                      date_end,
-                                                                                                      activity['end']):
+            if self.is_there_appa(activity['begin'], date_star, date_end, activity['end']) or self.is_there_appb(
+                    activity['begin'],
+                    date_star,
+                    date_end,
+                    activity['end']):
                 list_return.append({'activity': activity})
         return list_return
 
     @staticmethod
-    def is_there_appa(activity, date_star, date_end, date_end_anct):
-        if (activity['hour'] >= date_star['hour'] and activity['hour'] > date_end['hour']) or (
-                        activity['hour'] <= date_star['hour'] and date_end_anct['hour'] >= date_end[
-                    'hour']) or (
-                        date_star['hour'] < date_end_anct['hour'] <= date_end['hour']) or (
-                    activity['hour'] == date_star['hour']):
+    def is_there_appa(ini_es, ini_new, fine_new, fine_es):
+        if ini_new['hour'] <= ini_es['hour'] < fine_new['hour'] or ini_es['hour'] <= ini_new['hour'] <= fine_es[
+            'hour'] or ini_new['hour'] <= fine_es['hour'] <= fine_new['hour']:
             return True
         return False
 
     @staticmethod
-    def is_there_appb(activity, date_star, date_end, date_end_anct):
-        if ((activity['minute'] >= date_star['minute'] and activity['minute'] > date_end['minute']) or (
-                        activity['minute'] <= date_star['minute'] and date_end_anct['minute'] >= date_end[
-                        'minute']) or (date_star['minute'] < activity['minute'] <= date_end['minute'])):
+    def is_there_appb(ini_es, ini_new, fine_new, fine_es):
+        if fine_new['hour'] == ini_new['hour'] and (
+                                ini_new['minute'] <= ini_es['minute'] < fine_new['minute'] or ini_es['minute'] <=
+                        ini_new[
+                            'minute'] <= fine_es['minute'] or ini_new['minute'] <= fine_es['minute'] <= fine_new[
+                    'minute']):
             return True
         return False
 
@@ -114,10 +123,10 @@ class ClassDbHelper:
         end = self.db_manager.calc_duration(begin, dur)
         list_return = []
         for activity in day_act:
-            if self.is_there_appa(activity['begin'], begin, end, activity['end']) or self.is_there_appa(activity['begin'], begin, end, activity['end']):
+            if self.is_there_appa(activity['begin'], begin, end, activity['end']) or self.is_there_appb(
+                    activity['begin'], begin, end, activity['end']):
                 list_return.append(activity['room'])
         return list_return
-
 
     @staticmethod
     def is_there_something_holiday(id_usr, ids_act):
@@ -131,66 +140,6 @@ class ClassDbHelper:
             if id_usr in activity['participant']:
                 list_return.append(activity)
         return list_return
-
-    def get_activites_rel_al_activity(self, id_usr):
-        # Parto da un utente e trovo tutte le attività dei suoi gruppi
-        list_group = self.db_manager.from_user_get_groups(id_usr)
-        list_app_usr = []
-        list_act = []
-        for group in list_group:
-            set(list_app_usr).union(self.db_manager.from_group_get_users(group))
-        for user in list_app_usr:
-            set(list_act).union(self.db_manager.from_user_get_acts(user))
-        return list_act
-
-    def get_activites_rel_activity(self, id_group):
-        # Parto da un gruppo e trovo tutti i gruppi degli utenti con quel gruppo
-        # Trovo tutte le attività con quei gruppi
-        list_usr = self.db_manager.open_file('user')
-        list_group = []
-        list_app_usr = []
-        list_act = []
-        for user in list_usr:
-            for group in user['groups']:
-                if group['ID'] == id_group:
-                    list_group.append(self.db_manager.from_user_get_groups(user['ID']))
-                    break
-        for group in list_group:
-            set(list_app_usr).union(self.db_manager.from_group_get_users(group))
-        for user in list_app_usr:
-            set(list_act).union(self.db_manager.from_user_get_acts(user))
-        return list_act
-
-    def get_holidays_rel_alone_activity(self, id_usr):
-        # Parto dall'utente e trovo tutte le sue vacanze
-        return self.db_manager.from_user_hol(id_usr)
-
-    def get_holidays_rel_activity(self, id_group):
-        # Parto da un gruppo e trovo tutti gli utenti
-        # Trovo tutte le vacanze degli utenti
-        list_usr = self.db_manager.open_file('user')
-        list_app_usr = []
-        list_hol = []
-        for user in list_usr:
-            for group in user['groups']:
-                if group['ID'] == id_group:
-                    list_app_usr.append(user['ID'])
-                    break
-        for user in list_app_usr:
-            set(list_hol).union(self.db_manager.from_user_hol(user))
-        return list_hol
-
-    def get_activites_rel_holiday(self, id_usr):
-        # Parto da un utente e trovo tutti i gruppi degli utenti correlati
-        # Trovo tutte le attività con gli utenti
-        list_group = self.db_manager.from_user_get_groups(id_usr)
-        list_app_usr = []
-        list_act = []
-        for group in list_group:
-            set(list_app_usr).union(self.db_manager.from_group_get_users(group))
-        for user in list_app_usr:
-            set(list_act).union(self.db_manager.from_user_get_acts(user))
-        return list_act
 
     ####################################################################################################################
     # Parte di gestione controllo e modifica/eliminazione nel db
