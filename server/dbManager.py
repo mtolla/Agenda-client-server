@@ -779,11 +779,11 @@ class ClassDbManager:
         dict_hour['minute'] += rest
         return dict_hour
 
-    @staticmethod
-    def is_teamleader_check(row, id_proj):
+    def is_teamleader_check(self, row, id_proj):
         # Funzione di supporto per non far piangere sonarqube
+        groups_proj = self.from_group_sub_all(self.get_group_from_proj(id_proj))
         for group in row['groups']:
-            if group['level'] == 'teamleader' and group['ID'] == id_proj:
+            if group['level'] == 'teamleader' and group['ID'] in groups_proj:
                 return True
         return False
 
