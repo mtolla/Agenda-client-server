@@ -192,9 +192,8 @@ class ClassDbManager:
         for holiday in list_app:
             if holiday['begin']['year'] <= day['year'] <= holiday['end']['year'] and holiday['begin']['month'] <= day[
                 'month'] <= holiday['end']['month'] and holiday['begin']['day'] <= day['day'] <= holiday['end'][
-                'day']:
-                if holiday['ID'] in list_id_hol:
-                    list_return.append(holiday)
+                'day'] and holiday['ID'] in list_id_hol:
+                list_return.append(holiday)
         return list_return
 
     def get_group_name_from_group(self, id_group):
@@ -391,7 +390,7 @@ class ClassDbManager:
         return False
 
     def get_activity_day(self, id_proj, day):
-        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end) i quel progetto
+        # Da un giorno restituisco un dizionario con le attività di quel giorno (ID, name, begin, end) di quel progetto
         list_app = self.open_file('activity')
         list_return = []
         for activity in list_app:
