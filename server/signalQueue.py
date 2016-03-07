@@ -14,21 +14,37 @@ class ClassSignalQueue:
         self.login_manager = login_manager
         self.db_manager = db_manager
 
-
     def add_to_modified(self, id_act):
         app_list = self.db_manager.get_users_from_activity(id_act)
+        time = self.db_manager.time_now()
         for item in app_list:
             item['action'] = "update"
             item['attempt'] = 0
-            item['date'] = self.db_manager.time_now()
+            item['date'] = time
             self.modified_queue.append(item)
 
-    def add_to_activity(self, app_list):
+    def add_to_activity(self):
+        time = self.db_manager.time_now()
+        list_id = self.get_id_from_activity()
+        for act in self.db_manager.today_act:
+            # Manca un ora
+            if act['time']['hour'] - 1 == time['hour'] and act['time']['minute'] == time['minute'] and act[
+                'ID'] not in list_id:
+                self.add_to_activity_app(self.db_manager.get_users_from_activity(act['ID']), time)
+
+    def add_to_activity_app(self, app_list, time):
         for item in app_list:
             item['action'] = "reminder"
             item['attempt'] = 0
-            item['date'] = self.db_manager.time_now()
-            self.modified_queue.append(item)
+            item['date'] = time
+            self.activity_queue.append(item)
+
+    def get_id_from_activity(self):
+        list_return = []
+        for act in self.activity_queue:
+            if act['ID'] not in list_return:
+                list_return.append(act['ID'])
+        return list_return
 
     def check_modified(self):
         for activity in self.db_manager.modified_act:

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import copy
+
 from utils import populate
 
 
@@ -15,53 +17,39 @@ class ClassDbHelper:
         # "participants": [],"date": {"day", "month", "year", "hour", "minute"}, "duration": 2}
         #  Ricevo una attività, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
         # Ricevo tutte le attività di quel giorno (ID, name, begin, end)
+        act_original = copy.deepcopy(act)
         day_act = self.db_manager.get_activity_day_all(act['date'])
         day_hol = self.db_manager.get_holidays_day_all(act['date'])
-        print day_hol
         # Controllo subito se la stanza non è già occupata
         self.room_occupied(day_act, act['date'], act['duration'])
         list_occ_room = self.room_occupied(day_act, act['date'], act['duration'])
         for activity in day_act:
-            print "activity"
-            print activity['room']
             if activity['room'] in list_occ_room:
-                print "YO"
                 return False
         # Faccio un intersezione tra tutte le attività di gruppo e quelle del giorno
         day_act = self.cleaner_list(day_act, act['participants'])
         # Faccio una intersezione tra le festività e quelle del giorno
         day_hol = self.cleaner_list(day_hol, act['participants'])
-        print "ASD"
-        print day_hol
         # Ci sono delle vacanze in quel giorno
         if day_hol:
-            print "So"
             return False
         data_end = self.db_manager.calc_duration(act['date'], act['duration'])
         list_error = self.is_there_something_activity(act['date'], data_end, day_act)
         if list_error:
-            print "to"
             return False
         # Implementazione programma teo
         list_act = self.db_manager.open_file('activity')
         act['ID'] = populate.next_index(list_act)
-        list_act.append(act)
+        list_act.append(act_original)
         self.db_manager.write_file(list_act, 'activity')
+        self.db_manager.check_today_tomorrow_act()
         return True
 
     @staticmethod
     def cleaner_list(list_res, list_del):
-        print "lista"
-        print list_res
-        print "list del"
-        print list_del
         for app in list_res:
-            print "app"
-            print app
             if not app['ID'] in list_del:
                 list_res.remove(app)  ## Controllare
-                print "lista return"
-                print list_res
         return list_res
 
     def insert_holiday(self, hol, id_usr):

@@ -52,10 +52,13 @@ class SignalThread(QtCore.QRunnable):
 
     def run(self):
         while True:
+            self.signal_queue.add_to_activity()
             self.signal_queue.check_activity()
             self.signal_queue.send()
             self.signal_queue.clean_queue()
             time.sleep(self.sleep_time)
+
+
 
 # Classe Thread, lavora giornalmente
 class JournalThread(QtCore.QRunnable):
