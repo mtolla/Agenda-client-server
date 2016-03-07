@@ -34,11 +34,6 @@ class Holiday(Dialog):
         ))
         self.dtm_end.setDisplayFormat("dd MMMM yyyy")
 
-    def add_buttons(self, **kwargs):
-        modality = self.data['modality']
-        modify = self.data['modify']
-        Dialog.add_buttons(modality, modify)
-
     def switch_to_create(self):
         self.lyt_button.removeWidget(self.cmd_modify)
         self.lyt_button.removeWidget(self.cmd_delete)

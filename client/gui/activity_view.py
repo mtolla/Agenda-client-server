@@ -64,11 +64,6 @@ class Activity(Dialog):
         self.lyt_data.addWidget(self.lbl_location, 6, 0)
         self.lyt_data.addWidget(self.cmb_location, 6, 1)
 
-    def add_buttons(self, **kwargs):
-        modality = self.data['modality']
-        modify = self.data['informations']['modify']
-        Dialog.add_buttons(modality, modify)
-
     def switch_to_create(self):
         self.lyt_button.removeWidget(self.cmd_modify)
         self.lyt_button.removeWidget(self.cmd_delete)

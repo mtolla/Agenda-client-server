@@ -13,7 +13,10 @@ class ActivityManager:
         if data['type'] != "single":
             self.activity.extend()
 
-        self.activity.add_buttons()
+        if data['modality'] == "view":
+            self.activity.add_buttons(data['modality'], data['informations']['modify'])
+        else:
+            self.activity.add_buttons(data['modality'], False)
 
         if data['modality'] == "view":
             self.activity.set_enabled_view(False)
