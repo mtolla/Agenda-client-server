@@ -52,6 +52,7 @@ class AgendaManager:
         data = dict()
 
         data['locations'] = self.server_manager.locations()
+        data['project_group'] = self.info_agenda['project']['group']
 
         if _id:
             data['modality'] = "view"

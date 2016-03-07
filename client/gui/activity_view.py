@@ -249,10 +249,17 @@ class Activity(QtGui.QDialog):
         self.set_enabled_view()
 
         if self.data['type'] != "single":
+            if self.data['type'] == "project":
+                self.data['informations']['participants'].pop(self.data['creator'].keys()[0])
+
             participants = self.data['functions'].get_remain_participants(
                 self.data['informations']['activity']['group'],
                 self.data['informations']['participants']
             )
+
+            if self.data['type'] == "project":
+                self.data['informations']['participants'].update(self.data['creator'])
+
             self.add_participants(participants)
 
         self.add_create_buttons()
@@ -302,7 +309,8 @@ class Activity(QtGui.QDialog):
 
         self.data['informations']['participants'] = self.data['functions'].get_remain_participants(
             self.data['groups'][index].keys()[0],
-            {}
+            {},
+            self.data['type']
         )
 
         self.chk_participants = {}
@@ -381,6 +389,8 @@ class Activity(QtGui.QDialog):
     def set_group_project(self):
         if self.data['type'] == "group":
             self.activity['group'] = int(self.data['groups'][self.index_group].keys()[0])
+        else:
+            self.activity['group'] = self.data['project_group']
 
         participants = self.get_checked()
         if len(participants) < 2:
