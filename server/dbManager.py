@@ -96,21 +96,21 @@ class ClassDbManager:
                 return row['email']
         return False
 
-    def is_teamleader(self, id_user):
+    def is_teamleader(self, id_user, id_proj):
         # Dall'user id trovo se è un teamleader almeno di un gruppo
         # Ricevo l'ID dal login_manager e lo ricerco nel database utenti
         # Apro il file che mi serve
         list_app = self.open_file('user')
         for row in list_app:
             if row['ID'] == id_user:
-                return self.is_teamleader_check(row)
+                return self.is_teamleader_check(row, id_proj)
         return False
 
-    def is_projectmanager(self, id_user):
+    def is_projectmanager(self, id_user, id_proj):
         # Dall'user id trovo se è un project manager
         list_app = self.open_file('project')
         for row in list_app:
-            if row['projectManager'] == id_user:
+            if row['projectManager'] == id_user and row['ID'] == id_proj:
                 return True
         return False
 
@@ -780,10 +780,10 @@ class ClassDbManager:
         return dict_hour
 
     @staticmethod
-    def is_teamleader_check(row):
+    def is_teamleader_check(row, id_proj):
         # Funzione di supporto per non far piangere sonarqube
         for group in row['groups']:
-            if group['level'] == 'teamleader':
+            if group['level'] == 'teamleader' and group['ID'] == id_proj:
                 return True
         return False
 

@@ -77,7 +77,7 @@ class Api:
         dict_return['email'] = self.db_manager.get_pjmanager_email(id_proj)
         dict_return['activities'] = self.db_manager.get_today_activities_from_proj(id_proj)
         dict_return['holidays'] = self.db_manager.get_holidays_from_proj(id_proj)
-        dict_return['level'] = self.get_level_usr(token)
+        dict_return['level'] = self.get_level_usr(token, id_proj)
         dict_return['user'] = self.db_manager.get_user_name(self.from_token_get_iduser(token))
         return json.dumps(dict_return)
 
@@ -122,17 +122,17 @@ class Api:
     def user_holiday(self, id_usr):
         return json.dumps(self.db_manager.user_holiday(id_usr))
 
-    def get_level_usr(self, token):
+    def get_level_usr(self, token, id_proj):
         if self.get_is_projectmanager(token):
             return "projectmanager"
-        if self.get_is_teamleader(token):
+        if self.get_is_teamleader(token, id_proj):
             return "teamleader"
         return "participant"
 
-    def get_is_projectmanager(self, token):
+    def get_is_projectmanager(self, token, id_proj):
         return self.db_manager.is_projectmanager(self.login_manager.from_token_get_iduser(token))
 
-    def get_is_teamleader(self, token):
+    def get_is_teamleader(self, token, id_proj):
         return self.db_manager.is_teamleader(self.login_manager.from_token_get_iduser(token))
 
     def from_token_get_iduser(self, token):
