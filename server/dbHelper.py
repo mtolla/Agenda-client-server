@@ -58,6 +58,7 @@ class ClassDbHelper:
         #  Ricevo una vacanza, controllo che non dia fastidio a nulla, in caso di esito negativo la inserisco
         # Trovo tutte le attività in quel periodo
         days_act = []
+        hol_original = copy.deepcopy(hol)
         for year in range(hol['begin']['year'], hol['end']['year'], 1):
             for month in range(hol['begin']['month'], hol['end']['month'], 1):
                 for day in range(hol['begin']['day'], hol['end']['day'], 1):
@@ -66,7 +67,11 @@ class ClassDbHelper:
         if list_error:
             return list_error
         # Implementazione programma teo
-        populate.setholidays(id_usr, hol)
+        list_hol = self.db_manager.open_file('holiday')
+        hol_original['ID'] = populate.next_index(list_hol)
+        list_hol.append(hol_original)
+        self.db_manager.write_file(list_hol, 'holiday')
+        self.set_user_holiday(id_usr, hol_original['ID'])
         return "OK"
 
     def is_there_something_activity(self, date_star, date_end, day_act):
@@ -128,6 +133,14 @@ class ClassDbHelper:
             if id_usr in activity['participant']:
                 list_return.append(activity)
         return list_return
+
+    def set_user_holiday(self, id_usr, id_hol):
+        list_usr = self.db_manager.open_file('user')
+        for user in list_usr:
+            if user['ID'] == id_usr:
+                user['holiday'].append(id_hol)
+                break
+        self.db_manager.write_file(list_usr, 'user')
 
     ####################################################################################################################
     # Parte di gestione controllo e modifica/eliminazione nel db
