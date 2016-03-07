@@ -149,3 +149,6 @@ class ServerManager:
 
     def insert_activity(self, activity):
         return self.server_request_handler.insert_activity(activity)
+
+    def insert_holiday(self, holiday):
+        return self.server_request_handler.insert_holiday(holiday)

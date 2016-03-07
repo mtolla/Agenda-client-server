@@ -19,3 +19,6 @@ class HolidayManager:
             self.holiday.set_enabled_view(False)
 
         self.holiday.exec_()
+
+    def insert_holiday(self, holiday):
+        return self.agenda_manager.insert_holiday(holiday)

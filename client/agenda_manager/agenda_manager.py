@@ -222,3 +222,6 @@ class AgendaManager:
         self.info_agenda = self.server_manager.info_agenda(project_list.keys()[index])
         self.info_agenda['projects'] = project_list
         return self.info_agenda
+
+    def insert_holiday(self, holiday):
+        return self.server_manager.insert_holiday(holiday)

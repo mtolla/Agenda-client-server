@@ -82,6 +82,7 @@ class Agenda(Page):
         self.lbl_status_lbl.setFont(self.bold)
         self.lbl_status_lbl.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
 
+        self.lbl_status = QtGui.QLabel("status", self.gdr_agenda)
         self.create_lbl_status()
 
         # Creazione data selezionata
@@ -214,6 +215,7 @@ class Agenda(Page):
         self.scrl_operation.setWidget(self.vrt_opreations)
 
     def create_lbl_status(self):
+        print self.info_agenda['project']['status']
         if self.info_agenda['project']['status']:
             message = "Attivo"
             style = "background-color: rgb(0, 255, 0);"
@@ -221,7 +223,7 @@ class Agenda(Page):
             message = "Terminato"
             style = "background-color: rgb(255, 0, 0);"
 
-        self.lbl_status = QtGui.QLabel(message, self.gdr_agenda)
+        self.lbl_status.setText(message)
         self.lbl_status.setStyleSheet(style)
         self.lbl_status.setAlignment(QtCore.Qt.AlignCenter)
 
@@ -421,7 +423,6 @@ class Agenda(Page):
     def change_project(self, index):
         self.info_agenda = self.function.change_project(index)
 
-
         self.create_operation_list()
 
         self.dted_date_begin.setDate(QtCore.QDate(
@@ -437,7 +438,6 @@ class Agenda(Page):
         ))
 
         self.lbl_mail.setText(self.info_agenda['email'])
-        #self.lbl_mail.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
 
         self.create_lbl_status()
 

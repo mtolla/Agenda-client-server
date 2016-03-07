@@ -56,14 +56,17 @@ class ServerRequestHandler:
     def holiday_id(self, _id):
         return self.server_get_request.holiday_id(_id)
 
-    def logout(self):
-        return self.server_get_request.logout()
-
     def holidays_day(self, day):
         return self.server_get_request.holidays_day(day)
+
+    def logout(self):
+        return self.server_get_request.logout()
 
     def participant_id(self, _id):
         return self.server_get_request.participant_id(_id)
 
     def insert_activity(self, activity):
         return self.server_post_request.insert_activity(activity)
+
+    def insert_holiday(self, holiday):
+        return self.server_post_request.insert_holiday(holiday)

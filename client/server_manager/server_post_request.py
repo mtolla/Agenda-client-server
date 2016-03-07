@@ -17,7 +17,8 @@ class ServerPostRequest(ServerRequestInterface):
         self.request_url = {
             'get_token': server_url + "/login/token",
             'do_login': server_url + "/login",
-            'insert_activity': server_url + "/insert/activity"
+            'insert_activity': server_url + "/insert/activity",
+            'insert_holiday': server_url + "/insert/holiday"
         }
 
     @staticmethod
@@ -73,6 +74,21 @@ class ServerPostRequest(ServerRequestInterface):
             self.request_url['insert_activity'],
             data={
                 'dict_activity': json.dumps(dict_activity)
+            }
+        ).__dict__
+
+        return self.get_response(response)
+
+    def insert_holiday(self, holiday):
+        dict_holiday = dict()
+        dict_holiday['token'] = self.token
+        dict_holiday['ip'] = self.client_url
+        dict_holiday['holiday'] = holiday
+
+        response = self.request.post(
+            self.request_url['insert_holiday'],
+            data={
+                'dict_holiday': json.dumps(dict_holiday)
             }
         ).__dict__
 
