@@ -1,13 +1,15 @@
-import sys
+import os
 import hashlib
 import json
 
-activity_file = sys.path[1] + "/database/activity.json"
-group_file = sys.path[1] + "/database/group.json"
-location_file = sys.path[1] + "/database/location.json"
-project_file = sys.path[1] + "/database/project.json"
-user_file = sys.path[1] + "/database/user.json"
-holiday_file = sys.path[1] + "/database/holiday.json"
+project_path = os.path.dirname(os.path.abspath(__file__))
+
+activity_file = project_path + "/../database/activity.json"
+group_file = project_path + "/../database/group.json"
+location_file = project_path + "/../database/location.json"
+project_file = project_path + "/../database/project.json"
+user_file = project_path + "/../database/user.json"
+holiday_file = project_path + "/../database/holiday.json"
 
 # Load json utility
 def load(path):
