@@ -2,7 +2,7 @@
 
 from createUserUI import *
 from populate import *
-from client.gui.page import *
+from client.abstract.page import *
 
 class CreateUser(Page):
     def __init__(self):

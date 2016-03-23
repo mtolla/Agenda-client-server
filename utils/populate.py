@@ -38,6 +38,7 @@ def populate_user(username, password, email, name, surname):
     user["name"] = name
     user["surname"] = surname
     user["holiday"] = []
+    user["groups"] = [{"ID": 7, "level": "participant"}]
     return user
 
 def setholidays(user, holidays):
